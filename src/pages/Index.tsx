@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -122,101 +123,202 @@ User has consented to data processing per GDPR.
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header Section */}
-      <header id="home" className="bg-gradient-to-r from-purple-500 to-cyan-500 text-white">
-        <div className="container mx-auto px-6 py-20 md:py-32 text-center">
-          {/* Logo */}
-          <div className="flex justify-center mb-8">
-            <img 
-              src="/lovable-uploads/4824a6ff-4ee4-49c4-a5e0-681407eaf295.png" 
-              alt="EntrSphere Logo" 
-              className="w-24 h-24 object-contain" 
-            />
-          </div>
+    <div className="min-h-screen bg-white">
+      {/* Announcement Bar */}
+      <div className="bg-teal-100 text-slate-700 py-3">
+        <div className="container mx-auto px-6 text-center">
+          <span className="text-sm font-medium">
+            🎉 Exciting News! We Raised a $5.5M Seed Round!
+          </span>
+          <button className="ml-4 bg-slate-800 text-white px-4 py-1 rounded-full text-xs font-medium hover:bg-slate-700 transition-colors">
+            Grab a bite →
+          </button>
+        </div>
+      </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight">
-            EntrSphere: Boost Your Startup with AI Automation
-          </h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-            Join Our Beta to Automate Your Business – Save Time and Costs Today!
-          </p>
-          <p className="text-lg md:text-xl italic mb-12 max-w-2xl mx-auto">
-            "Say goodbye to manual processes and hello to seamless AI-driven growth that works anywhere, anytime."
-          </p>
-          <a 
-            href="#signup"
-            className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-10 rounded-lg text-lg shadow-lg inline-block transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-            onClick={() => trackEvent('click_cta_hero', 'CTA', 'Learn More Hero')}
-          >
-            Sign Up for Beta Access
-          </a>
+      {/* Header */}
+      <header className="bg-white border-b border-slate-200">
+        <div className="container mx-auto px-6 py-4">
+          <nav className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <img 
+                src="/lovable-uploads/4824a6ff-4ee4-49c4-a5e0-681407eaf295.png" 
+                alt="EntrSphere Logo" 
+                className="w-8 h-8 object-contain" 
+              />
+              <span className="text-xl font-bold text-slate-900">entrsphere</span>
+            </div>
+            
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#features" className="text-slate-600 hover:text-slate-900 transition-colors">Platform Overview</a>
+              <a href="#about" className="text-slate-600 hover:text-slate-900 transition-colors">About Us</a>
+              <a href="#feedback" className="text-slate-600 hover:text-slate-900 transition-colors">Blog</a>
+              <a href="#trust" className="text-slate-600 hover:text-slate-900 transition-colors">Trust Center</a>
+            </div>
+
+            <Button 
+              className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2 rounded-full font-medium"
+              onClick={() => trackEvent('click_cta_nav', 'CTA', 'Book a Demo Nav')}
+            >
+              Book a Demo
+            </Button>
+          </nav>
         </div>
       </header>
 
-      <main className="container mx-auto px-6 py-16">
-        {/* Features Section */}
-        <section id="features" className="py-16">
-          <h2 className="text-3xl font-bold text-center mb-4 text-purple-600">Why Automate with EntrSphere?</h2>
-          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-            Discover how our AI-powered platform can transform your startup's efficiency and scalability.
+      {/* Hero Section */}
+      <section className="py-24 lg:py-32">
+        <div className="container mx-auto px-6 text-center">
+          <h1 className="text-5xl lg:text-7xl font-bold text-slate-900 mb-8 leading-tight">
+            Make Good{" "}
+            <span className="bg-teal-200 px-4 py-2 rounded-lg inline-block">
+              Data-Driven
+            </span>
+            <br />
+            Product Decisions
+          </h1>
+          
+          <p className="text-xl text-slate-600 mb-12 max-w-4xl mx-auto leading-relaxed">
+            EntrSphere AI turns scattered feedback and product data from tools like Salesforce, Gong, Zendesk, and Slack into clear actions, so every decision is backed by real evidence and tied to business impact.
           </p>
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
-              <div className="text-purple-500 mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                </svg>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+            <Button 
+              className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-3 rounded-full font-medium"
+              onClick={() => trackEvent('click_cta_hero', 'CTA', 'Book a Demo Hero')}
+            >
+              Book a demo
+            </Button>
+            <Button 
+              variant="outline" 
+              className="border-slate-300 text-slate-700 px-8 py-3 rounded-full font-medium hover:bg-slate-50"
+            >
+              ▶ Watch How It Works
+            </Button>
+          </div>
+
+          {/* Platform Visual */}
+          <div className="relative max-w-4xl mx-auto">
+            <div className="bg-slate-50 rounded-3xl p-12 relative overflow-hidden">
+              {/* Integration Icons */}
+              <div className="flex justify-center space-x-8 mb-8">
+                <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">SF</span>
+                </div>
+                <div className="w-12 h-12 bg-blue-400 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">Z</span>
+                </div>
+                <div className="w-12 h-12 bg-emerald-500 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">S</span>
+                </div>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Streamline Workflows</h3>
-              <p className="text-gray-600">Automate repetitive tasks and free up your team for strategic initiatives.</p>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
-              <div className="text-teal-500 mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
+
+              {/* Workflow Visualization */}
+              <div className="space-y-6">
+                {/* Feedback Card */}
+                <div className="bg-white rounded-lg p-4 shadow-sm border border-slate-200 max-w-md mx-auto">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs font-bold">CPO</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-slate-600">Feedback Surge</div>
+                      <div className="text-sm font-medium">Spike in API feature asks across tools *</div>
+                    </div>
+                    <div className="text-green-600 font-bold">+120 +69%</div>
+                  </div>
+                </div>
+
+                {/* Impact Card */}
+                <div className="bg-white rounded-lg p-4 shadow-sm border border-slate-200 max-w-md mx-auto">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs">★</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-slate-600">Impact</div>
+                      <div className="text-sm font-medium">High interest from APAC accounts</div>
+                    </div>
+                    <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs font-bold">CPO</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Card */}
+                <div className="bg-white rounded-lg p-4 shadow-sm border border-slate-200 max-w-md mx-auto">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs">→</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-slate-600">Action</div>
+                      <div className="text-sm font-medium">Moved up in delivery plan</div>
+                    </div>
+                    <div className="w-8 h-8 bg-teal-500 rounded-full"></div>
+                  </div>
+                </div>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Reduce Costs</h3>
-              <p className="text-gray-600">Optimize resource allocation and minimize operational expenses effectively.</p>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
-              <div className="text-orange-500 mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Scale with Confidence</h3>
-              <p className="text-gray-600">Grow your business without being hindered by manual process limitations.</p>
+
+              {/* Decorative Elements */}
+              <div className="absolute top-8 right-8 text-orange-400">✦</div>
+              <div className="absolute bottom-8 left-8 text-blue-400">✧</div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Platform Preview Section */}
-        <section id="platform-preview" className="py-16 bg-gray-50 rounded-xl">
-          <h2 className="text-3xl font-bold text-center mb-4 text-purple-600">See EntrSphere in Action</h2>
-          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-            Visualize how our intuitive platform integrates AI automation seamlessly into your startup.
-          </p>
-          <div className="flex justify-center items-center">
-            <img 
-              src="https://placehold.co/800x450/8B5CF6/FFFFFF?text=EntrSphere+Platform+Mockup&font=inter"
-              alt="EntrSphere Platform Mockup"
-              className="rounded-lg shadow-xl border-4 border-white w-full max-w-3xl h-auto"
-              loading="lazy"
-            />
+      {/* Features Section */}
+      <section id="features" className="py-20 bg-slate-50">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">Why Automate with EntrSphere?</h2>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+              Discover how our AI-powered platform can transform your startup's efficiency and scalability.
+            </p>
           </div>
-          <p className="text-center text-sm text-gray-500 mt-4">
-            Friendly, modern illustrations will showcase AI automation concepts here.
-          </p>
-        </section>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
+              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-slate-900 mb-3">Streamline Workflows</h3>
+              <p className="text-slate-600 leading-relaxed">Automate repetitive tasks and free up your team for strategic initiatives.</p>
+            </div>
+            
+            <div className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
+              <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-slate-900 mb-3">Reduce Costs</h3>
+              <p className="text-slate-600 leading-relaxed">Optimize resource allocation and minimize operational expenses effectively.</p>
+            </div>
+            
+            <div className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
+              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-slate-900 mb-3">Scale with Confidence</h3>
+              <p className="text-slate-600 leading-relaxed">Grow your business without being hindered by manual process limitations.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        {/* Sign Up Form */}
-        <section id="signup" className="py-16">
-          <div className="max-w-2xl mx-auto bg-white p-8 sm:p-12 rounded-xl shadow-2xl">
-            <div className="text-center mb-10">
-              <h2 className="text-3xl font-bold text-purple-600 mb-3">Join Our Exclusive Beta!</h2>
-              <p className="text-lg text-gray-700">
+      {/* Sign Up Form */}
+      <section id="signup" className="py-20">
+        <div className="container mx-auto px-6">
+          <div className="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-slate-200">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-slate-900 mb-3">Join Our Exclusive Beta!</h2>
+              <p className="text-lg text-slate-600">
                 🎁 Sign up for our beta and get a <strong className="text-orange-500">free AI automation checklist</strong> for startups worldwide!
               </p>
             </div>
@@ -224,7 +326,7 @@ User has consented to data processing per GDPR.
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name Input */}
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
                   Full Name <span className="text-red-500">*</span>
                 </label>
                 <Input 
@@ -232,8 +334,8 @@ User has consented to data processing per GDPR.
                   id="name"
                   value={name} 
                   onChange={(e) => setName(e.target.value)}
-                  className={`w-full px-4 py-3 text-lg rounded-lg border-2 transition-all duration-200 ${
-                    nameError ? 'border-red-500' : 'border-blue-400 focus:border-purple-500 focus:ring-4 focus:ring-purple-200'
+                  className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 ${
+                    nameError ? 'border-red-500' : 'border-slate-200 focus:border-slate-400'
                   }`}
                   placeholder="e.g., Jane Doe"
                   required 
@@ -243,7 +345,7 @@ User has consented to data processing per GDPR.
 
               {/* Email Input */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
                   Email Address <span className="text-red-500">*</span>
                 </label>
                 <Input 
@@ -251,8 +353,8 @@ User has consented to data processing per GDPR.
                   id="email"
                   value={email} 
                   onChange={(e) => setEmail(e.target.value)}
-                  className={`w-full px-4 py-3 text-lg rounded-lg border-2 transition-all duration-200 ${
-                    emailError ? 'border-red-500' : 'border-blue-400 focus:border-purple-500 focus:ring-4 focus:ring-purple-200'
+                  className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 ${
+                    emailError ? 'border-red-500' : 'border-slate-200 focus:border-slate-400'
                   }`}
                   placeholder="you@company.com"
                   required 
@@ -262,7 +364,7 @@ User has consented to data processing per GDPR.
 
               {/* Company Input */}
               <div>
-                <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="company" className="block text-sm font-medium text-slate-700 mb-2">
                   Company Name (Optional)
                 </label>
                 <Input 
@@ -270,23 +372,23 @@ User has consented to data processing per GDPR.
                   id="company"
                   value={company} 
                   onChange={(e) => setCompany(e.target.value)}
-                  className="w-full px-4 py-3 text-lg rounded-lg border-2 border-blue-400 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-200"
+                  className="w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-slate-400 transition-all duration-200"
                   placeholder="e.g., Your Startup Inc."
                 />
               </div>
 
               {/* Challenge Dropdown */}
               <div>
-                <label htmlFor="challenge" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="challenge" className="block text-sm font-medium text-slate-700 mb-2">
                   What's your biggest challenge? <span className="text-red-500">*</span>
                 </label>
                 <Select value={challenge} onValueChange={handleChallengeChange}>
-                  <SelectTrigger className={`w-full px-4 py-3 text-lg rounded-lg border-2 transition-all duration-200 ${
-                    challengeError ? 'border-red-500' : 'border-blue-400 focus:border-purple-500 focus:ring-4 focus:ring-purple-200'
+                  <SelectTrigger className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 ${
+                    challengeError ? 'border-red-500' : 'border-slate-200 focus:border-slate-400'
                   }`}>
                     <SelectValue placeholder="Select an option" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white border border-slate-200 shadow-lg rounded-lg z-50">
+                  <SelectContent className="bg-white border border-slate-200 shadow-lg rounded-lg">
                     <SelectItem value="manual_processes">Manual processes</SelectItem>
                     <SelectItem value="high_costs">High operational costs</SelectItem>
                     <SelectItem value="digital_transformation">Digital transformation</SelectItem>
@@ -300,7 +402,7 @@ User has consented to data processing per GDPR.
               {/* Other Challenge Text Input */}
               {challenge === "other" && (
                 <div>
-                  <label htmlFor="other_challenge" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="other_challenge" className="block text-sm font-medium text-slate-700 mb-2">
                     Please specify your challenge:
                   </label>
                   <Input 
@@ -308,7 +410,7 @@ User has consented to data processing per GDPR.
                     id="other_challenge"
                     value={otherChallenge} 
                     onChange={(e) => setOtherChallenge(e.target.value)}
-                    className="w-full px-4 py-3 text-lg rounded-lg border-2 border-blue-400 focus:border-purple-500 focus:ring-4 focus:ring-purple-200 transition-all duration-200"
+                    className="w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-slate-400 transition-all duration-200"
                     placeholder="Describe your challenge"
                     required={challenge === "other"}
                   />
@@ -316,15 +418,15 @@ User has consented to data processing per GDPR.
               )}
 
               {/* Consent Checkbox */}
-              <div className="flex items-start space-x-3 text-left">
+              <div className="flex items-start space-x-3">
                 <Checkbox 
                   id="consent" 
                   checked={consent} 
                   onCheckedChange={(checked) => setConsent(checked as boolean)}
-                  className="mt-1 border-2 border-blue-500" 
+                  className="mt-1" 
                   required 
                 />
-                <label htmlFor="consent" className="text-sm leading-relaxed cursor-pointer text-slate-600">
+                <label htmlFor="consent" className="text-sm text-slate-600 cursor-pointer">
                   I consent to my data being processed per GDPR <span className="text-red-500">*</span>
                 </label>
               </div>
@@ -333,55 +435,59 @@ User has consented to data processing per GDPR.
               <Button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="w-full font-bold py-4 px-6 rounded-lg text-lg text-white transition-all duration-300 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600"
+                className="w-full bg-slate-900 hover:bg-slate-800 text-white font-medium py-3 px-6 rounded-lg transition-all duration-300"
               >
                 {isSubmitting ? "Submitting..." : "Sign Up & Get Checklist"}
               </Button>
             </form>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Trust Section */}
-        <section id="trust" className="py-12 text-center">
-          <h2 className="text-2xl font-bold text-center mb-8 text-gray-700">Committed to Your Privacy & Security</h2>
-          <div className="max-w-3xl mx-auto space-y-6 flex flex-col items-center">
-            <div className="inline-flex items-center bg-blue-50 border border-blue-200 text-green-700 font-semibold py-3 px-6 rounded-lg shadow">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              GDPR & Privacy Compliant ✅
-            </div>
+      {/* Trust Section */}
+      <section id="trust" className="py-12 bg-slate-50">
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-2xl font-bold text-slate-900 mb-8">Committed to Your Privacy & Security</h2>
+          <div className="inline-flex items-center bg-green-50 border border-green-200 text-green-700 font-medium py-3 px-6 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            GDPR & Privacy Compliant ✅
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Feedback CTA */}
-        <section id="feedback" className="py-16 bg-purple-50 rounded-xl">
-          <div className="text-center max-w-2xl mx-auto px-6">
-            <h2 className="text-3xl font-bold text-purple-600 mb-4">Help Us Improve!</h2>
-            <p className="text-lg text-gray-700 mb-8">
+      {/* Feedback CTA */}
+      <section id="feedback" className="py-16">
+        <div className="container mx-auto px-6 text-center">
+          <div className="max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Help Us Improve!</h2>
+            <p className="text-lg text-slate-600 mb-8">
               We value your input. Share your thoughts on AI automation for your startup and help us build the best solution for you.
             </p>
-            <a 
-              href="mailto:admin@entrsphere.com?subject=Feedback%20on%20AI%20Automation"
-              className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-8 rounded-lg text-md shadow-md hover:shadow-lg transition duration-300 inline-block"
-              onClick={() => trackEvent('click_feedback_cta', 'CTA', 'Feedback Button')}
+            <Button 
+              className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-3 rounded-full font-medium"
+              onClick={() => {
+                trackEvent('click_feedback_cta', 'CTA', 'Feedback Button');
+                window.location.href = "mailto:admin@entrsphere.com?subject=Feedback%20on%20AI%20Automation";
+              }}
             >
               Share Your Thoughts
-            </a>
+            </Button>
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-gray-300 py-12">
+      <footer className="bg-slate-900 text-slate-300 py-12">
         <div className="container mx-auto px-6 text-center">
-          <nav className="mb-6 space-x-4 sm:space-x-6">
-            <a href="#about" className="hover:text-purple-400 transition-colors">About Us</a>
-            <a href="#privacy" className="hover:text-purple-400 transition-colors">Privacy Policy</a>
-            <a href="#contact" className="hover:text-purple-400 transition-colors">Contact Us</a>
+          <nav className="mb-6 space-x-6">
+            <a href="#about" className="hover:text-white transition-colors">About Us</a>
+            <a href="#privacy" className="hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#contact" className="hover:text-white transition-colors">Contact Us</a>
           </nav>
-          <p>&copy; 2025 EntrSphere. All Rights Reserved.</p>
-          <p className="text-sm mt-2">Built for a global startup community.</p>
+          <p className="text-slate-400">&copy; 2025 EntrSphere. All Rights Reserved.</p>
+          <p className="text-sm text-slate-500 mt-2">Built for a global startup community.</p>
         </div>
       </footer>
     </div>
