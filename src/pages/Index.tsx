@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -124,18 +123,6 @@ User has consented to data processing per GDPR.
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Announcement Bar */}
-      <div className="bg-teal-100 text-slate-700 py-3">
-        <div className="container mx-auto px-6 text-center">
-          <span className="text-sm font-medium">
-            🎉 Exciting News! We Raised a $5.5M Seed Round!
-          </span>
-          <button className="ml-4 bg-slate-800 text-white px-4 py-1 rounded-full text-xs font-medium hover:bg-slate-700 transition-colors">
-            Grab a bite →
-          </button>
-        </div>
-      </div>
-
       {/* Header */}
       <header className="bg-white border-b border-slate-200">
         <div className="container mx-auto px-6 py-4">
