@@ -1,11 +1,9 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-
 const Index = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -13,32 +11,25 @@ const Index = () => {
   const [challenge, setChallenge] = useState("");
   const [consent, setConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!name) {
       toast.error("Please enter your name");
       return;
     }
-    
     if (!email) {
       toast.error("Please enter your email address");
       return;
     }
-    
     if (!challenge) {
       toast.error("Please select your biggest challenge");
       return;
     }
-    
     if (!consent) {
       toast.error("Please consent to data processing to continue");
       return;
     }
-
     setIsSubmitting(true);
-    
     try {
       const subject = encodeURIComponent("Beta Registration - EntrSphere AI Automation");
       const body = encodeURIComponent(`
@@ -50,11 +41,9 @@ Biggest Challenge: ${challenge}
 User has consented to data processing per GDPR.
       `);
       const mailtoLink = `mailto:admin@entrsphere.com?subject=${subject}&body=${body}`;
-      
       window.location.href = mailtoLink;
-      
       toast.success("Opening your email client...");
-      
+
       // Reset form
       setName("");
       setEmail("");
@@ -67,18 +56,12 @@ User has consented to data processing per GDPR.
       setIsSubmitting(false);
     }
   };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100">
+  return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100">
       {/* Header Section */}
       <div className="container mx-auto px-4 py-8">
         {/* Logo */}
         <div className="flex justify-center mb-12">
-          <img 
-            src="/lovable-uploads/b252d908-092e-4e71-80ac-351a41bb3b68.png" 
-            alt="EntrSphere Logo" 
-            className="w-24 h-24 object-contain"
-          />
+          <img src="/lovable-uploads/b252d908-092e-4e71-80ac-351a41bb3b68.png" alt="EntrSphere Logo" className="w-24 h-24 object-contain" />
         </div>
 
         {/* Main Content */}
@@ -103,52 +86,31 @@ User has consented to data processing per GDPR.
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name Input */}
               <div className="space-y-2">
-                <Input
-                  type="text"
-                  placeholder="Your Name *"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-3 text-lg rounded-lg border-2 border-blue-500 focus:ring-4 focus:ring-blue-200 focus:border-blue-600 transition-all duration-200"
-                  style={{ 
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                  }}
-                  required
-                />
+                <Input type="text" placeholder="Your Name *" value={name} onChange={e => setName(e.target.value)} className="w-full px-4 py-3 text-lg rounded-lg border-2 border-blue-500 focus:ring-4 focus:ring-blue-200 focus:border-blue-600 transition-all duration-200" style={{
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }} required />
               </div>
 
               {/* Email Input */}
               <div className="space-y-2">
-                <Input
-                  type="email"
-                  placeholder="Your Email *"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 text-lg rounded-lg border-2 border-blue-500 focus:ring-4 focus:ring-blue-200 focus:border-blue-600 transition-all duration-200"
-                  style={{ 
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                  }}
-                  required
-                />
+                <Input type="email" placeholder="Your Email *" value={email} onChange={e => setEmail(e.target.value)} className="w-full px-4 py-3 text-lg rounded-lg border-2 border-blue-500 focus:ring-4 focus:ring-blue-200 focus:border-blue-600 transition-all duration-200" style={{
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }} required />
               </div>
 
               {/* Company Input */}
               <div className="space-y-2">
-                <Input
-                  type="text"
-                  placeholder="Company (Optional)"
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
-                  className="w-full px-4 py-3 text-lg rounded-lg border-2 border-blue-500 focus:ring-4 focus:ring-blue-200 focus:border-blue-600 transition-all duration-200"
-                  style={{ 
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                  }}
-                />
+                <Input type="text" placeholder="Company (Optional)" value={company} onChange={e => setCompany(e.target.value)} className="w-full px-4 py-3 text-lg rounded-lg border-2 border-blue-500 focus:ring-4 focus:ring-blue-200 focus:border-blue-600 transition-all duration-200" style={{
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }} />
               </div>
 
               {/* Challenge Dropdown */}
               <div className="space-y-2">
                 <Select value={challenge} onValueChange={setChallenge}>
-                  <SelectTrigger className="w-full px-4 py-3 text-lg rounded-lg border-2 border-blue-500 focus:ring-4 focus:ring-blue-200 focus:border-blue-600 transition-all duration-200" style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+                  <SelectTrigger className="w-full px-4 py-3 text-lg rounded-lg border-2 border-blue-500 focus:ring-4 focus:ring-blue-200 focus:border-blue-600 transition-all duration-200" style={{
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                }}>
                     <SelectValue placeholder="What's your biggest challenge? *" />
                   </SelectTrigger>
                   <SelectContent className="bg-white border border-slate-200 shadow-lg rounded-lg">
@@ -163,40 +125,24 @@ User has consented to data processing per GDPR.
 
               {/* Consent Checkbox */}
               <div className="flex items-start space-x-3 text-left">
-                <Checkbox
-                  id="consent"
-                  checked={consent}
-                  onCheckedChange={(checked) => setConsent(checked as boolean)}
-                  className="mt-1 border-2 border-blue-500"
-                  required
-                />
-                <label 
-                  htmlFor="consent" 
-                  className="text-sm leading-relaxed cursor-pointer text-slate-600"
-                >
+                <Checkbox id="consent" checked={consent} onCheckedChange={checked => setConsent(checked as boolean)} className="mt-1 border-2 border-blue-500" required />
+                <label htmlFor="consent" className="text-sm leading-relaxed cursor-pointer text-slate-600">
                   I consent to my data being processed per GDPR *
                 </label>
               </div>
 
               {/* Submit Button */}
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full font-semibold py-4 px-8 rounded-lg text-lg text-white transition-all duration-200 hover:shadow-lg transform hover:scale-105"
-                style={{ 
-                  background: 'linear-gradient(135deg, #007bff 0%, #0056b3 100%)',
-                  border: 'none'
-                }}
-              >
+              <Button type="submit" disabled={isSubmitting} className="w-full font-semibold py-4 px-8 rounded-lg text-lg text-white transition-all duration-200 hover:shadow-lg transform hover:scale-105" style={{
+              background: 'linear-gradient(135deg, #007bff 0%, #0056b3 100%)',
+              border: 'none'
+            }}>
                 {isSubmitting ? "Joining Beta..." : "Join Beta Now"}
               </Button>
             </form>
 
             {/* Trust Signals */}
             <div className="mt-8 space-y-4">
-              <p className="text-slate-600 font-medium">
-                Trusted by innovative startups globally, including Circle Tel
-              </p>
+              <p className="text-slate-600 font-medium">Trusted by innovative startups globally</p>
               <div className="inline-block bg-blue-50 px-4 py-2 rounded-lg border border-blue-200">
                 <p className="text-blue-700 font-medium text-sm">
                   GDPR & Privacy Compliant ✅
@@ -209,10 +155,7 @@ User has consented to data processing per GDPR.
           <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-8 text-white shadow-xl">
             <h3 className="text-2xl font-bold mb-4">Help Us Improve!</h3>
             <p className="text-lg mb-6">Share your thoughts on AI automation for your startup</p>
-            <a
-              href="mailto:admin@entrsphere.com?subject=Feedback on AI Automation"
-              className="inline-block bg-white text-orange-600 font-semibold px-8 py-3 rounded-lg hover:bg-gray-100 transition-colors duration-200"
-            >
+            <a href="mailto:admin@entrsphere.com?subject=Feedback on AI Automation" className="inline-block bg-white text-orange-600 font-semibold px-8 py-3 rounded-lg hover:bg-gray-100 transition-colors duration-200">
               Send Feedback
             </a>
           </div>
@@ -230,8 +173,6 @@ User has consented to data processing per GDPR.
           </p>
         </div>
       </footer>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
