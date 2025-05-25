@@ -1,15 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EntrSphere: AI Automation for Startups</title>
+    <title>EntrSphere: Boost Your Startup with AI Automation</title>
     <meta name="description" content="EntrSphere provides AI automation solutions for startups. Contact us for more information about our services." />
     <meta name="author" content="EntrSphere" />
     <link rel="icon" href="/lovable-uploads/4824a6ff-4ee4-49c4-a5e0-681407eaf295.png" type="image/png">
 
-    <meta property="og:title" content="EntrSphere: AI Automation for Startups" />
+    <meta property="og:title" content="EntrSphere: Boost Your Startup with AI Automation" />
     <meta property="og:description" content="EntrSphere provides AI automation solutions for startups. Contact us for more information about our services." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
@@ -17,6 +16,24 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@entrsphere" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+
+      // Example event tracking function (to be called on form submission, button clicks etc.)
+      function trackEvent(eventName, eventCategory, eventLabel) {
+        gtag('event', eventName, {
+          'event_category': eventCategory,
+          'event_label': eventLabel
+        });
+        console.log(`Tracked Event: ${eventName}, Category: ${eventCategory}, Label: ${eventLabel}`); // For debugging
+      }
+    </script>
   </head>
 
   <body>
