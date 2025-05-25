@@ -149,71 +149,7 @@ User has consented to data processing per GDPR.
 
           {/* Platform Visual */}
           <div className="relative max-w-4xl mx-auto">
-            <div className="bg-slate-50 rounded-3xl p-12 relative overflow-hidden">
-              {/* Integration Icons */}
-              <div className="flex justify-center space-x-8 mb-8">
-                <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">SF</span>
-                </div>
-                <div className="w-12 h-12 bg-blue-400 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">Z</span>
-                </div>
-                <div className="w-12 h-12 bg-emerald-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">S</span>
-                </div>
-              </div>
-
-              {/* Workflow Visualization */}
-              <div className="space-y-6">
-                {/* Feedback Card */}
-                <div className="bg-white rounded-lg p-4 shadow-sm border border-slate-200 max-w-md mx-auto">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">CPO</span>
-                    </div>
-                    <div className="flex-1">
-                      <div className="text-sm text-slate-600">Feedback Surge</div>
-                      <div className="text-sm font-medium">Spike in API feature asks across tools *</div>
-                    </div>
-                    <div className="text-green-600 font-bold">+120 +69%</div>
-                  </div>
-                </div>
-
-                {/* Impact Card */}
-                <div className="bg-white rounded-lg p-4 shadow-sm border border-slate-200 max-w-md mx-auto">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs">★</span>
-                    </div>
-                    <div className="flex-1">
-                      <div className="text-sm text-slate-600">Impact</div>
-                      <div className="text-sm font-medium">High interest from APAC accounts</div>
-                    </div>
-                    <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">CPO</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Action Card */}
-                <div className="bg-white rounded-lg p-4 shadow-sm border border-slate-200 max-w-md mx-auto">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs">→</span>
-                    </div>
-                    <div className="flex-1">
-                      <div className="text-sm text-slate-600">Action</div>
-                      <div className="text-sm font-medium">Moved up in delivery plan</div>
-                    </div>
-                    <div className="w-8 h-8 bg-teal-500 rounded-full"></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Decorative Elements */}
-              <div className="absolute top-8 right-8 text-orange-400">✦</div>
-              <div className="absolute bottom-8 left-8 text-blue-400">✧</div>
-            </div>
+            
           </div>
         </div>
       </section>
