@@ -144,9 +144,7 @@ User has consented to data processing per GDPR.
             <Button className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-3 rounded-full font-medium" onClick={() => trackEvent('click_cta_hero', 'CTA', 'Book a Demo Hero')}>
               Book a demo
             </Button>
-            <Button variant="outline" className="border-slate-300 text-slate-700 px-8 py-3 rounded-full font-medium hover:bg-slate-50">
-              ▶ Watch How It Works
-            </Button>
+            
           </div>
 
           {/* Platform Visual */}
