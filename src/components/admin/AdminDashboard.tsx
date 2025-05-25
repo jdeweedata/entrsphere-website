@@ -1,12 +1,11 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { databases, DATABASE_ID, BETA_SIGNUPS_COLLECTION_ID } from '@/lib/appwrite';
 import { toast } from 'sonner';
+import { Models } from 'appwrite';
 
-interface BetaSignup {
-  $id: string;
+interface BetaSignup extends Models.Document {
   name: string;
   email: string;
   company: string;

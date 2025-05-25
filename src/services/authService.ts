@@ -31,7 +31,7 @@ export const authService = {
   // Login user
   login: async (email: string, password: string): Promise<any> => {
     try {
-      const session = await account.createEmailSession(email, password);
+      const session = await account.createEmailPasswordSession(email, password);
       console.log('User logged in:', session);
       return session;
     } catch (error: any) {
