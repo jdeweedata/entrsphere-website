@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+
 const Index = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -61,7 +62,7 @@ User has consented to data processing per GDPR.
       <div className="container mx-auto px-4 py-8">
         {/* Logo */}
         <div className="flex justify-center mb-12">
-          <img src="/lovable-uploads/b252d908-092e-4e71-80ac-351a41bb3b68.png" alt="EntrSphere Logo" className="w-24 h-24 object-contain" />
+          <img src="/lovable-uploads/4824a6ff-4ee4-49c4-a5e0-681407eaf295.png" alt="EntrSphere Logo" className="w-24 h-24 object-contain" />
         </div>
 
         {/* Main Content */}
@@ -175,4 +176,5 @@ User has consented to data processing per GDPR.
       </footer>
     </div>;
 };
+
 export default Index;
