@@ -4,6 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import HowItWorks from "@/components/HowItWorks";
+import Testimonials from "@/components/Testimonials";
+import FAQ from "@/components/FAQ";
+import SocialProof from "@/components/SocialProof";
+
 const Index = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -119,9 +124,9 @@ User has consented to data processing per GDPR.
             
             <div className="hidden md:flex items-center space-x-8">
               <a href="#features" className="text-slate-600 hover:text-slate-900 transition-colors">Platform Overview</a>
-              <a href="#about" className="text-slate-600 hover:text-slate-900 transition-colors">About Us</a>
-              <a href="#feedback" className="text-slate-600 hover:text-slate-900 transition-colors">Blog</a>
-              
+              <a href="#how-it-works" className="text-slate-600 hover:text-slate-900 transition-colors">How It Works</a>
+              <a href="#testimonials" className="text-slate-600 hover:text-slate-900 transition-colors">Success Stories</a>
+              <a href="#faq" className="text-slate-600 hover:text-slate-900 transition-colors">FAQ</a>
             </div>
 
             <Button className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2 rounded-full font-medium" onClick={() => trackEvent('click_cta_nav', 'CTA', 'Book a Demo Nav')}>
@@ -138,21 +143,60 @@ User has consented to data processing per GDPR.
             Unlock Growth, Protect Margins, and Cut Costs—Without Hiring More or Wasting Budget
           </h1>
           
-          <p className="text-xl text-slate-600 mb-12 max-w-4xl mx-auto leading-relaxed">Grow smarter—not harder. Let AI do the heavy lifting so you can scale profitably, control costs, and outpace competitors.</p>
+          <p className="text-xl text-slate-600 mb-12 max-w-4xl mx-auto leading-relaxed">
+            Grow smarter—not harder. Let AI do the heavy lifting so you can scale profitably, control costs, and outpace competitors.
+          </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
             <Button className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-3 rounded-full font-medium" onClick={() => trackEvent('click_cta_hero', 'CTA', 'Book a Demo Hero')}>
               Book a demo
             </Button>
-            
+            <Button variant="outline" className="px-8 py-3 rounded-full font-medium" onClick={() => document.getElementById('signup')?.scrollIntoView({ behavior: 'smooth' })}>
+              Join Beta - Get Free Checklist
+            </Button>
           </div>
 
           {/* Platform Visual */}
           <div className="relative max-w-4xl mx-auto">
-            
+            <div className="bg-gradient-to-r from-purple-500 to-teal-500 rounded-2xl p-8 shadow-2xl">
+              <div className="bg-white rounded-xl p-6 text-left">
+                <div className="flex items-center space-x-2 mb-4">
+                  <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                  <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                  <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                </div>
+                <div className="space-y-3">
+                  <div className="h-4 bg-slate-200 rounded w-3/4 animate-pulse"></div>
+                  <div className="h-4 bg-slate-200 rounded w-1/2 animate-pulse"></div>
+                  <div className="h-4 bg-slate-200 rounded w-5/6 animate-pulse"></div>
+                  <div className="grid grid-cols-3 gap-3 mt-6">
+                    <div className="h-20 bg-green-100 rounded flex items-center justify-center">
+                      <span className="text-green-600 font-bold">-40% Costs</span>
+                    </div>
+                    <div className="h-20 bg-blue-100 rounded flex items-center justify-center">
+                      <span className="text-blue-600 font-bold">+80% Speed</span>
+                    </div>
+                    <div className="h-20 bg-purple-100 rounded flex items-center justify-center">
+                      <span className="text-purple-600 font-bold">24/7 Auto</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="absolute -bottom-4 -right-4 bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold shadow-lg">
+              🎁 Beta Access Available
+            </div>
           </div>
         </div>
       </section>
+
+      {/* Social Proof */}
+      <SocialProof />
+
+      {/* How It Works */}
+      <div id="how-it-works">
+        <HowItWorks />
+      </div>
 
       {/* Features Section */}
       <section id="features" className="py-20 bg-slate-50">
@@ -198,6 +242,11 @@ User has consented to data processing per GDPR.
         </div>
       </section>
 
+      {/* Testimonials */}
+      <div id="testimonials">
+        <Testimonials />
+      </div>
+
       {/* Sign Up Form */}
       <section id="signup" className="py-20">
         <div className="container mx-auto px-6">
@@ -207,6 +256,9 @@ User has consented to data processing per GDPR.
               <p className="text-lg text-slate-600">
                 🎁 Sign up for our beta and get a <strong className="text-orange-500">free AI automation checklist</strong> for startups worldwide!
               </p>
+              <div className="mt-4 text-sm text-orange-600 font-medium">
+                ⏰ Limited spots available - Only 50 beta users remaining
+              </div>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -281,6 +333,11 @@ User has consented to data processing per GDPR.
         </div>
       </section>
 
+      {/* FAQ */}
+      <div id="faq">
+        <FAQ />
+      </div>
+
       {/* Trust Section */}
       <section id="trust" className="py-12 bg-slate-50">
         <div className="container mx-auto px-6 text-center">
@@ -326,4 +383,5 @@ User has consented to data processing per GDPR.
       </footer>
     </div>;
 };
+
 export default Index;
