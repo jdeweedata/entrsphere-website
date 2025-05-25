@@ -8,6 +8,7 @@ import HowItWorks from "@/components/HowItWorks";
 import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import SocialProof from "@/components/SocialProof";
+import { createBetaSignup, checkDuplicateEmail } from "@/services/betaSignupService";
 
 const Index = () => {
   const [name, setName] = useState("");
@@ -72,23 +73,27 @@ const Index = () => {
     setIsSubmitting(true);
     trackEvent('form_submit_attempt', 'Form Interaction', 'Beta Signup Validated');
     try {
-      const challengeText = challenge === "other" ? otherChallenge : challenge;
-      const subject = encodeURIComponent("Beta Registration - EntrSphere AI Automation");
-      const body = encodeURIComponent(`
-Name: ${name}
-Email: ${email}
-Company: ${company || 'Not specified'}
-Biggest Challenge: ${challengeText}
+      // Check for duplicate email
+      const isDuplicate = await checkDuplicateEmail(email);
+      if (isDuplicate) {
+        toast.error("This email is already registered for our beta program.");
+        setIsSubmitting(false);
+        return;
+      }
 
-User has consented to data processing per GDPR.
-      `);
-      const mailtoLink = `mailto:admin@entrsphere.com?subject=${subject}&body=${body}`;
+      // Create beta signup
+      const result = await createBetaSignup({
+        name,
+        email,
+        company,
+        challenge,
+        otherChallenge: challenge === "other" ? otherChallenge : undefined,
+        consent
+      });
 
-      // Simulate processing time
-      setTimeout(() => {
-        window.location.href = mailtoLink;
+      if (result.success) {
         toast.success("Thank you for signing up! We will be in touch soon with your checklist.");
-
+        
         // Track successful submission
         trackEvent('beta_signup_complete', 'Conversion', 'Beta Signup Success');
 
@@ -99,10 +104,14 @@ User has consented to data processing per GDPR.
         setChallenge("");
         setOtherChallenge("");
         setConsent(false);
-        setIsSubmitting(false);
-      }, 1500);
+      } else {
+        toast.error("Something went wrong. Please try again.");
+        console.error('Signup failed:', result.error);
+      }
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
+      console.error('Signup error:', error);
+    } finally {
       setIsSubmitting(false);
     }
   };
