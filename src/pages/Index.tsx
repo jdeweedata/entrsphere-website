@@ -121,7 +121,7 @@ User has consented to data processing per GDPR.
               <a href="#features" className="text-slate-600 hover:text-slate-900 transition-colors">Platform Overview</a>
               <a href="#about" className="text-slate-600 hover:text-slate-900 transition-colors">About Us</a>
               <a href="#feedback" className="text-slate-600 hover:text-slate-900 transition-colors">Blog</a>
-              <a href="#trust" className="text-slate-600 hover:text-slate-900 transition-colors">Trust Center</a>
+              
             </div>
 
             <Button className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2 rounded-full font-medium" onClick={() => trackEvent('click_cta_nav', 'CTA', 'Book a Demo Nav')}>
