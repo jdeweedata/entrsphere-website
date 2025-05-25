@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-
 const Index = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -27,20 +26,17 @@ const Index = () => {
     }
     console.log(`Tracked Event: ${eventName}, Category: ${eventCategory}, Label: ${eventLabel}`);
   };
-
   const validateEmail = (email: string) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Reset errors
     setNameError(false);
     setEmailError(false);
     setChallengeError(false);
-
     let isValid = true;
 
     // Validation
@@ -48,35 +44,28 @@ const Index = () => {
       setNameError(true);
       isValid = false;
     }
-
     if (!email.trim() || !validateEmail(email)) {
       setEmailError(true);
       isValid = false;
     }
-
     if (!challenge) {
       setChallengeError(true);
       isValid = false;
     }
-
     if (challenge === "other" && !otherChallenge.trim()) {
       isValid = false;
     }
-
     if (!consent) {
       toast.error("Please consent to data processing to continue");
       return;
     }
-
     if (!isValid) {
       toast.error("Please correct the errors above");
       trackEvent('form_submit_error', 'Form Interaction', 'Beta Signup Invalid');
       return;
     }
-
     setIsSubmitting(true);
     trackEvent('form_submit_attempt', 'Form Interaction', 'Beta Signup Validated');
-
     try {
       const challengeText = challenge === "other" ? otherChallenge : challenge;
       const subject = encodeURIComponent("Beta Registration - EntrSphere AI Automation");
@@ -89,12 +78,12 @@ Biggest Challenge: ${challengeText}
 User has consented to data processing per GDPR.
       `);
       const mailtoLink = `mailto:admin@entrsphere.com?subject=${subject}&body=${body}`;
-      
+
       // Simulate processing time
       setTimeout(() => {
         window.location.href = mailtoLink;
         toast.success("Thank you for signing up! We will be in touch soon with your checklist.");
-        
+
         // Track successful submission
         trackEvent('beta_signup_complete', 'Conversion', 'Beta Signup Success');
 
@@ -107,32 +96,24 @@ User has consented to data processing per GDPR.
         setConsent(false);
         setIsSubmitting(false);
       }, 1500);
-
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
       setIsSubmitting(false);
     }
   };
-
   const handleChallengeChange = (value: string) => {
     setChallenge(value);
     if (value !== "other") {
       setOtherChallenge("");
     }
   };
-
-  return (
-    <div className="min-h-screen bg-white">
+  return <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-white border-b border-slate-200">
         <div className="container mx-auto px-6 py-4">
           <nav className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <img 
-                src="/lovable-uploads/4824a6ff-4ee4-49c4-a5e0-681407eaf295.png" 
-                alt="EntrSphere Logo" 
-                className="w-8 h-8 object-contain" 
-              />
+              <img src="/lovable-uploads/4824a6ff-4ee4-49c4-a5e0-681407eaf295.png" alt="EntrSphere Logo" className="w-8 h-8 object-contain" />
               <span className="text-xl font-bold text-slate-900">entrsphere</span>
             </div>
             
@@ -143,10 +124,7 @@ User has consented to data processing per GDPR.
               <a href="#trust" className="text-slate-600 hover:text-slate-900 transition-colors">Trust Center</a>
             </div>
 
-            <Button 
-              className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2 rounded-full font-medium"
-              onClick={() => trackEvent('click_cta_nav', 'CTA', 'Book a Demo Nav')}
-            >
+            <Button className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2 rounded-full font-medium" onClick={() => trackEvent('click_cta_nav', 'CTA', 'Book a Demo Nav')}>
               Book a Demo
             </Button>
           </nav>
@@ -160,21 +138,13 @@ User has consented to data processing per GDPR.
             Unlock Growth, Protect Margins, and Cut Costs—Without Hiring More or Wasting Budget
           </h1>
           
-          <p className="text-xl text-slate-600 mb-12 max-w-4xl mx-auto leading-relaxed">
-            EntrSphere AI turns scattered feedback and product data from tools like Salesforce, Gong, Zendesk, and Slack into clear actions, so every decision is backed by real evidence and tied to business impact.
-          </p>
+          <p className="text-xl text-slate-600 mb-12 max-w-4xl mx-auto leading-relaxed">Grow smarter—not harder. Let AI do the heavy lifting so you can scale profitably, control costs, and outpace competitors.</p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-            <Button 
-              className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-3 rounded-full font-medium"
-              onClick={() => trackEvent('click_cta_hero', 'CTA', 'Book a Demo Hero')}
-            >
+            <Button className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-3 rounded-full font-medium" onClick={() => trackEvent('click_cta_hero', 'CTA', 'Book a Demo Hero')}>
               Book a demo
             </Button>
-            <Button 
-              variant="outline" 
-              className="border-slate-300 text-slate-700 px-8 py-3 rounded-full font-medium hover:bg-slate-50"
-            >
+            <Button variant="outline" className="border-slate-300 text-slate-700 px-8 py-3 rounded-full font-medium hover:bg-slate-50">
               ▶ Watch How It Works
             </Button>
           </div>
@@ -311,17 +281,7 @@ User has consented to data processing per GDPR.
                 <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
                   Full Name <span className="text-red-500">*</span>
                 </label>
-                <Input 
-                  type="text" 
-                  id="name"
-                  value={name} 
-                  onChange={(e) => setName(e.target.value)}
-                  className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 ${
-                    nameError ? 'border-red-500' : 'border-slate-200 focus:border-slate-400'
-                  }`}
-                  placeholder="e.g., Jane Doe"
-                  required 
-                />
+                <Input type="text" id="name" value={name} onChange={e => setName(e.target.value)} className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 ${nameError ? 'border-red-500' : 'border-slate-200 focus:border-slate-400'}`} placeholder="e.g., Jane Doe" required />
                 {nameError && <p className="text-xs text-red-500 mt-1">Name is required.</p>}
               </div>
 
@@ -330,17 +290,7 @@ User has consented to data processing per GDPR.
                 <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
                   Email Address <span className="text-red-500">*</span>
                 </label>
-                <Input 
-                  type="email" 
-                  id="email"
-                  value={email} 
-                  onChange={(e) => setEmail(e.target.value)}
-                  className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 ${
-                    emailError ? 'border-red-500' : 'border-slate-200 focus:border-slate-400'
-                  }`}
-                  placeholder="you@company.com"
-                  required 
-                />
+                <Input type="email" id="email" value={email} onChange={e => setEmail(e.target.value)} className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 ${emailError ? 'border-red-500' : 'border-slate-200 focus:border-slate-400'}`} placeholder="you@company.com" required />
                 {emailError && <p className="text-xs text-red-500 mt-1">Please enter a valid email.</p>}
               </div>
 
@@ -349,14 +299,7 @@ User has consented to data processing per GDPR.
                 <label htmlFor="company" className="block text-sm font-medium text-slate-700 mb-2">
                   Company Name (Optional)
                 </label>
-                <Input 
-                  type="text" 
-                  id="company"
-                  value={company} 
-                  onChange={(e) => setCompany(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-slate-400 transition-all duration-200"
-                  placeholder="e.g., Your Startup Inc."
-                />
+                <Input type="text" id="company" value={company} onChange={e => setCompany(e.target.value)} className="w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-slate-400 transition-all duration-200" placeholder="e.g., Your Startup Inc." />
               </div>
 
               {/* Challenge Dropdown */}
@@ -365,9 +308,7 @@ User has consented to data processing per GDPR.
                   What's your biggest challenge? <span className="text-red-500">*</span>
                 </label>
                 <Select value={challenge} onValueChange={handleChallengeChange}>
-                  <SelectTrigger className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 ${
-                    challengeError ? 'border-red-500' : 'border-slate-200 focus:border-slate-400'
-                  }`}>
+                  <SelectTrigger className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 ${challengeError ? 'border-red-500' : 'border-slate-200 focus:border-slate-400'}`}>
                     <SelectValue placeholder="Select an option" />
                   </SelectTrigger>
                   <SelectContent className="bg-white border border-slate-200 shadow-lg rounded-lg">
@@ -382,43 +323,23 @@ User has consented to data processing per GDPR.
               </div>
 
               {/* Other Challenge Text Input */}
-              {challenge === "other" && (
-                <div>
+              {challenge === "other" && <div>
                   <label htmlFor="other_challenge" className="block text-sm font-medium text-slate-700 mb-2">
                     Please specify your challenge:
                   </label>
-                  <Input 
-                    type="text" 
-                    id="other_challenge"
-                    value={otherChallenge} 
-                    onChange={(e) => setOtherChallenge(e.target.value)}
-                    className="w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-slate-400 transition-all duration-200"
-                    placeholder="Describe your challenge"
-                    required={challenge === "other"}
-                  />
-                </div>
-              )}
+                  <Input type="text" id="other_challenge" value={otherChallenge} onChange={e => setOtherChallenge(e.target.value)} className="w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-slate-400 transition-all duration-200" placeholder="Describe your challenge" required={challenge === "other"} />
+                </div>}
 
               {/* Consent Checkbox */}
               <div className="flex items-start space-x-3">
-                <Checkbox 
-                  id="consent" 
-                  checked={consent} 
-                  onCheckedChange={(checked) => setConsent(checked as boolean)}
-                  className="mt-1" 
-                  required 
-                />
+                <Checkbox id="consent" checked={consent} onCheckedChange={checked => setConsent(checked as boolean)} className="mt-1" required />
                 <label htmlFor="consent" className="text-sm text-slate-600 cursor-pointer">
                   I consent to my data being processed per GDPR <span className="text-red-500">*</span>
                 </label>
               </div>
 
               {/* Submit Button */}
-              <Button 
-                type="submit" 
-                disabled={isSubmitting}
-                className="w-full bg-slate-900 hover:bg-slate-800 text-white font-medium py-3 px-6 rounded-lg transition-all duration-300"
-              >
+              <Button type="submit" disabled={isSubmitting} className="w-full bg-slate-900 hover:bg-slate-800 text-white font-medium py-3 px-6 rounded-lg transition-all duration-300">
                 {isSubmitting ? "Submitting..." : "Sign Up & Get Checklist"}
               </Button>
             </form>
@@ -447,13 +368,10 @@ User has consented to data processing per GDPR.
             <p className="text-lg text-slate-600 mb-8">
               We value your input. Share your thoughts on AI automation for your startup and help us build the best solution for you.
             </p>
-            <Button 
-              className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-3 rounded-full font-medium"
-              onClick={() => {
-                trackEvent('click_feedback_cta', 'CTA', 'Feedback Button');
-                window.location.href = "mailto:admin@entrsphere.com?subject=Feedback%20on%20AI%20Automation";
-              }}
-            >
+            <Button className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-3 rounded-full font-medium" onClick={() => {
+            trackEvent('click_feedback_cta', 'CTA', 'Feedback Button');
+            window.location.href = "mailto:admin@entrsphere.com?subject=Feedback%20on%20AI%20Automation";
+          }}>
               Share Your Thoughts
             </Button>
           </div>
@@ -472,8 +390,6 @@ User has consented to data processing per GDPR.
           <p className="text-sm text-slate-500 mt-2">Built for a global startup community.</p>
         </div>
       </footer>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
