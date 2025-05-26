@@ -4,28 +4,28 @@ import { Star } from "lucide-react";
 const Testimonials = () => {
   const testimonials = [
     {
-      name: "Sarah Chen",
-      title: "CEO, TechFlow Startup",
-      company: "TechFlow",
+      name: "Alex Thompson",
+      title: "CEO, DataFlow Solutions",
+      company: "DataFlow Solutions",
       testimonial: "EntrSphere helped us automate our customer onboarding process. We went from 3 hours per customer to 15 minutes, and our team can now focus on product development.",
       rating: 5,
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b1c5?w=60&h=60&fit=crop&crop=face"
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face"
     },
     {
-      name: "Marcus Rodriguez",
-      title: "Founder, GrowthLab",
-      company: "GrowthLab",
+      name: "Jessica Chen",
+      title: "Founder, GrowthMetrics",
+      company: "GrowthMetrics",
       testimonial: "The ROI was immediate. Within the first month, we saved 40% on operational costs and could redirect those resources to customer acquisition.",
       rating: 5,
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face"
+      avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=60&h=60&fit=crop&crop=face"
     },
     {
-      name: "Emily Watson",
-      title: "COO, InnovateCorp",
-      company: "InnovateCorp",
+      name: "Michael Rodriguez",
+      title: "COO, TechPivot Inc",
+      company: "TechPivot Inc",
       testimonial: "What used to take our team 2 weeks now happens automatically overnight. EntrSphere's AI automation has been a game-changer for our scaling efforts.",
       rating: 5,
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face"
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face"
     }
   ];
 
