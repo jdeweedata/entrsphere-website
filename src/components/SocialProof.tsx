@@ -32,17 +32,17 @@ const SocialProof = () => {
         {/* Single powerful testimonial */}
         <div className="max-w-4xl mx-auto text-center bg-slate-800 p-8 rounded-xl">
           <div className="text-xl italic mb-4 text-slate-200">
-            "EntrSphere saved us $41,000 in our first quarter alone. What used to take our team 3 full days now happens automatically overnight. It's like having 10 extra employees."
+            "The ROI was immediate. Within the first month, we saved 40% on operational costs and could redirect those resources to customer acquisition. EntrSphere transformed how we operate."
           </div>
           <div className="flex items-center justify-center space-x-4">
             <img 
-              src="https://images.unsplash.com/photo-1494790108755-2616b612b1c5?w=60&h=60&fit=crop&crop=face" 
-              alt="Sarah Chen"
+              src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=60&h=60&fit=crop&crop=face" 
+              alt="Jessica Chen"
               className="w-12 h-12 rounded-full"
             />
             <div>
-              <div className="font-semibold text-white">Sarah Chen</div>
-              <div className="text-sm text-slate-400">CEO, TechFlow (YC S23)</div>
+              <div className="font-semibold text-white">Jessica Chen</div>
+              <div className="text-sm text-slate-400">Founder, GrowthMetrics</div>
             </div>
           </div>
         </div>
