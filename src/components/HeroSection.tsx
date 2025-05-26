@@ -2,60 +2,71 @@
 import { Button } from "@/components/ui/button";
 
 interface HeroSectionProps {
-  onBookDemo: () => void;
-  onJoinBeta: () => void;
+  onGetAudit: () => void;
 }
 
-const HeroSection = ({ onBookDemo, onJoinBeta }: HeroSectionProps) => {
+const HeroSection = ({ onGetAudit }: HeroSectionProps) => {
   return (
     <section className="py-24 lg:py-32">
       <div className="container mx-auto px-6 text-center">
+        <div className="mb-6">
+          <span className="inline-block bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+            ⚠️ Stop Losing $50K+/Year to Manual Processes
+          </span>
+        </div>
+        
         <h1 className="text-5xl lg:text-7xl font-bold text-slate-900 mb-8 leading-tight">
-          Unlock Growth, Protect Margins, and Cut Costs—Without Hiring More or Wasting Budget
+          Turn Your Team's Busywork Into Strategic Work
         </h1>
         
         <p className="text-xl text-slate-600 mb-12 max-w-4xl mx-auto leading-relaxed">
-          Grow smarter—not harder. Let AI do the heavy lifting so you can scale profitably, control costs, and outpace competitors.
+          <strong>Spending 60% of your time on manual tasks?</strong> Our AI automation cuts repetitive work by 80%, so you can scale to 10x revenue without 10x headcount.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-          <Button className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-3 rounded-full font-medium" onClick={onBookDemo}>
-            Book a demo
+        <div className="mb-16">
+          <Button 
+            className="bg-orange-600 hover:bg-orange-700 text-white px-12 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300" 
+            onClick={onGetAudit}
+          >
+            Get Your Free Automation Audit →
           </Button>
-          <Button variant="outline" className="px-8 py-3 rounded-full font-medium" onClick={onJoinBeta}>
-            Join Beta - Get Free Checklist
-          </Button>
+          <p className="text-sm text-slate-500 mt-3">See exactly how much time & money you could save • No commitment required</p>
         </div>
 
-        {/* Platform Visual */}
-        <div className="relative max-w-4xl mx-auto">
-          <div className="bg-gradient-to-r from-purple-500 to-teal-500 rounded-2xl p-8 shadow-2xl">
-            <div className="bg-white rounded-xl p-6 text-left">
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+        {/* Before/After Scenarios */}
+        <div className="relative max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Before */}
+            <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-8">
+              <h3 className="text-xl font-bold text-red-700 mb-4">❌ Before Automation</h3>
+              <div className="space-y-3 text-left">
+                <div className="text-slate-700">• Customer support: <strong>6 hours per ticket</strong></div>
+                <div className="text-slate-700">• Data entry: <strong>20 hours/week</strong></div>
+                <div className="text-slate-700">• Invoice processing: <strong>3 days delay</strong></div>
+                <div className="text-slate-700">• Manual reporting: <strong>2 full days/month</strong></div>
               </div>
-              <div className="space-y-3">
-                <div className="h-4 bg-slate-200 rounded w-3/4 animate-pulse"></div>
-                <div className="h-4 bg-slate-200 rounded w-1/2 animate-pulse"></div>
-                <div className="h-4 bg-slate-200 rounded w-5/6 animate-pulse"></div>
-                <div className="grid grid-cols-3 gap-3 mt-6">
-                  <div className="h-20 bg-green-100 rounded flex items-center justify-center">
-                    <span className="text-green-600 font-bold">-40% Costs</span>
-                  </div>
-                  <div className="h-20 bg-blue-100 rounded flex items-center justify-center">
-                    <span className="text-blue-600 font-bold">+80% Speed</span>
-                  </div>
-                  <div className="h-20 bg-purple-100 rounded flex items-center justify-center">
-                    <span className="text-purple-600 font-bold">24/7 Auto</span>
-                  </div>
-                </div>
+              <div className="mt-6 p-4 bg-red-100 rounded-lg">
+                <div className="text-red-800 font-bold">Cost: $52,000/year in lost productivity</div>
+              </div>
+            </div>
+
+            {/* After */}
+            <div className="bg-green-50 border-2 border-green-200 rounded-2xl p-8">
+              <h3 className="text-xl font-bold text-green-700 mb-4">✅ After Automation</h3>
+              <div className="space-y-3 text-left">
+                <div className="text-slate-700">• Customer support: <strong>30 minutes per ticket</strong></div>
+                <div className="text-slate-700">• Data entry: <strong>2 hours/week</strong></div>
+                <div className="text-slate-700">• Invoice processing: <strong>Same day</strong></div>
+                <div className="text-slate-700">• Manual reporting: <strong>Automated daily</strong></div>
+              </div>
+              <div className="mt-6 p-4 bg-green-100 rounded-lg">
+                <div className="text-green-800 font-bold">Savings: $41,600/year + faster growth</div>
               </div>
             </div>
           </div>
-          <div className="absolute -bottom-4 -right-4 bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold shadow-lg">
-            🎁 Beta Access Available
+          
+          <div className="absolute -bottom-4 -right-4 bg-orange-500 text-white px-6 py-3 rounded-lg font-bold shadow-lg animate-pulse">
+            🎁 Limited: Only 50 Free Audits This Month
           </div>
         </div>
       </div>

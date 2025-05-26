@@ -1,11 +1,10 @@
 
-import HowItWorks from "@/components/HowItWorks";
 import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import SocialProof from "@/components/SocialProof";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
-import FeaturesSection from "@/components/FeaturesSection";
+import ProblemsSection from "@/components/ProblemsSection";
 import BetaSignupForm from "@/components/BetaSignupForm";
 import Footer from "@/components/Footer";
 
@@ -21,11 +20,8 @@ const Index = () => {
     console.log(`Tracked Event: ${eventName}, Category: ${eventCategory}, Label: ${eventLabel}`);
   };
 
-  const handleBookDemo = () => {
-    trackEvent('click_cta_nav', 'CTA', 'Book a Demo Nav');
-  };
-
-  const handleJoinBeta = () => {
+  const handleGetAudit = () => {
+    trackEvent('click_cta_primary', 'CTA', 'Free Automation Audit');
     document.getElementById('signup')?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -36,20 +32,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header onBookDemo={handleBookDemo} onJoinBeta={handleJoinBeta} />
-      <HeroSection onBookDemo={handleBookDemo} onJoinBeta={handleJoinBeta} />
+      <Header onGetAudit={handleGetAudit} />
+      <HeroSection onGetAudit={handleGetAudit} />
       <SocialProof />
-      
-      <div id="how-it-works">
-        <HowItWorks />
-      </div>
-      
-      <FeaturesSection />
-      
-      <div id="testimonials">
-        <Testimonials />
-      </div>
-      
+      <ProblemsSection />
+      <Testimonials />
       <BetaSignupForm onFormSubmit={trackEvent} />
       
       <div id="faq">
