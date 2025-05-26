@@ -1,37 +1,37 @@
 
-import { Clock, DollarSign, Users, TrendingUp } from "lucide-react";
+import { Building2, Zap, Cloud, Cog } from "lucide-react";
 
 const ProblemsSection = () => {
   const problems = [
     {
-      icon: Clock,
-      problem: "Customer Support Taking 6+ Hours Per Ticket",
-      solution: "AI-powered auto-responses and ticket routing cut response time to 30 minutes",
-      savings: "Save 18 hours/week per support agent",
-      color: "text-blue-600",
-      bgColor: "bg-blue-100"
-    },
-    {
-      icon: DollarSign,
-      problem: "Manual Data Entry Eating 20+ Hours Weekly",
-      solution: "Automated data extraction and entry from emails, PDFs, and forms",
-      savings: "Eliminate 90% of manual data work",
-      color: "text-green-600",
-      bgColor: "bg-green-100"
-    },
-    {
-      icon: Users,
-      problem: "Invoice Processing Delays Costing Deals",
-      solution: "Instant invoice generation, approval workflows, and payment tracking",
-      savings: "Get paid 5x faster",
+      icon: Building2,
+      problem: "Fragmented Markets With No Central Connection Point",
+      solution: "AI-powered marketplace platforms that intelligently match supply and demand with smart algorithms",
+      savings: "10x faster connections, 95% match accuracy",
       color: "text-purple-600",
       bgColor: "bg-purple-100"
     },
     {
-      icon: TrendingUp,
-      problem: "Manual Reporting Taking 2 Days/Month",
-      solution: "Real-time dashboards with automated insights and alerts",
-      savings: "Turn 16 hours into 0 hours monthly",
+      icon: Zap,
+      problem: "Building Custom Platforms Takes Years & Millions",
+      solution: "Ready-to-deploy PaaS solutions with industry-specific templates and pre-built components",
+      savings: "Launch in weeks, 90% cost reduction",
+      color: "text-blue-600",
+      bgColor: "bg-blue-100"
+    },
+    {
+      icon: Cloud,
+      problem: "Scaling Infrastructure Is Complex & Expensive",
+      solution: "Managed IaaS with auto-scaling, monitoring, and optimization built for platform businesses",
+      savings: "Handle 100x growth seamlessly",
+      color: "text-green-600",
+      bgColor: "bg-green-100"
+    },
+    {
+      icon: Cog,
+      problem: "Platform Management Consumes All Resources",
+      solution: "Fully managed platform operations with AI-driven optimization and automated workflows",
+      savings: "Focus on growth, not operations",
       color: "text-orange-600",
       bgColor: "bg-orange-100"
     }
@@ -41,9 +41,9 @@ const ProblemsSection = () => {
     <section id="problems" className="py-20 bg-slate-50">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-slate-900 mb-4">Real Problems We Solve Daily</h2>
+          <h2 className="text-4xl font-bold text-slate-900 mb-4">Platform Challenges We Solve Daily</h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Stop bleeding money on manual processes. Here's exactly how we've helped 500+ startups reclaim their time and boost profits.
+            Stop losing opportunities to fragmented markets. Here's exactly how we've helped 50+ companies build thriving digital ecosystems.
           </p>
         </div>
         
@@ -58,7 +58,7 @@ const ProblemsSection = () => {
                   <h3 className="text-lg font-bold text-slate-900 mb-2">{item.problem}</h3>
                   <p className="text-slate-600 mb-3">{item.solution}</p>
                   <div className={`inline-flex items-center ${item.color} bg-slate-50 px-3 py-1 rounded-full text-sm font-medium`}>
-                    💰 {item.savings}
+                    💡 {item.savings}
                   </div>
                 </div>
               </div>
@@ -67,9 +67,9 @@ const ProblemsSection = () => {
         </div>
 
         <div className="text-center mt-12">
-          <div className="inline-flex items-center bg-orange-50 border border-orange-200 text-orange-700 font-bold py-4 px-8 rounded-lg">
+          <div className="inline-flex items-center bg-blue-50 border border-blue-200 text-blue-700 font-bold py-4 px-8 rounded-lg">
             <span className="text-2xl mr-3">🚀</span>
-            <span>Average client sees ROI within 30 days</span>
+            <span>From concept to thriving ecosystem in record time</span>
           </div>
         </div>
       </div>

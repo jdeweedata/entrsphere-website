@@ -5,37 +5,40 @@ const Testimonials = () => {
   const testimonials = [
     {
       name: "Alex Thompson",
-      title: "CEO, DataFlow Solutions",
-      company: "DataFlow Solutions",
-      testimonial: "EntrSphere helped us automate our customer onboarding process. We went from 3 hours per customer to 15 minutes, and our team can now focus on product development.",
+      title: "CEO & Founder",
+      company: "LogiConnect Marketplace",
+      testimonial: "EntrSphere helped us launch a B2B logistics marketplace that now processes $2M monthly. Their AI matching reduced our customer acquisition cost by 60% while improving match quality.",
       rating: 5,
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face"
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face",
+      metrics: "Platform Type: B2B Marketplace"
     },
     {
       name: "Jessica Chen",
-      title: "Founder, GrowthMetrics",
-      company: "GrowthMetrics",
-      testimonial: "The ROI was immediate. Within the first month, we saved 40% on operational costs and could redirect those resources to customer acquisition.",
+      title: "Founder",
+      company: "MedConnect Platform",
+      testimonial: "From concept to live healthcare network in 6 weeks. EntrSphere's platform infrastructure handles our complex compliance requirements while we focus on connecting patients with specialists.",
       rating: 5,
-      avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=60&h=60&fit=crop&crop=face"
+      avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=60&h=60&fit=crop&crop=face",
+      metrics: "Platform Type: Healthcare Network"
     },
     {
       name: "Michael Rodriguez",
-      title: "COO, TechPivot Inc",
-      company: "TechPivot Inc",
-      testimonial: "What used to take our team 2 weeks now happens automatically overnight. EntrSphere's AI automation has been a game-changer for our scaling efforts.",
+      title: "CTO",
+      company: "SkillBridge Pro",
+      testimonial: "Their PaaS solution saved us 18 months of development time. We launched our professional services marketplace with advanced features that would have taken our team years to build.",
       rating: 5,
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face"
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face",
+      metrics: "Platform Type: Professional Services"
     }
   ];
 
   return (
-    <section className="py-20 bg-slate-50">
+    <section id="testimonials" className="py-20 bg-slate-50">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-slate-900 mb-4">What Our Clients Say</h2>
+          <h2 className="text-4xl font-bold text-slate-900 mb-4">Platform Success Stories</h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Join hundreds of startups that have transformed their operations with AI automation.
+            Join dozens of platform operators who've built thriving ecosystems with our technology.
           </p>
         </div>
         
@@ -49,6 +52,12 @@ const Testimonials = () => {
               </div>
               
               <p className="text-slate-600 mb-6 leading-relaxed italic">"{testimonial.testimonial}"</p>
+              
+              <div className="mb-4">
+                <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                  {testimonial.metrics}
+                </span>
+              </div>
               
               <div className="flex items-center">
                 <img 

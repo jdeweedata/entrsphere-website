@@ -5,6 +5,7 @@ import SocialProof from "@/components/SocialProof";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ProblemsSection from "@/components/ProblemsSection";
+import SolutionsSection from "@/components/SolutionsSection";
 import BetaSignupForm from "@/components/BetaSignupForm";
 import Footer from "@/components/Footer";
 
@@ -21,13 +22,13 @@ const Index = () => {
   };
 
   const handleGetAudit = () => {
-    trackEvent('click_cta_primary', 'CTA', 'Free Automation Audit');
+    trackEvent('click_cta_primary', 'CTA', 'Platform Strategy Session');
     document.getElementById('signup')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleFeedbackClick = () => {
     trackEvent('click_feedback_cta', 'CTA', 'Feedback Button');
-    window.location.href = "mailto:admin@entrsphere.com?subject=Feedback%20on%20AI%20Automation";
+    window.location.href = "mailto:admin@entrsphere.com?subject=Feedback%20on%20Platform%20Solutions";
   };
 
   return (
@@ -36,6 +37,7 @@ const Index = () => {
       <HeroSection onGetAudit={handleGetAudit} />
       <SocialProof />
       <ProblemsSection />
+      <SolutionsSection />
       <Testimonials />
       <BetaSignupForm onFormSubmit={trackEvent} />
       

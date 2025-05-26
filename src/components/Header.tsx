@@ -27,13 +27,13 @@ const Header = ({ onGetAudit }: HeaderProps) => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-teal-600 rounded-lg"></div>
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg"></div>
             <span className="text-xl font-bold text-slate-900">EntrSphere</span>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#problems" className="text-slate-600 hover:text-slate-900 transition-colors">Problems We Solve</a>
+            <a href="#problems" className="text-slate-600 hover:text-slate-900 transition-colors">Platform Solutions</a>
             <a href="#testimonials" className="text-slate-600 hover:text-slate-900 transition-colors">Success Stories</a>
             <a href="#faq" className="text-slate-600 hover:text-slate-900 transition-colors">FAQ</a>
           </nav>
@@ -54,10 +54,10 @@ const Header = ({ onGetAudit }: HeaderProps) => {
                   <Button variant="ghost">Login</Button>
                 </Link>
                 <Button 
-                  className="bg-orange-600 hover:bg-orange-700 text-white font-medium" 
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium" 
                   onClick={onGetAudit}
                 >
-                  Get Free Audit
+                  Get Platform Strategy
                 </Button>
               </>
             )}
@@ -76,7 +76,7 @@ const Header = ({ onGetAudit }: HeaderProps) => {
         {isMenuOpen && (
           <div className="md:hidden mt-4 pb-4 border-t border-slate-200">
             <nav className="flex flex-col space-y-4 mt-4">
-              <a href="#problems" className="text-slate-600 hover:text-slate-900 transition-colors">Problems We Solve</a>
+              <a href="#problems" className="text-slate-600 hover:text-slate-900 transition-colors">Platform Solutions</a>
               <a href="#testimonials" className="text-slate-600 hover:text-slate-900 transition-colors">Success Stories</a>
               <a href="#faq" className="text-slate-600 hover:text-slate-900 transition-colors">FAQ</a>
               {user ? (
@@ -93,10 +93,10 @@ const Header = ({ onGetAudit }: HeaderProps) => {
                     <Button variant="ghost" className="w-full">Login</Button>
                   </Link>
                   <Button 
-                    className="bg-orange-600 hover:bg-orange-700 text-white font-medium w-full" 
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-medium w-full" 
                     onClick={onGetAudit}
                   >
-                    Get Free Audit
+                    Get Platform Strategy
                   </Button>
                 </div>
               )}

@@ -7,28 +7,28 @@ const FAQ = () => {
 
   const faqs = [
     {
-      question: "How quickly can I see results from AI automation?",
-      answer: "Most clients see immediate improvements within the first week of implementation. Significant cost savings and efficiency gains typically become apparent within 30 days."
+      question: "How quickly can we launch our platform with EntrSphere?",
+      answer: "Most platforms launch within 4-8 weeks using our PaaS solutions. Custom marketplace development typically takes 6-12 weeks, compared to 12-24 months for traditional custom development."
     },
     {
-      question: "Do I need technical expertise to use EntrSphere?",
-      answer: "Not at all! We handle all the technical implementation and provide ongoing support. Our solutions are designed to work seamlessly with your existing processes."
+      question: "What types of platforms can you build?",
+      answer: "We specialize in marketplaces (B2B, B2C, peer-to-peer), professional service networks, healthcare platforms, supply chain solutions, and industry-specific platforms across 12+ verticals."
     },
     {
-      question: "What types of processes can be automated?",
-      answer: "We can automate customer onboarding, data entry, reporting, email marketing, inventory management, customer support, and many other repetitive business processes."
+      question: "Do you provide ongoing platform management?",
+      answer: "Yes! Our IaaS includes 24/7 monitoring, auto-scaling, security updates, and performance optimization. You focus on growing your business while we handle the technical operations."
     },
     {
-      question: "Is my data secure with EntrSphere?",
-      answer: "Absolutely. We're GDPR compliant and use enterprise-grade security measures. Your data is encrypted and never shared with third parties."
+      question: "How does your AI matching technology work?",
+      answer: "Our AI learns from user behavior, preferences, and successful transactions to continuously improve matching accuracy. It considers factors like location, pricing, ratings, and compatibility to optimize connections."
     },
     {
-      question: "What's included in the beta program?",
-      answer: "Beta participants get early access to our platform, dedicated support, custom automation setup, and a free AI automation checklist. You'll also get priority access to new features."
+      question: "What's included in your platform strategy session?",
+      answer: "We analyze your market opportunity, define your platform architecture, identify key features, estimate development timeline and costs, and provide a comprehensive go-to-market strategy."
     },
     {
-      question: "How much can I expect to save with automation?",
-      answer: "Our clients typically see 30-50% reduction in operational costs and 60-80% time savings on automated processes. The exact savings depend on your specific use case."
+      question: "Can you integrate with existing systems and third-party services?",
+      answer: "Absolutely. Our platforms integrate with payment processors, CRM systems, analytics tools, communication platforms, and industry-specific software through our comprehensive API framework."
     }
   ];
 
@@ -40,9 +40,9 @@ const FAQ = () => {
     <section className="py-20 bg-white">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-slate-900 mb-4">Frequently Asked Questions</h2>
+          <h2 className="text-4xl font-bold text-slate-900 mb-4">Platform Development FAQ</h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Get answers to common questions about AI automation for your startup.
+            Get answers to common questions about building and scaling digital platforms.
           </p>
         </div>
         
