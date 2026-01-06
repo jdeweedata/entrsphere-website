@@ -9,9 +9,10 @@ import remarkGfm from "remark-gfm";
 import { api } from "../../convex/_generated/api";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { ArrowLeft, Clock, Calendar, User } from "lucide-react";
 
 // Import highlight.js styles
-import "highlight.js/styles/github-dark.css";
+import "highlight.js/styles/github.css";
 
 interface TocItem {
   id: string;
@@ -28,11 +29,15 @@ function formatDate(timestamp: number): string {
 }
 
 function extractTocItems(markdown: string): TocItem[] {
-  const headingRegex = /^(#{2,3})\s+(.+)$/gm;
+  // Remove code blocks first to avoid picking up headings from inside them
+  const withoutCodeBlocks = markdown.replace(/```[\s\S]*?```/g, "");
+
+  // Only extract h2 headings for cleaner TOC
+  const headingRegex = /^(#{2})\s+(.+)$/gm;
   const items: TocItem[] = [];
   let match;
 
-  while ((match = headingRegex.exec(markdown)) !== null) {
+  while ((match = headingRegex.exec(withoutCodeBlocks)) !== null) {
     const level = match[1].length;
     const text = match[2].trim();
     const id = text
@@ -44,6 +49,11 @@ function extractTocItems(markdown: string): TocItem[] {
   }
 
   return items;
+}
+
+// Strip the first H1 from content since we display it in PostHeader
+function stripFirstH1(markdown: string): string {
+  return markdown.replace(/^#\s+.+\n+/, "");
 }
 
 function TableOfContents({
@@ -63,6 +73,7 @@ function TableOfContents({
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="lg:hidden fixed bottom-6 right-6 z-50 bg-slate-900 text-white p-3 rounded-full shadow-lg hover:bg-slate-800 transition-colors"
+        aria-label="Table of contents"
       >
         <svg
           className="w-6 h-6"
@@ -93,15 +104,13 @@ function TableOfContents({
               Table of Contents
             </h3>
             <nav>
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 {items.map((item) => (
                   <li key={item.id}>
                     <a
                       href={`#${item.id}`}
                       onClick={() => setIsOpen(false)}
                       className={`block py-1 text-sm transition-colors ${
-                        item.level === 3 ? "pl-4" : ""
-                      } ${
                         activeId === item.id
                           ? "text-blue-600 font-medium"
                           : "text-slate-600 hover:text-slate-900"
@@ -118,23 +127,21 @@ function TableOfContents({
       )}
 
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:block sticky top-24 self-start w-64 flex-shrink-0">
+      <aside className="hidden lg:block sticky top-28 self-start w-72 flex-shrink-0">
         <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">
+          <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">
             On This Page
           </h3>
           <nav>
-            <ul className="space-y-2">
+            <ul className="space-y-1">
               {items.map((item) => (
                 <li key={item.id}>
                   <a
                     href={`#${item.id}`}
-                    className={`block py-1 text-sm transition-colors border-l-2 ${
-                      item.level === 3 ? "pl-5" : "pl-3"
-                    } ${
+                    className={`block py-2 px-3 text-sm rounded-lg transition-colors ${
                       activeId === item.id
-                        ? "border-blue-600 text-blue-600 font-medium"
-                        : "border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300"
+                        ? "bg-blue-50 text-blue-700 font-medium"
+                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                     }`}
                   >
                     {item.text}
@@ -154,6 +161,7 @@ function PostHeader({
 }: {
   post: {
     title: string;
+    excerpt: string;
     category: string;
     coverImage?: string;
     author: { name: string; avatar?: string; bio?: string };
@@ -162,56 +170,53 @@ function PostHeader({
   };
 }) {
   return (
-    <header className="mb-10">
-      {/* Cover Image */}
-      {post.coverImage && (
-        <div className="relative h-64 md:h-96 -mx-4 sm:-mx-6 lg:-mx-8 mb-8 overflow-hidden rounded-xl">
-          <img
-            src={post.coverImage}
-            alt={post.title}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      )}
-
-      {/* Category */}
+    <header className="mb-12">
+      {/* Category Badge */}
       <Link
         to={`/blog?category=${encodeURIComponent(post.category)}`}
-        className="inline-block px-3 py-1 text-sm font-medium bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-colors mb-4"
+        className="inline-block px-3 py-1 text-sm font-medium bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-colors mb-6"
       >
         {post.category}
       </Link>
 
       {/* Title */}
-      <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+      <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 leading-tight">
         {post.title}
       </h1>
 
-      {/* Meta */}
-      <div className="flex flex-wrap items-center gap-4 text-slate-500">
+      {/* Excerpt */}
+      <p className="text-xl text-slate-600 mb-8 leading-relaxed">
+        {post.excerpt}
+      </p>
+
+      {/* Meta Row */}
+      <div className="flex flex-wrap items-center gap-6 pb-8 border-b border-slate-200">
+        {/* Author */}
         <div className="flex items-center gap-3">
-          {post.author.avatar ? (
-            <img
-              src={post.author.avatar}
-              alt={post.author.name}
-              className="w-10 h-10 rounded-full"
-            />
-          ) : (
-            <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-600">
-              {post.author.name.charAt(0)}
-            </div>
-          )}
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-semibold text-lg">
+            {post.author.name.charAt(0)}
+          </div>
           <div>
             <p className="text-slate-900 font-medium">{post.author.name}</p>
             {post.author.bio && (
-              <p className="text-sm text-slate-500">{post.author.bio}</p>
+              <p className="text-sm text-slate-500 max-w-xs">{post.author.bio}</p>
             )}
           </div>
         </div>
-        <span className="hidden sm:inline text-slate-300">|</span>
-        {post.publishedAt && <span>{formatDate(post.publishedAt)}</span>}
-        <span className="hidden sm:inline text-slate-300">|</span>
-        <span>{post.readTime} min read</span>
+
+        {/* Date & Read Time */}
+        <div className="flex items-center gap-4 text-sm text-slate-500">
+          {post.publishedAt && (
+            <div className="flex items-center gap-1.5">
+              <Calendar className="w-4 h-4" />
+              <span>{formatDate(post.publishedAt)}</span>
+            </div>
+          )}
+          <div className="flex items-center gap-1.5">
+            <Clock className="w-4 h-4" />
+            <span>{post.readTime} min read</span>
+          </div>
+        </div>
       </div>
     </header>
   );
@@ -227,22 +232,17 @@ function PostFooter({
   tags?: string[];
 }) {
   return (
-    <footer className="mt-12 pt-8 border-t border-slate-200">
+    <footer className="mt-16 pt-8 border-t border-slate-200">
       {/* Author Card */}
-      <div className="bg-white border border-slate-200 rounded-xl p-6 mb-8 shadow-sm">
+      <div className="bg-gradient-to-br from-slate-50 to-blue-50 border border-slate-200 rounded-2xl p-6 mb-8">
         <div className="flex items-start gap-4">
-          {author.avatar ? (
-            <img
-              src={author.avatar}
-              alt={author.name}
-              className="w-16 h-16 rounded-full"
-            />
-          ) : (
-            <div className="w-16 h-16 rounded-full bg-slate-200 flex items-center justify-center text-2xl text-slate-600">
-              {author.name.charAt(0)}
-            </div>
-          )}
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-2xl flex-shrink-0">
+            {author.name.charAt(0)}
+          </div>
           <div>
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+              Written by
+            </p>
             <p className="text-slate-900 font-semibold text-lg">{author.name}</p>
             {author.bio && (
               <p className="text-slate-600 mt-1">{author.bio}</p>
@@ -252,26 +252,165 @@ function PostFooter({
       </div>
 
       {/* Tags */}
-      <div className="flex flex-wrap items-center gap-3">
-        <span className="text-slate-500 text-sm">Tagged:</span>
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-slate-500 text-sm mr-2">Topics:</span>
         <Link
           to={`/blog?category=${encodeURIComponent(category)}`}
-          className="px-3 py-1 text-sm bg-slate-100 text-slate-700 rounded-full hover:bg-slate-200 transition-colors"
+          className="px-3 py-1.5 text-sm bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-colors font-medium"
         >
           {category}
         </Link>
         {tags?.map((tag) => (
           <span
             key={tag}
-            className="px-3 py-1 text-sm bg-slate-100 text-slate-600 rounded-full"
+            className="px-3 py-1.5 text-sm bg-slate-100 text-slate-600 rounded-full"
           >
-            #{tag}
+            {tag}
           </span>
         ))}
+      </div>
+
+      {/* CTA */}
+      <div className="mt-12 bg-slate-900 rounded-2xl p-8 text-center">
+        <h3 className="text-2xl font-bold text-white mb-3">
+          Ready to stop building the wrong thing?
+        </h3>
+        <p className="text-slate-300 mb-6 max-w-lg mx-auto">
+          Get our Discovery Router Toolkit and start validating ideas before you waste time and money.
+        </p>
+        <Link
+          to="/solutions/discovery-router"
+          className="inline-flex items-center gap-2 bg-white text-slate-900 px-6 py-3 rounded-lg font-medium hover:bg-slate-100 transition-colors"
+        >
+          Get the Toolkit
+          <ArrowLeft className="w-4 h-4 rotate-180" />
+        </Link>
       </div>
     </footer>
   );
 }
+
+// Custom components for ReactMarkdown
+const MarkdownComponents = {
+  h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h2
+      className="text-2xl md:text-3xl font-bold text-slate-900 mt-12 mb-6 pb-3 border-b border-slate-200"
+      {...props}
+    >
+      {children}
+    </h2>
+  ),
+  h3: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h3
+      className="text-xl md:text-2xl font-semibold text-slate-900 mt-8 mb-4"
+      {...props}
+    >
+      {children}
+    </h3>
+  ),
+  p: ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
+    <p className="text-slate-700 leading-relaxed mb-6" {...props}>
+      {children}
+    </p>
+  ),
+  ul: ({ children, ...props }: React.HTMLAttributes<HTMLUListElement>) => (
+    <ul className="list-disc list-outside ml-6 mb-6 space-y-2 text-slate-700" {...props}>
+      {children}
+    </ul>
+  ),
+  ol: ({ children, ...props }: React.HTMLAttributes<HTMLOListElement>) => (
+    <ol className="list-decimal list-outside ml-6 mb-6 space-y-2 text-slate-700" {...props}>
+      {children}
+    </ol>
+  ),
+  li: ({ children, ...props }: React.HTMLAttributes<HTMLLIElement>) => (
+    <li className="leading-relaxed" {...props}>
+      {children}
+    </li>
+  ),
+  a: ({ children, href, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+    <a
+      href={href}
+      className="text-blue-600 hover:text-blue-700 underline underline-offset-2 font-medium"
+      {...props}
+    >
+      {children}
+    </a>
+  ),
+  blockquote: ({ children, ...props }: React.HTMLAttributes<HTMLQuoteElement>) => (
+    <blockquote
+      className="border-l-4 border-blue-500 bg-blue-50 pl-6 pr-4 py-4 my-6 rounded-r-lg italic text-slate-700"
+      {...props}
+    >
+      {children}
+    </blockquote>
+  ),
+  code: ({ className, children, ...props }: React.HTMLAttributes<HTMLElement> & { inline?: boolean }) => {
+    const isInline = !className;
+    if (isInline) {
+      return (
+        <code
+          className="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-sm font-mono"
+          {...props}
+        >
+          {children}
+        </code>
+      );
+    }
+    return (
+      <code className={className} {...props}>
+        {children}
+      </code>
+    );
+  },
+  pre: ({ children, ...props }: React.HTMLAttributes<HTMLPreElement>) => (
+    <pre
+      className="bg-slate-800 text-slate-100 rounded-xl p-6 overflow-x-auto mb-6 text-sm"
+      {...props}
+    >
+      {children}
+    </pre>
+  ),
+  table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
+    <div className="overflow-x-auto mb-6">
+      <table
+        className="w-full border-collapse bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200"
+        {...props}
+      >
+        {children}
+      </table>
+    </div>
+  ),
+  thead: ({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) => (
+    <thead className="bg-slate-50" {...props}>
+      {children}
+    </thead>
+  ),
+  th: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
+    <th
+      className="px-4 py-3 text-left text-sm font-semibold text-slate-900 border-b border-slate-200"
+      {...props}
+    >
+      {children}
+    </th>
+  ),
+  td: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
+    <td
+      className="px-4 py-3 text-sm text-slate-700 border-b border-slate-100"
+      {...props}
+    >
+      {children}
+    </td>
+  ),
+  strong: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (
+    <strong className="font-semibold text-slate-900" {...props}>
+      {children}
+    </strong>
+  ),
+  hr: () => (
+    <hr className="my-12 border-t border-slate-200" />
+  ),
+};
 
 export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
@@ -282,18 +421,19 @@ export default function BlogPost() {
   // Extract TOC items when post loads
   useEffect(() => {
     if (post?.content) {
-      setTocItems(extractTocItems(post.content));
+      const contentWithoutH1 = stripFirstH1(post.content);
+      setTocItems(extractTocItems(contentWithoutH1));
     }
   }, [post?.content]);
 
   // Scroll spy
   const handleScroll = useCallback(() => {
-    const headings = document.querySelectorAll("h2, h3");
+    const headings = document.querySelectorAll("h2[id]");
     let currentId = "";
 
     headings.forEach((heading) => {
       const rect = heading.getBoundingClientRect();
-      if (rect.top <= 100) {
+      if (rect.top <= 120) {
         currentId = heading.id;
       }
     });
@@ -312,11 +452,18 @@ export default function BlogPost() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50/50 to-white">
         <Header />
         <main className="pt-24 pb-20">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="animate-pulse">
-              <div className="h-64 bg-slate-200 rounded-xl mb-8" />
-              <div className="h-8 w-24 bg-slate-200 rounded-full mb-4" />
-              <div className="h-12 bg-slate-200 rounded-lg mb-6" />
+              <div className="h-6 w-20 bg-slate-200 rounded-full mb-6" />
+              <div className="h-12 bg-slate-200 rounded-lg mb-4" />
+              <div className="h-8 bg-slate-200 rounded-lg mb-8 w-3/4" />
+              <div className="flex items-center gap-4 mb-8 pb-8 border-b border-slate-200">
+                <div className="w-12 h-12 bg-slate-200 rounded-full" />
+                <div className="space-y-2">
+                  <div className="h-4 w-32 bg-slate-200 rounded" />
+                  <div className="h-3 w-48 bg-slate-200 rounded" />
+                </div>
+              </div>
               <div className="space-y-4">
                 <div className="h-4 bg-slate-200 rounded" />
                 <div className="h-4 bg-slate-200 rounded w-5/6" />
@@ -345,21 +492,9 @@ export default function BlogPost() {
             </p>
             <Link
               to="/blog"
-              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors"
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors font-medium"
             >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                />
-              </svg>
+              <ArrowLeft className="w-5 h-5" />
               Back to Blog
             </Link>
           </div>
@@ -398,6 +533,9 @@ export default function BlogPost() {
     },
   };
 
+  // Strip the first H1 from content since we display it in PostHeader
+  const processedContent = stripFirstH1(post.content);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50/50 to-white">
       <Helmet>
@@ -424,36 +562,25 @@ export default function BlogPost() {
           {/* Back Link */}
           <Link
             to="/blog"
-            className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors mb-8"
+            className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors mb-8 font-medium"
           >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
+            <ArrowLeft className="w-4 h-4" />
             Back to Blog
           </Link>
 
-          <div className="flex gap-8">
+          <div className="flex gap-12">
             {/* Main Content */}
             <article className="flex-1 min-w-0 max-w-3xl">
               <PostHeader post={post} />
 
               {/* Content */}
-              <div className="prose prose-slate prose-lg max-w-none prose-headings:scroll-mt-24 prose-headings:text-slate-900 prose-a:text-blue-600 hover:prose-a:text-blue-700 prose-code:text-blue-700 prose-code:bg-slate-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-slate-800 prose-pre:border prose-pre:border-slate-700">
+              <div className="prose-custom">
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   rehypePlugins={[rehypeHighlight, rehypeSlug]}
+                  components={MarkdownComponents}
                 >
-                  {post.content}
+                  {processedContent}
                 </ReactMarkdown>
               </div>
 
