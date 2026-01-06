@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Check, ArrowLeft } from "lucide-react";
 
@@ -83,6 +84,13 @@ const targetAudience = [
 const DiscoveryRouter = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50/50 to-white">
+      <SEO
+        title="Discovery Router Toolkit - Turn Vague Ideas into Production-Ready Specs"
+        description="Stop guessing requirements. The 4-scenario framework that turns vague 'I want an AI app' ideas into production-ready specifications in 30 minutes. R850 (~$47)."
+        canonical="/solutions/discovery-router"
+        type="product"
+        product={{ price: "850", currency: "ZAR" }}
+      />
       <Header />
 
       <main className="py-16">

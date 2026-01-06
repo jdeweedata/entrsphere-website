@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { ArrowRight, TrendingUp, Clock, Zap } from "lucide-react";
 
 type Category = "all" | "solopreneur" | "agency" | "startup";
@@ -159,6 +160,11 @@ const CaseStudies = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50/50 to-white">
+      <SEO
+        title="Case Studies - Small Teams, Massive Output with AI-Native Frameworks"
+        description="Real stories of solopreneurs, agencies, and startups using AI-native frameworks to build permissionless leverage. See how they scaled without hiring."
+        canonical="/case-studies"
+      />
       <Header />
 
       <main className="py-16">

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { ArrowRight } from "lucide-react";
 
 const solutions = [
@@ -35,6 +36,11 @@ const solutions = [
 const Solutions = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50/50 to-white">
+      <SEO
+        title="AI-Native Development Solutions - Frameworks, Templates & Consulting"
+        description="From discovery to deployment, we provide frameworks, templates, and expertise to build AI-powered products without chaos. Discovery Router Toolkit from R850."
+        canonical="/solutions"
+      />
       <Header />
 
       <main className="py-16">

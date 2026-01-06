@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Check, ArrowLeft, Search, Users, Cog } from "lucide-react";
 
@@ -55,6 +56,11 @@ const services = [
 const Consulting = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50/50 to-white">
+      <SEO
+        title="AI Development Consulting - Build AI-Native Products Without Chaos"
+        description="Expert consulting to implement AI-native development pipelines. Discovery audits, integration workshops, and custom AI development. From R25,000 (~$1,500)."
+        canonical="/solutions/consulting"
+      />
       <Header />
 
       <main className="py-16">

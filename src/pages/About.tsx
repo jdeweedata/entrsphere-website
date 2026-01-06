@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { ArrowRight, Target, Zap, Code, Lightbulb, Building2, Rocket, Users, Briefcase } from "lucide-react";
 
 const values = [
@@ -72,6 +73,11 @@ const audience = [
 const About = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50/50 to-white">
+      <SEO
+        title="About EntrSphere - Stop Losing Money on Bad Requirements"
+        description="EntrSphere helps agencies, founders, and product teams protect their profits by turning vague ideas into production-ready specs. No more expensive rework."
+        canonical="/about"
+      />
       <Header />
 
       <main className="py-16">

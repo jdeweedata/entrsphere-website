@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Check, ArrowLeft, FileText, Code, ListChecks, Cpu } from "lucide-react";
 
@@ -64,6 +65,13 @@ const targetAudience = [
 const ProductRequirements = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-50/50 to-white">
+      <SEO
+        title="Product Requirement Framework - Write Specs Developers Love"
+        description="Standardized, fill-in-the-blank templates for creating clear, bulletproof PRDs and User Stories. Includes AI-native SPEC.json schema. R485 (~$27)."
+        canonical="/solutions/product-requirements"
+        type="product"
+        product={{ price: "485", currency: "ZAR" }}
+      />
       <Header />
 
       <main className="py-16">

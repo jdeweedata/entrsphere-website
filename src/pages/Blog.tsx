@@ -223,6 +223,13 @@ export default function Blog() {
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://entrsphere.com/blog" />
+        <meta property="og:image" content="https://entrsphere.com/og-image.png" />
+        <meta property="og:site_name" content="EntrSphere" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@entrsphere" />
+        <meta name="twitter:title" content="Blog | EntrSphere - Insights That Protect Your Budget" />
+        <meta name="twitter:description" content="Practical frameworks for agencies tired of scope creep, founders protecting their investments, and product teams building AI-native products." />
+        <meta name="twitter:image" content="https://entrsphere.com/og-image.png" />
         <link rel="canonical" href="https://entrsphere.com/blog" />
       </Helmet>
 
