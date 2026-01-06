@@ -1,0 +1,202 @@
+{
+  "project": "EntrSphere Blog",
+  "phase": 1,
+  "name": "MVP - Core Blog",
+  "description": "Basic blog functionality with index page, post pages, categories, and SEO",
+  "status": "ready_to_build",
+
+  "requirements": {
+    "pages": [
+      {
+        "route": "/blog",
+        "name": "Blog Index",
+        "description": "Main blog listing page with featured post and grid layout",
+        "components": [
+          {
+            "name": "FeaturedPost",
+            "description": "Hero section with the latest/pinned post",
+            "props": ["post"],
+            "display": ["coverImage (full-width)", "title", "excerpt", "category badge", "date", "readTime", "author"]
+          },
+          {
+            "name": "CategoryFilter",
+            "description": "Horizontal filter tabs for categories",
+            "categories": [
+              "All",
+              "AI Automation",
+              "AI Integration",
+              "AI Strategy",
+              "Case Studies",
+              "Tools & Reviews",
+              "Tutorials"
+            ],
+            "behavior": "Filter grid posts by category, 'All' shows everything"
+          },
+          {
+            "name": "PostGrid",
+            "description": "Grid of post cards (3 columns desktop, 2 tablet, 1 mobile)",
+            "cardContent": ["coverImage", "category badge", "title", "excerpt (truncated)", "date", "readTime"]
+          }
+        ]
+      },
+      {
+        "route": "/blog/:slug",
+        "name": "Blog Post",
+        "description": "Individual blog post page with full content",
+        "components": [
+          {
+            "name": "PostHeader",
+            "description": "Post metadata and cover image",
+            "display": ["coverImage", "category", "title", "author (Jeffrey De Wee)", "date", "readTime"]
+          },
+          {
+            "name": "TableOfContents",
+            "description": "Auto-generated from H2/H3 headings in markdown",
+            "behavior": "Sticky sidebar on desktop, collapsible on mobile",
+            "features": ["Scroll spy to highlight current section", "Click to jump to section"]
+          },
+          {
+            "name": "PostContent",
+            "description": "Markdown rendered to HTML",
+            "styling": "Prose typography, code highlighting, responsive images"
+          },
+          {
+            "name": "PostFooter",
+            "description": "End of post section",
+            "display": ["Author bio card", "Category/tags links"]
+          }
+        ]
+      }
+    ],
+
+    "dataModel": {
+      "table": "posts",
+      "fields": [
+        { "name": "_id", "type": "Id<'posts'>", "description": "Convex auto-generated ID" },
+        { "name": "title", "type": "string", "required": true },
+        { "name": "slug", "type": "string", "required": true, "unique": true },
+        { "name": "excerpt", "type": "string", "required": true, "maxLength": 280 },
+        { "name": "content", "type": "string", "required": true, "description": "Markdown content" },
+        { "name": "coverImage", "type": "string", "required": false, "description": "URL to cover image" },
+        { "name": "category", "type": "string", "required": true, "enum": ["AI Automation", "AI Integration", "AI Strategy", "Case Studies", "Tools & Reviews", "Tutorials"] },
+        { "name": "tags", "type": "array<string>", "required": false },
+        { "name": "author", "type": "object", "properties": { "name": "string", "avatar": "string", "bio": "string" } },
+        { "name": "publishedAt", "type": "number", "required": false, "description": "Unix timestamp, null = draft" },
+        { "name": "readTime", "type": "number", "required": true, "description": "Minutes to read" },
+        { "name": "metaTitle", "type": "string", "required": false, "description": "SEO title override" },
+        { "name": "metaDescription", "type": "string", "required": false, "description": "SEO description override" },
+        { "name": "canonicalUrl", "type": "string", "required": false },
+        { "name": "featured", "type": "boolean", "default": false, "description": "Show in featured hero" },
+        { "name": "createdAt", "type": "number", "required": true },
+        { "name": "updatedAt", "type": "number", "required": true }
+      ],
+      "indexes": [
+        { "name": "by_slug", "fields": ["slug"] },
+        { "name": "by_category", "fields": ["category"] },
+        { "name": "by_published", "fields": ["publishedAt"] }
+      ]
+    },
+
+    "convexFunctions": [
+      {
+        "name": "posts.list",
+        "type": "query",
+        "args": { "category": "optional<string>", "limit": "optional<number>" },
+        "returns": "array<Post>",
+        "description": "List published posts, optionally filtered by category"
+      },
+      {
+        "name": "posts.getFeatured",
+        "type": "query",
+        "args": {},
+        "returns": "Post | null",
+        "description": "Get the featured post for hero section"
+      },
+      {
+        "name": "posts.getBySlug",
+        "type": "query",
+        "args": { "slug": "string" },
+        "returns": "Post | null",
+        "description": "Get single post by slug"
+      },
+      {
+        "name": "posts.getCategories",
+        "type": "query",
+        "args": {},
+        "returns": "array<{category: string, count: number}>",
+        "description": "Get all categories with post counts"
+      }
+    ],
+
+    "seo": {
+      "indexPage": {
+        "title": "Blog | EntrSphere - AI Development Insights",
+        "description": "AI automation, integration, and strategy insights for solopreneurs and growing businesses.",
+        "ogImage": "/og-blog.png"
+      },
+      "postPage": {
+        "title": "{metaTitle || title} | EntrSphere",
+        "description": "{metaDescription || excerpt}",
+        "ogImage": "{coverImage}",
+        "jsonLd": {
+          "@type": "BlogPosting",
+          "headline": "{title}",
+          "description": "{excerpt}",
+          "author": { "@type": "Person", "name": "{author.name}" },
+          "datePublished": "{publishedAt}",
+          "image": "{coverImage}"
+        },
+        "canonicalUrl": "{canonicalUrl || /blog/{slug}}"
+      }
+    },
+
+    "styling": {
+      "theme": "Match existing site (slate-900 primary, blue-50 gradient background)",
+      "typography": "Prose styling for markdown content",
+      "codeBlocks": "Syntax highlighting with dark theme",
+      "responsive": "Mobile-first, breakpoints at md (768px) and lg (1024px)"
+    }
+  },
+
+  "seedData": {
+    "description": "Create 3 sample posts to test layout",
+    "posts": [
+      {
+        "title": "How We Use AI Agents to Ship 3x Faster",
+        "category": "AI Automation",
+        "featured": true
+      },
+      {
+        "title": "The Discovery Router: Stop Building the Wrong Thing",
+        "category": "AI Strategy",
+        "featured": false
+      },
+      {
+        "title": "Integrating Claude Code Into Your CI/CD Pipeline",
+        "category": "Tutorials",
+        "featured": false
+      }
+    ]
+  },
+
+  "acceptanceCriteria": [
+    "Blog index page loads with featured post hero and grid of posts",
+    "Category filter works and updates grid without page reload",
+    "Individual post pages render markdown correctly with syntax highlighting",
+    "Table of contents generates from headings and scroll spy works",
+    "SEO meta tags render correctly (check with view-source)",
+    "JSON-LD structured data is valid (test with Google Rich Results)",
+    "Mobile responsive - all layouts work on 375px width",
+    "Performance: LCP < 2.5s, no layout shift"
+  ],
+
+  "outOfScope": [
+    "User authentication",
+    "Likes/hearts",
+    "Comments",
+    "Admin dashboard",
+    "Gemini image generation",
+    "Newsletter signup",
+    "Related posts algorithm"
+  ]
+}

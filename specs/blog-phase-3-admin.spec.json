@@ -1,0 +1,169 @@
+{
+  "project": "EntrSphere Blog",
+  "phase": 3,
+  "name": "Admin & AI",
+  "description": "Admin dashboard for content management and Gemini-powered cover image generation",
+  "status": "planned",
+  "dependsOn": ["blog-phase-1-mvp", "blog-phase-2-engagement"],
+
+  "requirements": {
+    "features": [
+      {
+        "name": "Admin Dashboard",
+        "description": "Protected admin area for content management",
+        "route": "/admin/blog",
+        "access": "Admin users only (check user role)",
+        "pages": [
+          {
+            "route": "/admin/blog",
+            "name": "Posts List",
+            "features": [
+              "Table of all posts (drafts, scheduled, published)",
+              "Status filter tabs",
+              "Search by title",
+              "Sort by date, title",
+              "Quick actions: edit, delete, duplicate, change status"
+            ]
+          },
+          {
+            "route": "/admin/blog/new",
+            "name": "Create Post",
+            "features": [
+              "Markdown editor with live preview",
+              "Title, slug (auto-generated, editable), excerpt fields",
+              "Category dropdown, tags input",
+              "Cover image section with Gemini generation",
+              "SEO fields (meta title, description, canonical)",
+              "Save as draft, schedule, or publish"
+            ]
+          },
+          {
+            "route": "/admin/blog/:id/edit",
+            "name": "Edit Post",
+            "features": "Same as Create Post, pre-filled with existing data"
+          },
+          {
+            "route": "/admin/blog/comments",
+            "name": "Comment Moderation",
+            "features": [
+              "List of pending comments",
+              "Approve/reject buttons",
+              "View comment in context (link to post)",
+              "Bulk actions"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Markdown Editor",
+        "description": "Rich markdown editing experience",
+        "features": [
+          "Toolbar: bold, italic, headings, lists, links, images, code blocks",
+          "Live preview panel (side-by-side or toggle)",
+          "Keyboard shortcuts",
+          "Image upload (drag & drop, paste)",
+          "Auto-save drafts every 30 seconds",
+          "Word count and read time estimate"
+        ],
+        "library": "Consider: @uiw/react-md-editor or custom with remark"
+      },
+      {
+        "name": "Markdown File Upload",
+        "description": "Import content from .md files",
+        "behavior": [
+          "Upload .md file button",
+          "Parse frontmatter for metadata (title, excerpt, category, tags)",
+          "Extract content and populate editor",
+          "Handle images referenced in markdown"
+        ],
+        "frontmatterFormat": {
+          "example": "---\ntitle: My Post\nexcerpt: A short description\ncategory: AI Automation\ntags: [agents, automation]\n---\n\nContent here..."
+        }
+      },
+      {
+        "name": "Draft & Schedule Workflow",
+        "description": "Content lifecycle management",
+        "statuses": [
+          { "name": "draft", "description": "Work in progress, not visible" },
+          { "name": "scheduled", "description": "Will publish at scheduled time" },
+          { "name": "published", "description": "Live and visible" },
+          { "name": "archived", "description": "Hidden but not deleted" }
+        ],
+        "scheduling": {
+          "ui": "Date/time picker for scheduled publish",
+          "implementation": "Convex scheduled function to update status"
+        }
+      },
+      {
+        "name": "Gemini Cover Image Generation",
+        "description": "AI-generated cover images using Gemini API",
+        "style": "Woodcut/engraving aesthetic with bold limited color palettes, classical elements mixed with modern tech",
+        "workflow": [
+          "Click 'Generate Cover' button",
+          "System creates prompt from post title + excerpt + category",
+          "Call Gemini API (gemini-2.0-flash-exp or imagen)",
+          "Display generated image",
+          "Regenerate button if not satisfied",
+          "Option to upload custom image instead"
+        ],
+        "promptTemplate": "Create an editorial illustration in woodcut/engraving style with crosshatching. Bold, limited color palette (2-3 colors). Mix classical/neoclassical elements with modern tech themes. Subject: {title}. Theme: {category}. High contrast, dramatic composition. No text in image.",
+        "apiConfig": {
+          "endpoint": "Gemini API",
+          "envVar": "GEMINI_API_KEY",
+          "model": "gemini-2.0-flash-exp or imagen-3"
+        }
+      }
+    ],
+
+    "dataModelUpdates": {
+      "posts": {
+        "addFields": [
+          { "name": "status", "type": "string", "enum": ["draft", "scheduled", "published", "archived"] },
+          { "name": "scheduledAt", "type": "number | null" },
+          { "name": "coverImagePrompt", "type": "string | null", "description": "Prompt used to generate cover" }
+        ]
+      },
+      "authors": {
+        "description": "Support multiple authors",
+        "fields": [
+          { "name": "_id", "type": "Id<'authors'>" },
+          { "name": "userId", "type": "Id<'users'>" },
+          { "name": "name", "type": "string" },
+          { "name": "bio", "type": "string" },
+          { "name": "avatar", "type": "string" },
+          { "name": "role", "type": "string", "enum": ["admin", "author"] }
+        ]
+      }
+    },
+
+    "convexFunctions": [
+      { "name": "posts.create", "type": "mutation", "adminOnly": true },
+      { "name": "posts.update", "type": "mutation", "adminOnly": true },
+      { "name": "posts.delete", "type": "mutation", "adminOnly": true },
+      { "name": "posts.updateStatus", "type": "mutation", "adminOnly": true },
+      { "name": "posts.listAll", "type": "query", "adminOnly": true, "description": "Include drafts" },
+      { "name": "images.generateCover", "type": "action", "description": "Call Gemini API" },
+      { "name": "scheduler.publishScheduled", "type": "scheduled", "description": "Run every minute to publish scheduled posts" }
+    ]
+  },
+
+  "acceptanceCriteria": [
+    "Admin can create new posts with markdown editor",
+    "Live preview shows formatted content",
+    "Upload .md file populates editor with frontmatter parsed",
+    "Posts can be saved as draft, scheduled, or published",
+    "Scheduled posts auto-publish at set time",
+    "Gemini generates cover image matching editorial style",
+    "Can regenerate cover image or upload custom",
+    "Comment moderation queue shows pending comments",
+    "Admin can approve/reject comments",
+    "Non-admin users cannot access /admin routes"
+  ],
+
+  "outOfScope": [
+    "Collaborative editing",
+    "Version history",
+    "Media library management",
+    "Analytics dashboard"
+  ]
+}

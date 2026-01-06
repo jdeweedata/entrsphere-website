@@ -1,0 +1,225 @@
+{
+  "project": "EntrSphere Blog",
+  "phase": 4,
+  "name": "Growth",
+  "description": "Newsletter signup, related posts, and advanced SEO/GEO optimization",
+  "status": "planned",
+  "dependsOn": ["blog-phase-1-mvp", "blog-phase-2-engagement", "blog-phase-3-admin"],
+
+  "requirements": {
+    "features": [
+      {
+        "name": "Newsletter Signup",
+        "description": "Capture email subscribers at end of each post",
+        "placement": "End of each blog post, before comments",
+        "design": {
+          "style": "Card with headline, description, email input, submit button",
+          "headline": "Get AI insights delivered weekly",
+          "description": "Join solopreneurs and teams building with AI. No spam, unsubscribe anytime.",
+          "cta": "Subscribe"
+        },
+        "behavior": [
+          "Email validation",
+          "Check for existing subscriber (show 'already subscribed' message)",
+          "Success state with confirmation message",
+          "Store in Convex subscribers table (already exists)"
+        ],
+        "futureIntegration": {
+          "description": "Can connect to email service later",
+          "options": ["ConvertKit", "Beehiiv", "Mailchimp", "Resend"],
+          "implementation": "Convex action to sync new subscribers to email service"
+        }
+      },
+      {
+        "name": "Related Posts",
+        "description": "Show related content at end of each post",
+        "placement": "After post content, before newsletter signup",
+        "algorithm": {
+          "priority": [
+            "Same category (highest weight)",
+            "Shared tags",
+            "Recent posts as fallback"
+          ],
+          "count": 3,
+          "exclude": "Current post"
+        },
+        "display": {
+          "layout": "3-column grid (1 on mobile)",
+          "cardContent": ["coverImage (thumbnail)", "category", "title", "readTime"]
+        },
+        "convexFunction": {
+          "name": "posts.getRelated",
+          "args": { "postId": "Id<'posts'>", "limit": "number" },
+          "returns": "array<Post>"
+        }
+      },
+      {
+        "name": "GEO - Generative Engine Optimization",
+        "description": "Structure content for LLM recognition and citation",
+        "strategies": [
+          {
+            "name": "Authoritative Schema Markup",
+            "implementation": [
+              "Enhanced JSON-LD with author credentials",
+              "Organization schema linking to EntrSphere",
+              "Cite sources with structured references",
+              "Include dateModified for freshness signals"
+            ]
+          },
+          {
+            "name": "Content Structure",
+            "implementation": [
+              "Clear H2/H3 hierarchy for topic segmentation",
+              "FAQ sections with Question/Answer schema",
+              "Definition blocks for key terms",
+              "Numbered lists for processes/steps",
+              "Summary/TL;DR at start of long posts"
+            ]
+          },
+          {
+            "name": "Factual Authority Signals",
+            "implementation": [
+              "Statistics with source citations",
+              "Quotes from recognized experts",
+              "Links to primary sources",
+              "Last updated timestamps"
+            ]
+          },
+          {
+            "name": "Topic Clustering",
+            "implementation": [
+              "Internal linking between related posts",
+              "Category landing pages with overview content",
+              "Pillar content with supporting articles"
+            ]
+          }
+        ],
+        "schemaEnhancements": {
+          "BlogPosting": {
+            "additionalFields": [
+              "@type: TechArticle (for tutorials)",
+              "about: [array of Thing entities]",
+              "citation: [array of CreativeWork]",
+              "dateModified",
+              "wordCount",
+              "articleSection (category)"
+            ]
+          },
+          "FAQPage": {
+            "description": "For posts with FAQ sections",
+            "structure": "Question/Answer pairs with mainEntity"
+          },
+          "HowTo": {
+            "description": "For tutorial posts",
+            "structure": "Steps with name, text, optional image"
+          }
+        }
+      },
+      {
+        "name": "Enhanced JSON-LD",
+        "description": "Comprehensive structured data",
+        "schemas": [
+          {
+            "type": "Organization",
+            "data": {
+              "name": "EntrSphere",
+              "url": "https://entrsphere.com",
+              "logo": "https://entrsphere.com/logo.png",
+              "sameAs": ["LinkedIn", "Twitter", "GitHub"]
+            }
+          },
+          {
+            "type": "Person (Author)",
+            "data": {
+              "name": "Jeffrey De Wee",
+              "jobTitle": "Founder",
+              "worksFor": { "@type": "Organization", "name": "EntrSphere" },
+              "sameAs": ["LinkedIn profile", "Twitter profile"]
+            }
+          },
+          {
+            "type": "BlogPosting (per post)",
+            "data": {
+              "headline": "{title}",
+              "description": "{excerpt}",
+              "author": "{ Person reference }",
+              "publisher": "{ Organization reference }",
+              "datePublished": "{publishedAt}",
+              "dateModified": "{updatedAt}",
+              "image": "{coverImage}",
+              "wordCount": "{calculated}",
+              "articleSection": "{category}",
+              "keywords": "{tags}"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Category Landing Pages",
+        "description": "Dedicated pages for each category with overview content",
+        "route": "/blog/category/:category",
+        "content": [
+          "Category title and description",
+          "Overview paragraph (editable in admin)",
+          "Featured posts in this category",
+          "All posts grid with pagination"
+        ]
+      }
+    ],
+
+    "dataModelUpdates": {
+      "posts": {
+        "addFields": [
+          { "name": "faqItems", "type": "array<{question: string, answer: string}> | null" },
+          { "name": "howToSteps", "type": "array<{name: string, text: string}> | null" },
+          { "name": "citations", "type": "array<{title: string, url: string, author: string}> | null" },
+          { "name": "tldr", "type": "string | null", "description": "Summary for top of post" }
+        ]
+      },
+      "categories": {
+        "description": "Category metadata for landing pages",
+        "fields": [
+          { "name": "slug", "type": "string" },
+          { "name": "name", "type": "string" },
+          { "name": "description", "type": "string" },
+          { "name": "overviewContent", "type": "string", "description": "Markdown for landing page" }
+        ]
+      }
+    },
+
+    "convexFunctions": [
+      { "name": "posts.getRelated", "type": "query" },
+      { "name": "posts.getByCategory", "type": "query", "args": { "category": "string", "page": "number" } },
+      { "name": "categories.get", "type": "query", "args": { "slug": "string" } },
+      { "name": "categories.update", "type": "mutation", "adminOnly": true }
+    ]
+  },
+
+  "acceptanceCriteria": [
+    "Newsletter signup form appears at end of each post",
+    "Email validation works, duplicate check shows appropriate message",
+    "Subscribers stored in Convex",
+    "Related posts show 3 relevant articles based on category/tags",
+    "JSON-LD validates in Google Rich Results Test",
+    "FAQ schema renders correctly when post has FAQ section",
+    "Category landing pages show overview and filtered posts",
+    "Internal links between related posts are present",
+    "All schema markup passes structured data testing tools"
+  ],
+
+  "outOfScope": [
+    "Email sending/campaigns",
+    "A/B testing",
+    "Analytics integration",
+    "Search functionality",
+    "RSS feed"
+  ],
+
+  "futureConsiderations": [
+    "RSS feed generation",
+    "Full-text search with Convex",
+    "Reading progress indicator",
+    "Estimated reading time personalization",
+    "Content recommendations based on reading history"
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "project": "EntrSphere Blog",
+  "phase": 2,
+  "name": "Core Engagement",
+  "description": "User engagement features: likes, social login, comments, and social sharing",
+  "status": "planned",
+  "dependsOn": ["blog-phase-1-mvp"],
+
+  "requirements": {
+    "features": [
+      {
+        "name": "Social Authentication",
+        "description": "Allow users to login with social accounts",
+        "providers": ["Google", "LinkedIn", "X (Twitter)", "GitHub"],
+        "implementation": "Convex Auth or custom OAuth flow",
+        "userModel": {
+          "fields": [
+            { "name": "_id", "type": "Id<'users'>" },
+            { "name": "provider", "type": "string", "enum": ["google", "linkedin", "twitter", "github"] },
+            { "name": "providerId", "type": "string" },
+            { "name": "email", "type": "string" },
+            { "name": "name", "type": "string" },
+            { "name": "avatar", "type": "string" },
+            { "name": "createdAt", "type": "number" }
+          ]
+        }
+      },
+      {
+        "name": "Hearts/Likes",
+        "description": "Users can heart posts to show appreciation",
+        "behavior": [
+          "Heart button on each post (index cards and post page)",
+          "Click to toggle heart on/off",
+          "Display total heart count",
+          "Requires login - prompt if not authenticated",
+          "Optimistic UI update"
+        ],
+        "dataModel": {
+          "table": "hearts",
+          "fields": [
+            { "name": "userId", "type": "Id<'users'>" },
+            { "name": "postId", "type": "Id<'posts'>" },
+            { "name": "createdAt", "type": "number" }
+          ],
+          "indexes": [
+            { "name": "by_post", "fields": ["postId"] },
+            { "name": "by_user_post", "fields": ["userId", "postId"] }
+          ]
+        },
+        "convexFunctions": [
+          { "name": "hearts.toggle", "type": "mutation", "args": { "postId": "Id<'posts'>" } },
+          { "name": "hearts.getCount", "type": "query", "args": { "postId": "Id<'posts'>" } },
+          { "name": "hearts.hasHearted", "type": "query", "args": { "postId": "Id<'posts'>" } }
+        ]
+      },
+      {
+        "name": "Comments",
+        "description": "Threaded comments with moderation",
+        "behavior": [
+          "Comment form at bottom of post (requires login)",
+          "Threaded replies (nested conversations)",
+          "Moderation queue - comments pending until approved",
+          "Users can edit/delete their own comments",
+          "Display commenter name, avatar, timestamp",
+          "Markdown support in comments"
+        ],
+        "dataModel": {
+          "table": "comments",
+          "fields": [
+            { "name": "_id", "type": "Id<'comments'>" },
+            { "name": "postId", "type": "Id<'posts'>" },
+            { "name": "userId", "type": "Id<'users'>" },
+            { "name": "parentId", "type": "Id<'comments'> | null", "description": "For threading" },
+            { "name": "content", "type": "string" },
+            { "name": "status", "type": "string", "enum": ["pending", "approved", "rejected"] },
+            { "name": "createdAt", "type": "number" },
+            { "name": "updatedAt", "type": "number" }
+          ],
+          "indexes": [
+            { "name": "by_post", "fields": ["postId"] },
+            { "name": "by_status", "fields": ["status"] },
+            { "name": "by_user", "fields": ["userId"] }
+          ]
+        },
+        "convexFunctions": [
+          { "name": "comments.create", "type": "mutation", "args": { "postId": "Id", "content": "string", "parentId": "optional<Id>" } },
+          { "name": "comments.update", "type": "mutation", "args": { "commentId": "Id", "content": "string" } },
+          { "name": "comments.delete", "type": "mutation", "args": { "commentId": "Id" } },
+          { "name": "comments.listByPost", "type": "query", "args": { "postId": "Id" } },
+          { "name": "comments.moderate", "type": "mutation", "args": { "commentId": "Id", "status": "string" } }
+        ]
+      },
+      {
+        "name": "Social Sharing",
+        "description": "Share buttons for social platforms",
+        "platforms": ["X (Twitter)", "LinkedIn", "Facebook"],
+        "placement": ["Post header (near title)", "Post footer (after content)"],
+        "behavior": "Open share dialog with pre-filled post title and URL"
+      }
+    ],
+
+    "components": [
+      {
+        "name": "LoginButton",
+        "description": "Triggers social login modal",
+        "variants": ["icon-only", "with-text"]
+      },
+      {
+        "name": "LoginModal",
+        "description": "Modal with social provider buttons",
+        "content": "Choose provider, handle OAuth redirect"
+      },
+      {
+        "name": "UserAvatar",
+        "description": "Display logged-in user avatar with dropdown menu",
+        "menu": ["My Comments", "Logout"]
+      },
+      {
+        "name": "HeartButton",
+        "description": "Heart/like toggle button with count",
+        "states": ["not-hearted", "hearted", "loading"]
+      },
+      {
+        "name": "CommentSection",
+        "description": "Comments list with form",
+        "subcomponents": ["CommentForm", "CommentThread", "CommentItem"]
+      },
+      {
+        "name": "ShareButtons",
+        "description": "Row of social share buttons",
+        "style": "Icon buttons with hover states"
+      }
+    ]
+  },
+
+  "acceptanceCriteria": [
+    "Users can login with Google, LinkedIn, X, and GitHub",
+    "Login state persists across page refreshes",
+    "Heart button toggles and updates count in real-time",
+    "Unauthenticated users see login prompt when clicking heart",
+    "Comments can be submitted and appear after moderation approval",
+    "Threaded replies display correctly with visual nesting",
+    "Users can edit and delete their own comments",
+    "Share buttons open correct platform share dialogs",
+    "All engagement features work on mobile"
+  ],
+
+  "outOfScope": [
+    "Email notifications for comments",
+    "Admin notification for new comments",
+    "Comment spam filtering",
+    "User profiles page"
+  ]
+}
