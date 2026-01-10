@@ -271,8 +271,8 @@ const DiscoveryChat = () => {
       </div>
 
       {/* Chat Area */}
-      <ScrollArea className="flex-1 p-6" ref={scrollRef}>
-        <div className="max-w-3xl mx-auto space-y-2">
+      <ScrollArea className="flex-1" ref={scrollRef}>
+        <div className="max-w-3xl mx-auto space-y-2 p-6">
           {messages.map((message) => (
             <ChatMessage key={message.id} message={message} />
           ))}
