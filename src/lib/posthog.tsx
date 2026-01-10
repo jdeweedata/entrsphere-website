@@ -4,13 +4,15 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_API_KEY;
-const POSTHOG_HOST = import.meta.env.VITE_POSTHOG_HOST || "https://us.i.posthog.com";
+// Use reverse proxy in production to bypass ad blockers
+const POSTHOG_HOST = import.meta.env.VITE_POSTHOG_HOST || "/ingest";
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (POSTHOG_KEY) {
       posthog.init(POSTHOG_KEY, {
         api_host: POSTHOG_HOST,
+        ui_host: "https://us.posthog.com", // Required for toolbar with reverse proxy
         person_profiles: "identified_only",
         capture_pageview: false, // We capture manually for SPA
         capture_pageleave: true,
