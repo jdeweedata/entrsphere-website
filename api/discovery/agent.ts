@@ -274,6 +274,38 @@ interface RequestBody {
   signals?: { A: number; B: number; C: number; D: number };
 }
 
+// Preload playbook content based on route to reduce tool calls
+async function getPreloadedContext(route: string | null | undefined): Promise<string> {
+  const routeMap: Record<string, string> = {
+    A: "route-a-standard.md",
+    B: "route-b-exploratory.md",
+    C: "route-c-stakeholder.md",
+    D: "route-d-integration.md",
+  };
+
+  let preloaded = "\n\n## Preloaded Context\n";
+
+  // Always load knowledge base
+  try {
+    const redFlags = await readFile("/knowledge/red-flags.md");
+    if (!redFlags.startsWith("Error:")) {
+      preloaded += "\n### Red Flags (loaded)\n" + redFlags.slice(0, 2000) + "...\n";
+    }
+  } catch { /* ignore */ }
+
+  // Load route-specific playbook if route is known
+  if (route && routeMap[route]) {
+    try {
+      const playbook = await readFile(`/playbooks/${routeMap[route]}`);
+      if (!playbook.startsWith("Error:")) {
+        preloaded += `\n### Route ${route} Playbook (loaded)\n${playbook}\n`;
+      }
+    } catch { /* ignore */ }
+  }
+
+  return preloaded;
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // CORS headers
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -305,6 +337,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ? `Current session: ${sessionId}\nDetected route: ${route} (signals: A=${signals?.A?.toFixed(2)}, B=${signals?.B?.toFixed(2)}, C=${signals?.C?.toFixed(2)}, D=${signals?.D?.toFixed(2)})`
       : `Current session: ${sessionId}\nRoute not yet detected.`;
 
+    // Preload relevant playbook to reduce tool call latency
+    const preloadedContext = await getPreloadedContext(route);
+
     // Convert messages to Anthropic format
     const anthropicMessages: Anthropic.MessageParam[] = messages.map((m) => ({
       role: m.role,
@@ -319,14 +354,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       };
     }
 
+    // Build system prompt with preloaded context
+    const systemPromptWithContext = FILESYSTEM_AGENT_PROMPT + preloadedContext;
+
     // Agentic loop - let the model use tools until it's done
+    // Optimized: max 3 iterations to stay within timeout limits
     let continueLoop = true;
     let response: Anthropic.Message | null = null;
     let currentMessages = [...anthropicMessages];
     let totalInputTokens = 0;
     let totalOutputTokens = 0;
     let iterations = 0;
-    const maxIterations = 10;
+    const maxIterations = 3; // Reduced for faster response
 
     while (continueLoop && iterations < maxIterations) {
       iterations++;
@@ -334,7 +373,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       response = await anthropic.messages.create({
         model: MODELS.SONNET, // Use Sonnet for complex reasoning
         max_tokens: 4096,
-        system: FILESYSTEM_AGENT_PROMPT,
+        system: systemPromptWithContext,
         tools: TOOLS,
         messages: currentMessages,
       });
