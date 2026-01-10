@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,7 +16,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Intro+Rust:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -65,37 +63,14 @@
     }
     </script>
 
-    <!-- Structured Data - WebSite with SearchAction -->
+    <!-- Structured Data - WebSite -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "EntrSphere",
-      "url": "https://entrsphere.com",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://entrsphere.com/blog?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
+      "url": "https://entrsphere.com"
     }
-    </script>
-
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-XXXXXXXXXX');
-
-      // Example event tracking function (to be called on form submission, button clicks etc.)
-      function trackEvent(eventName, eventCategory, eventLabel) {
-        gtag('event', eventName, {
-          'event_category': eventCategory,
-          'event_label': eventLabel
-        });
-        console.log(`Tracked Event: ${eventName}, Category: ${eventCategory}, Label: ${eventLabel}`); // For debugging
-      }
     </script>
   </head>
 

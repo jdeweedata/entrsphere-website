@@ -26,3 +26,4 @@ dist-ssr
 # Tool directories
 .claude/
 .playwright-mcp/
+.vercel
