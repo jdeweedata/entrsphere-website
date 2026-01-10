@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { Mail, ArrowRight, X } from 'lucide-react';
+import { Envelope, ArrowRight, X } from '@phosphor-icons/react';
 
 interface EmailCaptureProps {
   onSubmit: (email: string, wantsUpdates: boolean) => void;
@@ -44,7 +44,7 @@ const EmailCapture = ({ onSubmit, onSkip, isLoading = false }: EmailCaptureProps
             Email address
           </Label>
           <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Envelope weight="duotone" className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <Input
               id="email"
               type="email"
@@ -84,7 +84,7 @@ const EmailCapture = ({ onSubmit, onSkip, isLoading = false }: EmailCaptureProps
             ) : (
               <>
                 Get My Profile
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <ArrowRight weight="duotone" className="ml-2 h-4 w-4" />
               </>
             )}
           </Button>
@@ -95,7 +95,7 @@ const EmailCapture = ({ onSubmit, onSkip, isLoading = false }: EmailCaptureProps
             disabled={isLoading}
             className="text-slate-500 hover:text-slate-700"
           >
-            <X className="h-4 w-4" />
+            <X weight="duotone" className="h-4 w-4" />
             <span className="sr-only">Skip</span>
           </Button>
         </div>

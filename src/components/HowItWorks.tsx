@@ -1,5 +1,5 @@
 
-import { CheckCircle, Zap, Target, TrendingUp } from "lucide-react";
+import { CheckCircle, Lightning, Target, TrendUp } from "@phosphor-icons/react";
 
 const HowItWorks = () => {
   const steps = [
@@ -11,7 +11,7 @@ const HowItWorks = () => {
       bgColor: "bg-green-100"
     },
     {
-      icon: Zap,
+      icon: Lightning,
       title: "Design Custom AI Solutions",
       description: "Our team creates tailored automation workflows that fit your specific business needs and goals.",
       color: "text-blue-600",
@@ -25,7 +25,7 @@ const HowItWorks = () => {
       bgColor: "bg-purple-100"
     },
     {
-      icon: TrendingUp,
+      icon: TrendUp,
       title: "Scale & Grow",
       description: "Watch your business grow while costs decrease and your team focuses on high-value strategic work.",
       color: "text-orange-600",
@@ -47,7 +47,7 @@ const HowItWorks = () => {
           {steps.map((step, index) => (
             <div key={index} className="text-center group">
               <div className={`w-16 h-16 ${step.bgColor} rounded-xl flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform duration-300`}>
-                <step.icon className={`h-8 w-8 ${step.color}`} />
+                <step.icon weight="duotone" className={`h-8 w-8 ${step.color}`} />
               </div>
               <div className="relative">
                 <div className="absolute -top-8 -left-4 w-8 h-8 bg-slate-900 text-white rounded-full flex items-center justify-center text-sm font-bold">

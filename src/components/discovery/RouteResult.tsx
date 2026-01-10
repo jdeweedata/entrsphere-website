@@ -5,11 +5,11 @@ import { getRouteInsights } from '@/lib/discovery-engine';
 import { cn } from '@/lib/utils';
 import {
   CheckCircle,
-  AlertTriangle,
+  Warning,
   Lightbulb,
   Clock,
   ArrowRight,
-} from 'lucide-react';
+} from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
@@ -19,10 +19,10 @@ interface RouteResultProps {
 }
 
 const routeIcons: Record<Exclude<DiscoveryRoute, null>, React.ReactNode> = {
-  A: <CheckCircle className="h-6 w-6 text-green-500" />,
-  B: <Lightbulb className="h-6 w-6 text-yellow-500" />,
-  C: <AlertTriangle className="h-6 w-6 text-orange-500" />,
-  D: <Clock className="h-6 w-6 text-blue-500" />,
+  A: <CheckCircle weight="duotone" className="h-6 w-6 text-green-500" />,
+  B: <Lightbulb weight="duotone" className="h-6 w-6 text-yellow-500" />,
+  C: <Warning weight="duotone" className="h-6 w-6 text-orange-500" />,
+  D: <Clock weight="duotone" className="h-6 w-6 text-blue-500" />,
 };
 
 const routeColors: Record<Exclude<DiscoveryRoute, null>, string> = {
@@ -84,7 +84,7 @@ const RouteResult = ({ route, answers }: RouteResultProps) => {
       {/* Insights */}
       <div className="bg-white border border-slate-200 rounded-xl p-4">
         <h4 className="font-semibold text-slate-900 mb-3 flex items-center gap-2">
-          <Lightbulb className="h-4 w-4 text-yellow-500" />
+          <Lightbulb weight="duotone" className="h-4 w-4 text-yellow-500" />
           Quick Insights for Your Scenario
         </h4>
         <ul className="space-y-2">
@@ -102,7 +102,7 @@ const RouteResult = ({ route, answers }: RouteResultProps) => {
         <Button asChild className="w-full bg-slate-900 hover:bg-slate-800">
           <Link to="/solutions/discovery-router">
             Get Full Discovery Toolkit
-            <ArrowRight className="ml-2 h-4 w-4" />
+            <ArrowRight weight="duotone" className="ml-2 h-4 w-4" />
           </Link>
         </Button>
         <p className="text-xs text-slate-500 text-center mt-2">

@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { CaretDown, CaretUp } from "@phosphor-icons/react";
 
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -55,9 +55,9 @@ const FAQ = () => {
               >
                 <h3 className="text-lg font-semibold text-slate-800 pr-4">{faq.question}</h3>
                 {openIndex === index ? (
-                  <ChevronUp className="h-5 w-5 text-slate-500 flex-shrink-0" />
+                  <CaretUp weight="duotone" className="h-5 w-5 text-slate-500 flex-shrink-0" />
                 ) : (
-                  <ChevronDown className="h-5 w-5 text-slate-500 flex-shrink-0" />
+                  <CaretDown weight="duotone" className="h-5 w-5 text-slate-500 flex-shrink-0" />
                 )}
               </button>
               

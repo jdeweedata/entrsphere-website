@@ -1,5 +1,5 @@
 
-import { ShoppingCart, Code, Server, BarChart3 } from "lucide-react";
+import { ShoppingCart, Code, Server, ChartBar } from "@phosphor-icons/react";
 
 const SolutionsSection = () => {
   const solutions = [
@@ -28,7 +28,7 @@ const SolutionsSection = () => {
       color: "green"
     },
     {
-      icon: BarChart3,
+      icon: ChartBar,
       title: "Platform Analytics",
       description: "Advanced analytics and business intelligence tools designed specifically for platform and marketplace operators",
       features: ["Real-time performance metrics", "User behavior analytics", "Revenue optimization tools", "Predictive insights"],
@@ -64,7 +64,7 @@ const SolutionsSection = () => {
               <div key={index} className={`${colors.bg} ${colors.border} border-2 p-8 rounded-2xl`}>
                 <div className="flex items-start space-x-4 mb-6">
                   <div className={`w-14 h-14 ${colors.accent} rounded-xl flex items-center justify-center flex-shrink-0`}>
-                    <solution.icon className="h-7 w-7 text-white" />
+                    <solution.icon weight="duotone" className="h-7 w-7 text-white" />
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold text-slate-900 mb-2">{solution.title}</h3>

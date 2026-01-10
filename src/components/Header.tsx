@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { List, X } from "@phosphor-icons/react";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,9 +36,9 @@ const Header = () => {
             aria-label="Toggle menu"
           >
             {isMenuOpen ? (
-              <X className="h-6 w-6 text-slate-800" />
+              <X weight="duotone" className="h-6 w-6 text-slate-800" />
             ) : (
-              <Menu className="h-6 w-6 text-slate-800" />
+              <List weight="duotone" className="h-6 w-6 text-slate-800" />
             )}
           </button>
         </div>

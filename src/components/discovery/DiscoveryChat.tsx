@@ -25,7 +25,7 @@ import EmailCapture from './EmailCapture';
 import RouteResult from './RouteResult';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { RotateCcw, Sparkles } from 'lucide-react';
+import { ArrowsClockwise, Sparkle } from '@phosphor-icons/react';
 import posthog from 'posthog-js';
 import { saveDiscoverySession, sendDiscoveryProfile } from '@/services/discoveryService';
 
@@ -250,7 +250,7 @@ const DiscoveryChat = () => {
       <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-slate-200">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center">
-            <Sparkles className="h-4 w-4 text-white" />
+            <Sparkle weight="duotone" className="h-4 w-4 text-white" />
           </div>
           <div>
             <h2 className="font-semibold text-slate-900 text-sm">Discovery Agent</h2>
@@ -265,7 +265,7 @@ const DiscoveryChat = () => {
           onClick={handleRestart}
           className="text-slate-500 hover:text-slate-700"
         >
-          <RotateCcw className="h-4 w-4 mr-1" />
+          <ArrowsClockwise weight="duotone" className="h-4 w-4 mr-1" />
           Restart
         </Button>
       </div>

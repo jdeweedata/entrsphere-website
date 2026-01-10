@@ -1,5 +1,5 @@
 
-import { Star } from "lucide-react";
+import { Star } from "@phosphor-icons/react";
 
 const Testimonials = () => {
   const testimonials = [
@@ -47,7 +47,7 @@ const Testimonials = () => {
             <div key={index} className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
               <div className="flex items-center mb-4">
                 {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                  <Star key={i} weight="fill" className="h-5 w-5 text-yellow-400" />
                 ))}
               </div>
               

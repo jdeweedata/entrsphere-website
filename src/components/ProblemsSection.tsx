@@ -1,10 +1,10 @@
 
-import { Building2, Zap, Cloud, Cog } from "lucide-react";
+import { Buildings, Lightning, Cloud, Gear } from "@phosphor-icons/react";
 
 const ProblemsSection = () => {
   const problems = [
     {
-      icon: Building2,
+      icon: Buildings,
       problem: "Fragmented Markets With No Central Connection Point",
       solution: "AI-powered marketplace platforms that intelligently match supply and demand with smart algorithms",
       savings: "10x faster connections, 95% match accuracy",
@@ -12,7 +12,7 @@ const ProblemsSection = () => {
       bgColor: "bg-purple-100"
     },
     {
-      icon: Zap,
+      icon: Lightning,
       problem: "Building Custom Platforms Takes Years & Millions",
       solution: "Ready-to-deploy PaaS solutions with industry-specific templates and pre-built components",
       savings: "Launch in weeks, 90% cost reduction",
@@ -28,7 +28,7 @@ const ProblemsSection = () => {
       bgColor: "bg-green-100"
     },
     {
-      icon: Cog,
+      icon: Gear,
       problem: "Platform Management Consumes All Resources",
       solution: "Fully managed platform operations with AI-driven optimization and automated workflows",
       savings: "Focus on growth, not operations",
@@ -52,7 +52,7 @@ const ProblemsSection = () => {
             <div key={index} className="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 border border-slate-200">
               <div className="flex items-start space-x-4">
                 <div className={`w-12 h-12 ${item.bgColor} rounded-lg flex items-center justify-center flex-shrink-0`}>
-                  <item.icon className={`h-6 w-6 ${item.color}`} />
+                  <item.icon weight="duotone" className={`h-6 w-6 ${item.color}`} />
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-bold text-slate-900 mb-2">{item.problem}</h3>
