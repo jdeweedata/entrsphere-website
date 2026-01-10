@@ -31,182 +31,127 @@ const Discovery = () => {
   const [mode, setMode] = useState<'guided' | 'ai'>('guided');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
+    <div className="min-h-screen bg-slate-50 relative overflow-hidden font-sans text-slate-900">
       <SEO
         title="Discovery Agent - Find Your Project Route | EntrSphere"
         description="Stop guessing requirements. Our AI Discovery Agent detects your project scenario and routes you to the right approach in 5 minutes. Free demo."
         canonical="/discovery"
       />
 
+      {/* Ambient Background */}
+      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-[500px] h-[500px] bg-blue-100/50 rounded-full blur-3xl pointer-events-none opacity-50 mix-blend-multiply" />
+      <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-[600px] h-[600px] bg-violet-100/40 rounded-full blur-3xl pointer-events-none opacity-50 mix-blend-multiply" />
+
       {/* Header */}
-      <header className="border-b border-slate-200 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+      <header className="absolute top-0 left-0 right-0 z-50">
+        <div className="container mx-auto px-6 py-6 flex items-center justify-between">
           <Link
             to="/"
-            className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors"
+            className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors group"
           >
-            <ArrowLeft weight="duotone" className="h-4 w-4" />
-            <span className="text-sm font-medium">Back to EntrSphere</span>
+            <div className="w-8 h-8 rounded-full bg-white/50 border border-slate-200 flex items-center justify-center group-hover:bg-white group-hover:shadow-sm transition-all">
+              <ArrowLeft weight="bold" className="h-4 w-4" />
+            </div>
+            <span className="text-sm font-semibold tracking-wide">Back</span>
           </Link>
 
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              {mode === 'guided' ? (
-                <Sparkle weight="duotone" className="h-5 w-5 text-slate-700" />
-              ) : (
-                <Lightning weight="duotone" className="h-5 w-5 text-violet-600" />
-              )}
-              <span className="font-semibold text-slate-900">Discovery Agent</span>
-              <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                mode === 'ai'
-                  ? 'bg-violet-100 text-violet-700'
-                  : 'bg-green-100 text-green-700'
-              }`}>
-                {mode === 'ai' ? 'AI Mode' : 'Guided'}
-              </span>
-            </div>
-
-            {/* Mode Toggle */}
-            <div className="hidden sm:flex items-center bg-slate-100 rounded-lg p-1">
-              <button
-                onClick={() => setMode('guided')}
-                className={`flex items-center gap-1 px-3 py-1 rounded-md text-xs font-medium transition-colors ${
-                  mode === 'guided'
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-500 hover:text-slate-700'
-                }`}
-              >
-                <Sparkle weight="duotone" className="h-3 w-3" />
-                Guided
-              </button>
-              <button
-                onClick={() => setMode('ai')}
-                className={`flex items-center gap-1 px-3 py-1 rounded-md text-xs font-medium transition-colors ${
-                  mode === 'ai'
-                    ? 'bg-white text-violet-700 shadow-sm'
-                    : 'text-slate-500 hover:text-slate-700'
-                }`}
-              >
-                <Lightning weight="duotone" className="h-3 w-3" />
-                AI Chat
-              </button>
-            </div>
-          </div>
-
-          <Button asChild variant="outline" size="sm">
+          <Button asChild variant="ghost" className="text-slate-600 hover:text-slate-900 hover:bg-white/50">
             <Link to="/solutions/discovery-router">Get Full Toolkit</Link>
           </Button>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {/* Left Panel - Info */}
-          <div className="lg:col-span-1 space-y-6">
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900 mb-2">
-                {mode === 'guided' ? 'Find Your Project Route' : 'AI Discovery Agent'}
+      <main className="relative z-10 w-full min-h-screen flex items-center justify-center p-4 lg:p-8 pt-24 lg:pt-24">
+        <div className="w-full max-w-[1280px] grid lg:grid-cols-12 gap-6 lg:gap-12 items-start">
+
+          {/* Left Panel - Info & Context */}
+          <div className="lg:col-span-4 space-y-10 py-4">
+            <div className="space-y-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/5 border border-slate-900/10 text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                <Sparkle weight="fill" className="text-violet-500" />
+                <span>Discovery Agent</span>
+              </div>
+              <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight leading-[1.1]">
+                {mode === 'guided' ? 'Find Your\nProject Route' : 'AI Discovery\nAssistant'}
               </h1>
-              <p className="text-slate-600">
+              <p className="text-lg text-slate-600 leading-relaxed max-w-md">
                 {mode === 'guided'
-                  ? "Answer 5 quick questions and I'll detect the best discovery approach for your specific situation."
-                  : "Have a free-form conversation with our AI agent. Describe your project and get personalized discovery guidance powered by Claude."}
+                  ? "Answer 5 strategic questions to identify the perfect discovery approach for your unique situation."
+                  : "Collaborate with our AI agent to explore your project's potential and get tailored guidance in real-time."}
               </p>
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-4">
-              {stats.map((stat) => (
+            <div className="grid grid-cols-3 gap-3">
+              {stats.map((stat, idx) => (
                 <div
                   key={stat.label}
-                  className="text-center p-3 bg-white rounded-xl border border-slate-200"
+                  className="p-4 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/50 shadow-sm flex flex-col items-center text-center gap-2 transition-transform hover:-translate-y-1 duration-300"
                 >
-                  <stat.icon weight="duotone" className="h-5 w-5 mx-auto mb-1 text-slate-600" />
-                  <div className="font-semibold text-slate-900 text-sm">{stat.label}</div>
-                  <div className="text-xs text-slate-500">{stat.description}</div>
+                  <div className="p-2 bg-slate-900/5 rounded-xl text-slate-700">
+                    <stat.icon weight="duotone" className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-slate-900 text-sm leading-tight">{stat.label}</div>
+                    <div className="text-[10px] uppercase tracking-wide font-semibold text-slate-500 mt-1">{stat.description}</div>
+                  </div>
                 </div>
               ))}
             </div>
 
-            {/* What you'll learn */}
-            <div className="bg-white rounded-xl border border-slate-200 p-4">
-              <h3 className="font-semibold text-slate-900 mb-3">What you'll discover:</h3>
-              <ul className="space-y-2 text-sm">
-                <li className="flex items-start gap-2 text-slate-600">
-                  <span className="text-green-500 mt-0.5">1.</span>
-                  Which of 4 discovery scenarios fits your project
-                </li>
-                <li className="flex items-start gap-2 text-slate-600">
-                  <span className="text-green-500 mt-0.5">2.</span>
-                  Risk factors specific to your situation
-                </li>
-                <li className="flex items-start gap-2 text-slate-600">
-                  <span className="text-green-500 mt-0.5">3.</span>
-                  The right approach to avoid scope creep
-                </li>
-                <li className="flex items-start gap-2 text-slate-600">
-                  <span className="text-green-500 mt-0.5">4.</span>
-                  Next steps tailored to your route
-                </li>
-              </ul>
+            {/* Mode Switcher */}
+            <div className="bg-white/50 backdrop-blur-md p-1.5 rounded-2xl border border-slate-200/60 inline-flex shadow-sm">
+              <button
+                onClick={() => setMode('guided')}
+                className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${mode === 'guided'
+                    ? 'bg-white text-slate-900 shadow-md ring-1 ring-black/5'
+                    : 'text-slate-500 hover:text-slate-700 hover:bg-white/30'
+                  }`}
+              >
+                <Sparkle weight={mode === 'guided' ? 'fill' : 'regular'} className={mode === 'guided' ? 'text-violet-500' : ''} />
+                Guided Flow
+              </button>
+              <button
+                onClick={() => setMode('ai')}
+                className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${mode === 'ai'
+                    ? 'bg-white text-slate-900 shadow-md ring-1 ring-black/5'
+                    : 'text-slate-500 hover:text-slate-700 hover:bg-white/30'
+                  }`}
+              >
+                <Lightning weight={mode === 'ai' ? 'fill' : 'regular'} className={mode === 'ai' ? 'text-blue-500' : ''} />
+                AI Chat
+              </button>
             </div>
 
-            {/* Social proof */}
-            <div className="bg-slate-900 text-white rounded-xl p-4">
-              <p className="text-sm text-slate-300 mb-2">Did you know?</p>
-              <p className="font-medium">
-                42% of software projects fail due to poor requirements gathering.
-              </p>
-              <p className="text-sm text-slate-400 mt-2">
-                The Discovery Router was built to fix that.
-              </p>
+            {/* Footer Note */}
+            <div className="flex items-center gap-3 text-xs text-slate-400 font-medium">
+              <div className="flex -space-x-2">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="w-6 h-6 rounded-full bg-slate-200 border-2 border-white" />
+                ))}
+              </div>
+              <p>Trusted by 1000+ Innovators</p>
             </div>
 
-            {/* Help text */}
-            <p className="text-xs text-slate-500 text-center">
-              Your answers are stored locally. We only save data if you opt in.
-            </p>
           </div>
 
-          {/* Right Panel - Chat */}
-          <div className="lg:col-span-2">
-            <div className="h-[calc(100vh-12rem)] min-h-[500px]">
-              {mode === 'guided' ? (
-                <DiscoveryChat />
-              ) : (
-                <DiscoveryChatAI
-                  onSwitchMode={() => setMode('guided')}
-                />
-              )}
+          {/* Right Panel - Chat Interface */}
+          <div className="lg:col-span-8 h-[600px] lg:h-[750px]">
+            <div className="h-full w-full bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04)] rounded-[2rem] overflow-hidden flex flex-col relative transition-all duration-500">
+              {/* Decorative Gradient Blob inside card */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-50 to-violet-50 opacity-50 blur-3xl rounded-full -mr-16 -mt-16 pointer-events-none" />
+
+              <div className="flex-1 relative z-10 p-2">
+                {mode === 'guided' ? (
+                  <DiscoveryChat />
+                ) : (
+                  <DiscoveryChatAI onSwitchMode={() => setMode('guided')} />
+                )}
+              </div>
             </div>
           </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="border-t border-slate-200 bg-white py-4 mt-8">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
-            <p>
-              Powered by{' '}
-              <Link to="/" className="text-slate-900 hover:underline">
-                EntrSphere
-              </Link>
-            </p>
-            <div className="flex items-center gap-4">
-              <Link to="/solutions/discovery-router" className="hover:text-slate-900">
-                Full Toolkit
-              </Link>
-              <Link to="/contact" className="hover:text-slate-900">
-                Contact
-              </Link>
-              <Link to="/about" className="hover:text-slate-900">
-                About
-              </Link>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

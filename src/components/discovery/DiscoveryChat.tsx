@@ -245,17 +245,17 @@ const DiscoveryChat = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
+    <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-slate-200">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center">
-            <Sparkle weight="duotone" className="h-4 w-4 text-white" />
+      <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200/40 bg-white/40 backdrop-blur-md">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-full bg-white border border-slate-200/60 flex items-center justify-center shadow-sm">
+            <Sparkle weight="fill" className="h-4 w-4 text-violet-500" />
           </div>
           <div>
-            <h2 className="font-semibold text-slate-900 text-sm">Discovery Agent</h2>
-            <p className="text-xs text-slate-500">
-              {session.phase === 'complete' ? 'Session complete' : 'Finding your route...'}
+            <h2 className="font-semibold text-slate-800 text-sm">Guided Discovery</h2>
+            <p className="text-xs text-slate-500 font-medium">
+              {session.phase === 'complete' ? 'Session complete' : 'Finding your path...'}
             </p>
           </div>
         </div>
@@ -263,16 +263,16 @@ const DiscoveryChat = () => {
           variant="ghost"
           size="sm"
           onClick={handleRestart}
-          className="text-slate-500 hover:text-slate-700"
+          className="text-slate-500 hover:text-slate-800 hover:bg-white/50 rounded-xl"
         >
-          <ArrowsClockwise weight="duotone" className="h-4 w-4 mr-1" />
+          <ArrowsClockwise weight="bold" className="h-4 w-4 mr-1.5" />
           Restart
         </Button>
       </div>
 
       {/* Chat Area */}
-      <ScrollArea className="flex-1 p-4" ref={scrollRef}>
-        <div className="space-y-1">
+      <ScrollArea className="flex-1 p-6" ref={scrollRef}>
+        <div className="max-w-3xl mx-auto space-y-2">
           {messages.map((message) => (
             <ChatMessage key={message.id} message={message} />
           ))}
@@ -281,38 +281,49 @@ const DiscoveryChat = () => {
 
           {/* Choice buttons (shown below last message) */}
           {currentOptions && !isTyping && session.phase === 'routing' && (
-            <div className="ml-0 md:ml-8 max-w-[85%] md:max-w-[70%]">
-              <ChoiceButtons
-                options={currentOptions}
-                onSelect={handleOptionSelect}
-              />
+            <div className="ml-0 md:ml-0 w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
+              {/* Wrapped in div to control width/position if needed, but ChoiceButtons usually handles it */}
+              <div className="flex justify-end">
+                <div className="max-w-[85%] md:max-w-[70%] w-full">
+                  <ChoiceButtons
+                    options={currentOptions}
+                    onSelect={handleOptionSelect}
+                  />
+                </div>
+              </div>
             </div>
           )}
 
           {/* Route result (shown after detection) */}
           {session.phase === 'email_capture' && session.detectedRoute && !isTyping && (
-            <div className="ml-0 md:ml-8 max-w-[85%] md:max-w-[70%]">
-              <RouteResult route={session.detectedRoute} answers={session.answers} />
-              <EmailCapture
-                onSubmit={handleEmailSubmit}
-                onSkip={handleEmailSkip}
-                isLoading={isEmailLoading}
-              />
+            <div className="flex justify-end w-full">
+              <div className="max-w-[85%] md:max-w-[70%] w-full">
+                <RouteResult route={session.detectedRoute} answers={session.answers} />
+                <div className="mt-4">
+                  <EmailCapture
+                    onSubmit={handleEmailSubmit}
+                    onSkip={handleEmailSkip}
+                    isLoading={isEmailLoading}
+                  />
+                </div>
+              </div>
             </div>
           )}
 
           {/* Final route result after completion */}
           {session.phase === 'complete' && session.detectedRoute && !isTyping && (
-            <div className="ml-0 md:ml-8 max-w-[85%] md:max-w-[70%]">
-              <RouteResult route={session.detectedRoute} answers={session.answers} />
+            <div className="flex justify-end w-full">
+              <div className="max-w-[85%] md:max-w-[70%] w-full">
+                <RouteResult route={session.detectedRoute} answers={session.answers} />
+              </div>
             </div>
           )}
         </div>
       </ScrollArea>
 
       {/* Footer - Progress indicator */}
-      <div className="px-4 py-3 bg-white border-t border-slate-200">
-        <div className="flex items-center justify-between text-xs text-slate-500">
+      <div className="px-6 py-4 bg-white/40 backdrop-blur-md border-t border-slate-200/40">
+        <div className="flex items-center justify-between text-xs font-semibold text-slate-500 mb-2">
           <span>
             {session.phase === 'routing' && (
               <>
@@ -320,22 +331,21 @@ const DiscoveryChat = () => {
               </>
             )}
             {session.phase === 'route_detected' && 'Route detected!'}
-            {session.phase === 'email_capture' && 'Get your profile'}
+            {session.phase === 'email_capture' && 'Finalizing...'}
             {session.phase === 'complete' && 'Discovery complete'}
           </span>
-          <span className="flex items-center gap-1">
+          <span className="flex items-center gap-1.5 bg-white/50 px-2 py-0.5 rounded-full border border-slate-100">
             <span
-              className={`w-2 h-2 rounded-full ${
-                session.phase !== 'complete' ? 'bg-green-500 animate-pulse' : 'bg-slate-300'
-              }`}
+              className={`w-1.5 h-1.5 rounded-full ${session.phase !== 'complete' ? 'bg-green-500 animate-pulse' : 'bg-slate-300'
+                }`}
             />
             {session.phase !== 'complete' ? 'Active' : 'Done'}
           </span>
         </div>
         {session.phase === 'routing' && (
-          <div className="mt-2 h-1 bg-slate-200 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-slate-200/60 rounded-full overflow-hidden">
             <div
-              className="h-full bg-slate-900 transition-all duration-300"
+              className="h-full bg-gradient-to-r from-violet-500 to-blue-500 transition-all duration-500 ease-out"
               style={{
                 width: `${((session.currentQuestionIndex + 1) / ROUTER_QUESTIONS.length) * 100}%`,
               }}

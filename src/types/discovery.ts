@@ -73,7 +73,7 @@ export interface RouterOption {
 }
 
 // Chat message types
-export type MessageRole = 'agent' | 'user' | 'system';
+export type MessageRole = 'agent' | 'user' | 'system' | 'assistant';
 
 export interface ChatMessage {
   id: string;

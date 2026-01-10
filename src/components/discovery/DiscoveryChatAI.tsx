@@ -233,21 +233,21 @@ const DiscoveryChatAI = ({ onSwitchMode }: Props) => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#112B58] rounded-2xl border border-[#88D2E8]/20 overflow-hidden">
+    <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-[#2069A8]/20 backdrop-blur-md border-b border-[#88D2E8]/20">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200/40 bg-white/40 backdrop-blur-md">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#2069A8] to-[#88D2E8] flex items-center justify-center shadow-lg shadow-[#88D2E8]/20">
-            <Lightning weight="duotone" className="h-5 w-5 text-white" />
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-md shadow-blue-500/20">
+            <Lightning weight="fill" className="h-4 w-4 text-white" />
           </div>
           <div>
-            <h2 className="font-semibold text-white text-sm flex items-center gap-2 font-outfit">
+            <h2 className="font-semibold text-slate-800 text-sm flex items-center gap-2">
               AI Discovery Agent
-              <span className="bg-[#88D2E8]/20 text-[#88D2E8] text-[10px] font-medium px-2 py-0.5 rounded-full border border-[#88D2E8]/30">
+              <span className="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded-full border border-blue-100">
                 BETA
               </span>
             </h2>
-            <p className="text-xs text-blue-200">
+            <p className="text-xs text-slate-500 font-medium">
               {detectedRoute ? `${getDominantRoute()} detected` : 'Free-form conversation'}
             </p>
           </div>
@@ -259,9 +259,9 @@ const DiscoveryChatAI = ({ onSwitchMode }: Props) => {
               variant="default"
               size="sm"
               onClick={() => setIsSpecModalOpen(true)}
-              className="bg-gradient-to-r from-[#2069A8] to-[#88D2E8] hover:opacity-90 text-white text-xs rounded-xl border-0"
+              className="bg-slate-900 hover:bg-slate-800 text-white text-xs rounded-xl shadow-lg shadow-slate-900/10"
             >
-              <FileCode weight="duotone" className="h-4 w-4 mr-1" />
+              <FileCode weight="bold" className="h-4 w-4 mr-1.5" />
               Generate SPEC
             </Button>
           )}
@@ -270,9 +270,9 @@ const DiscoveryChatAI = ({ onSwitchMode }: Props) => {
               variant="ghost"
               size="sm"
               onClick={onSwitchMode}
-              className="text-blue-200 hover:text-white hover:bg-[#2069A8]/30 text-xs rounded-xl"
+              className="text-slate-500 hover:text-slate-800 hover:bg-white/50 text-xs rounded-xl"
             >
-              <Sparkle weight="duotone" className="h-4 w-4 mr-1" />
+              <Sparkle weight="bold" className="h-4 w-4 mr-1.5" />
               Guided
             </Button>
           )}
@@ -280,17 +280,17 @@ const DiscoveryChatAI = ({ onSwitchMode }: Props) => {
             variant="ghost"
             size="sm"
             onClick={handleRestart}
-            className="text-blue-200 hover:text-white hover:bg-[#2069A8]/30 rounded-xl"
+            className="text-slate-500 hover:text-slate-800 hover:bg-white/50 rounded-xl"
           >
-            <ArrowsClockwise weight="duotone" className="h-4 w-4 mr-1" />
+            <ArrowsClockwise weight="bold" className="h-4 w-4 mr-1.5" />
             Restart
           </Button>
         </div>
       </div>
 
       {/* Chat Area */}
-      <ScrollArea className="flex-1 p-4" ref={scrollRef}>
-        <div className="space-y-1">
+      <ScrollArea className="flex-1 p-6" ref={scrollRef}>
+        <div className="max-w-3xl mx-auto space-y-2">
           {messages.map((message) => (
             <ChatMessage key={message.id} message={message} />
           ))}
@@ -298,15 +298,18 @@ const DiscoveryChatAI = ({ onSwitchMode }: Props) => {
           {isLoading && <TypingIndicator />}
 
           {error && (
-            <div className="ml-0 md:ml-8 max-w-[85%] md:max-w-[70%]">
-              <div className="bg-red-500/10 border border-red-400/30 rounded-2xl p-3 text-sm text-red-300 backdrop-blur-md">
-                {error}
-                <button
-                  onClick={() => setError(null)}
-                  className="ml-2 text-red-400 hover:text-red-300 underline"
-                >
-                  Dismiss
-                </button>
+            <div className="flex justify-start w-full">
+              <div className="max-w-[85%]">
+                <div className="bg-red-50 border border-red-100 rounded-2xl p-4 text-sm text-red-600 shadow-sm flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
+                  <div className="flex-1">{error}</div>
+                  <button
+                    onClick={() => setError(null)}
+                    className="text-xs font-semibold text-red-700 hover:underline"
+                  >
+                    Dismiss
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -314,51 +317,53 @@ const DiscoveryChatAI = ({ onSwitchMode }: Props) => {
       </ScrollArea>
 
       {/* Input Area */}
-      <div className="px-4 py-3 bg-[#2069A8]/10 backdrop-blur-md border-t border-[#88D2E8]/20">
-        <div className="flex gap-2">
-          <Input
-            ref={inputRef}
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Describe your project or answer the agent's questions..."
-            disabled={isLoading}
-            className="flex-1 bg-[#112B58]/80 border-[#88D2E8]/30 text-white placeholder:text-blue-300/50 rounded-xl focus:border-[#88D2E8] focus:ring-[#88D2E8]/20"
-          />
-          <Button
-            onClick={handleSendMessage}
-            disabled={!inputValue.trim() || isLoading}
-            className="bg-gradient-to-r from-[#2069A8] to-[#88D2E8] hover:opacity-90 rounded-xl border-0"
-          >
-            <PaperPlaneTilt weight="duotone" className="h-4 w-4 text-white" />
-          </Button>
-        </div>
+      <div className="px-6 py-4 bg-white/40 backdrop-blur-md border-t border-slate-200/40">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex gap-3">
+            <Input
+              ref={inputRef}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Describe your project or answer the agent's questions..."
+              disabled={isLoading}
+              className="flex-1 bg-white/60 border-slate-200/60 text-slate-800 placeholder:text-slate-400 rounded-xl focus:border-blue-400 focus:ring-blue-100 shadow-sm h-11"
+            />
+            <Button
+              onClick={handleSendMessage}
+              disabled={!inputValue.trim() || isLoading}
+              className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl w-11 h-11 p-0 shadow-lg shadow-blue-500/20"
+            >
+              <PaperPlaneTilt weight="fill" className="h-5 w-5" />
+            </Button>
+          </div>
 
-        {/* Signal indicators */}
-        <div className="flex items-center justify-between mt-3 text-xs text-blue-200">
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1.5">
-              <span className={`w-2 h-2 rounded-full transition-all duration-300 ${signals.A > 0.3 ? 'bg-[#88D2E8] shadow-sm shadow-[#88D2E8]/50' : 'bg-[#2069A8]/50'}`} />
-              A: {(signals.A * 100).toFixed(0)}%
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className={`w-2 h-2 rounded-full transition-all duration-300 ${signals.B > 0.3 ? 'bg-[#88D2E8] shadow-sm shadow-[#88D2E8]/50' : 'bg-[#2069A8]/50'}`} />
-              B: {(signals.B * 100).toFixed(0)}%
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className={`w-2 h-2 rounded-full transition-all duration-300 ${signals.C > 0.3 ? 'bg-[#88D2E8] shadow-sm shadow-[#88D2E8]/50' : 'bg-[#2069A8]/50'}`} />
-              C: {(signals.C * 100).toFixed(0)}%
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className={`w-2 h-2 rounded-full transition-all duration-300 ${signals.D > 0.3 ? 'bg-[#88D2E8] shadow-sm shadow-[#88D2E8]/50' : 'bg-[#2069A8]/50'}`} />
-              D: {(signals.D * 100).toFixed(0)}%
+          {/* Signal indicators */}
+          <div className="flex items-center justify-between mt-3 text-xs text-slate-400 font-medium px-1">
+            <div className="flex items-center gap-4">
+              <span className="flex items-center gap-1.5">
+                <span className={`w-2 h-2 rounded-full transition-all duration-300 ${signals.A > 0.3 ? 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]' : 'bg-slate-300'}`} />
+                A: {(signals.A * 100).toFixed(0)}%
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className={`w-2 h-2 rounded-full transition-all duration-300 ${signals.B > 0.3 ? 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]' : 'bg-slate-300'}`} />
+                B: {(signals.B * 100).toFixed(0)}%
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className={`w-2 h-2 rounded-full transition-all duration-300 ${signals.C > 0.3 ? 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]' : 'bg-slate-300'}`} />
+                C: {(signals.C * 100).toFixed(0)}%
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className={`w-2 h-2 rounded-full transition-all duration-300 ${signals.D > 0.3 ? 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]' : 'bg-slate-300'}`} />
+                D: {(signals.D * 100).toFixed(0)}%
+              </span>
+            </div>
+            <span className="text-slate-300">
+              {tokenUsage.input + tokenUsage.output > 0 && (
+                `${((tokenUsage.input + tokenUsage.output) / 1000).toFixed(1)}k tokens`
+              )}
             </span>
           </div>
-          <span className="text-blue-300/60">
-            {tokenUsage.input + tokenUsage.output > 0 && (
-              `${((tokenUsage.input + tokenUsage.output) / 1000).toFixed(1)}k tokens`
-            )}
-          </span>
         </div>
       </div>
 
