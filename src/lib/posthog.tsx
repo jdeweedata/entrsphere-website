@@ -15,6 +15,8 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
         capture_pageview: false, // We capture manually for SPA
         capture_pageleave: true,
       });
+      // Expose to window for PostHog toolbar and debugging
+      (window as typeof window & { posthog: typeof posthog }).posthog = posthog;
     }
   }, []);
 
