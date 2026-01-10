@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@phosphor-icons/react";
 
 const solutions = [
   {
@@ -85,7 +85,7 @@ const Solutions = () => {
                     </span>
                   </div>
                   <span className="text-slate-400 group-hover:text-slate-900 group-hover:translate-x-1 transition-all">
-                    <ArrowRight className="h-5 w-5" />
+                    <ArrowRight weight="duotone" className="h-5 w-5" />
                   </span>
                 </div>
               </Link>

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
-import { ArrowRight, TrendingUp, Clock, Zap } from "lucide-react";
+import { ArrowRight, TrendUp, Clock, Lightning } from "@phosphor-icons/react";
 
 type Category = "all" | "solopreneur" | "agency" | "startup";
 
@@ -32,7 +32,7 @@ const caseStudies = [
     quote:
       "I stopped trying to explain my product in meetings and started using the Discovery Router. My first spec was so clear that the developer said 'this is the best brief I've ever received.'",
     leverageType: "Code",
-    leverageIcon: Zap,
+    leverageIcon: Lightning,
   },
   {
     id: "freelance-developer-agency",
@@ -51,7 +51,7 @@ const caseStudies = [
     quote:
       "The framework let me productize my discovery process. Now I charge R8,500 for a 'Spec Sprint' that takes me 2 hours with AI assistance. That's permissionless leverage.",
     leverageType: "Systems",
-    leverageIcon: TrendingUp,
+    leverageIcon: TrendUp,
   },
   {
     id: "content-creator-saas",
@@ -70,7 +70,7 @@ const caseStudies = [
     quote:
       "I used the Non-Technical Discovery prompt to define exactly what I wanted. Then I handed the SPEC.json to a Claude Code agent. My audience became my first customers.",
     leverageType: "Media + Code",
-    leverageIcon: Zap,
+    leverageIcon: Lightning,
   },
   {
     id: "boutique-agency-scale",
@@ -89,7 +89,7 @@ const caseStudies = [
     quote:
       "Our AI pipeline handles the grunt work—research, first drafts, QA. Our humans do the creative strategy and client relationships. We're a 5-person agency with 20-person output.",
     leverageType: "Code + Systems",
-    leverageIcon: TrendingUp,
+    leverageIcon: TrendUp,
   },
   {
     id: "dev-shop-standardization",
@@ -127,7 +127,7 @@ const caseStudies = [
     quote:
       "We used the Integration Discovery workshop to map our FinTech API dependencies. The output was so detailed that we hired a junior dev and an AI agent to build it. Saved us R500K in senior dev costs.",
     leverageType: "Code",
-    leverageIcon: Zap,
+    leverageIcon: Lightning,
   },
   {
     id: "bootstrap-founder-pivot",
@@ -228,7 +228,7 @@ const CaseStudies = () => {
                       {study.client}
                     </span>
                     <span className="flex items-center gap-1 text-xs font-medium text-slate-600 bg-slate-100 px-2 py-1 rounded-full">
-                      <LeverageIcon className="h-3 w-3" />
+                      <LeverageIcon weight="duotone" className="h-3 w-3" />
                       {study.leverageType}
                     </span>
                   </div>
@@ -289,7 +289,7 @@ const CaseStudies = () => {
                 className="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-6 py-3 rounded-lg font-medium transition-colors"
               >
                 Explore Solutions
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight weight="duotone" className="h-4 w-4" />
               </Link>
               <Link
                 to="/contact"

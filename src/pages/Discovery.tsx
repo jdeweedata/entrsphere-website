@@ -7,7 +7,7 @@ import SEO from '@/components/SEO';
 import DiscoveryChat from '@/components/discovery/DiscoveryChat';
 import DiscoveryChatAI from '@/components/discovery/DiscoveryChatAI';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Sparkles, Clock, Target, FileJson, Zap } from 'lucide-react';
+import { ArrowLeft, Sparkle, Clock, Target, FileJs, Lightning } from '@phosphor-icons/react';
 
 const stats = [
   {
@@ -21,7 +21,7 @@ const stats = [
     description: 'detected automatically',
   },
   {
-    icon: FileJson,
+    icon: FileJs,
     label: 'SPEC.json',
     description: 'ready for devs',
   },
@@ -45,16 +45,16 @@ const Discovery = () => {
             to="/"
             className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft weight="duotone" className="h-4 w-4" />
             <span className="text-sm font-medium">Back to EntrSphere</span>
           </Link>
 
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               {mode === 'guided' ? (
-                <Sparkles className="h-5 w-5 text-slate-700" />
+                <Sparkle weight="duotone" className="h-5 w-5 text-slate-700" />
               ) : (
-                <Zap className="h-5 w-5 text-violet-600" />
+                <Lightning weight="duotone" className="h-5 w-5 text-violet-600" />
               )}
               <span className="font-semibold text-slate-900">Discovery Agent</span>
               <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
@@ -76,7 +76,7 @@ const Discovery = () => {
                     : 'text-slate-500 hover:text-slate-700'
                 }`}
               >
-                <Sparkles className="h-3 w-3" />
+                <Sparkle weight="duotone" className="h-3 w-3" />
                 Guided
               </button>
               <button
@@ -87,7 +87,7 @@ const Discovery = () => {
                     : 'text-slate-500 hover:text-slate-700'
                 }`}
               >
-                <Zap className="h-3 w-3" />
+                <Lightning weight="duotone" className="h-3 w-3" />
                 AI Chat
               </button>
             </div>
@@ -121,7 +121,7 @@ const Discovery = () => {
                   key={stat.label}
                   className="text-center p-3 bg-white rounded-xl border border-slate-200"
                 >
-                  <stat.icon className="h-5 w-5 mx-auto mb-1 text-slate-600" />
+                  <stat.icon weight="duotone" className="h-5 w-5 mx-auto mb-1 text-slate-600" />
                   <div className="font-semibold text-slate-900 text-sm">{stat.label}</div>
                   <div className="text-xs text-slate-500">{stat.description}</div>
                 </div>

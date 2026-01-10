@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { Check, ArrowLeft } from "lucide-react";
+import { Check, ArrowLeft } from "@phosphor-icons/react";
 
 const scenarios = [
   {
@@ -100,7 +100,7 @@ const DiscoveryRouter = () => {
             to="/solutions"
             className="inline-flex items-center text-slate-600 hover:text-slate-900 mb-8 transition-colors"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
+            <ArrowLeft weight="duotone" className="h-4 w-4 mr-2" />
             Back to Solutions
           </Link>
 
@@ -240,7 +240,7 @@ const DiscoveryRouter = () => {
                         key={item}
                         className="flex items-start gap-2 text-slate-600 text-sm"
                       >
-                        <Check className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                        <Check weight="bold" className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
                         {item}
                       </li>
                     ))}

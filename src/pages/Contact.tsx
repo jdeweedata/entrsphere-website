@@ -9,21 +9,21 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
-  Mail,
-  MessageSquare,
+  Envelope,
+  ChatCircle,
   User,
   CheckCircle,
-  Loader2,
-  Building2,
+  SpinnerGap,
+  Buildings,
   Rocket,
   Users,
   Briefcase,
-} from "lucide-react";
+} from "@phosphor-icons/react";
 
 const personas = [
   {
     id: "agency",
-    icon: Building2,
+    icon: Buildings,
     title: "Agency Owner",
     description: "Losing money on scope creep and rework",
     placeholder:
@@ -119,7 +119,7 @@ const Contact = () => {
               /* Success State */
               <div className="bg-white rounded-2xl p-12 shadow-sm border border-slate-100 text-center">
                 <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <CheckCircle className="h-8 w-8 text-green-600" />
+                  <CheckCircle weight="duotone" className="h-8 w-8 text-green-600" />
                 </div>
                 <h2 className="text-2xl font-bold text-slate-900 mb-3">
                   Message Sent!
@@ -186,7 +186,7 @@ const Contact = () => {
                         htmlFor="name"
                         className="text-slate-700 font-medium flex items-center gap-2"
                       >
-                        <User className="h-4 w-4" />
+                        <User weight="duotone" className="h-4 w-4" />
                         Name
                       </Label>
                       <Input
@@ -206,7 +206,7 @@ const Contact = () => {
                         htmlFor="email"
                         className="text-slate-700 font-medium flex items-center gap-2"
                       >
-                        <Mail className="h-4 w-4" />
+                        <Envelope weight="duotone" className="h-4 w-4" />
                         Email
                       </Label>
                       <Input
@@ -226,7 +226,7 @@ const Contact = () => {
                         htmlFor="message"
                         className="text-slate-700 font-medium flex items-center gap-2"
                       >
-                        <MessageSquare className="h-4 w-4" />
+                        <ChatCircle weight="duotone" className="h-4 w-4" />
                         What's happening?
                       </Label>
                       <Textarea
@@ -258,7 +258,7 @@ const Contact = () => {
                     >
                       {isSubmitting ? (
                         <>
-                          <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                          <SpinnerGap weight="duotone" className="h-5 w-5 mr-2 animate-spin" />
                           Sending...
                         </>
                       ) : (

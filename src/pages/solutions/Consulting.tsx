@@ -3,11 +3,11 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { Check, ArrowLeft, Search, Users, Cog } from "lucide-react";
+import { Check, ArrowLeft, MagnifyingGlass, Users, Gear } from "@phosphor-icons/react";
 
 const services = [
   {
-    icon: Search,
+    icon: MagnifyingGlass,
     title: 'The "Discovery Pipeline" Audit',
     subtitle: "For Teams Struggling with Requirements",
     price: "R25,000",
@@ -37,7 +37,7 @@ const services = [
     ],
   },
   {
-    icon: Cog,
+    icon: Gear,
     title: "Custom AI Development Pipeline",
     subtitle: "For Teams Ready to Automate",
     price: "Custom Quote",
@@ -70,7 +70,7 @@ const Consulting = () => {
             to="/solutions"
             className="inline-flex items-center text-slate-600 hover:text-slate-900 mb-8 transition-colors"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
+            <ArrowLeft weight="duotone" className="h-4 w-4 mr-2" />
             Back to Solutions
           </Link>
 
@@ -142,7 +142,7 @@ const Consulting = () => {
                   >
                     <div className="flex flex-col md:flex-row md:items-start gap-6">
                       <div className="bg-slate-100 p-3 rounded-xl w-fit">
-                        <Icon className="h-6 w-6 text-slate-700" />
+                        <Icon weight="duotone" className="h-6 w-6 text-slate-700" />
                       </div>
                       <div className="flex-1">
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
@@ -174,7 +174,7 @@ const Consulting = () => {
                                 key={item}
                                 className="flex items-start gap-2 text-slate-600"
                               >
-                                <Check className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
+                                <Check weight="bold" className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
                                 {item}
                               </li>
                             ))}

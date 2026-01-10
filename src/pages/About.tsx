@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
-import { ArrowRight, Target, Zap, Code, Lightbulb, Building2, Rocket, Users, Briefcase } from "lucide-react";
+import { ArrowRight, Target, Lightning, Code, Lightbulb, Buildings, Rocket, Users, Briefcase } from "@phosphor-icons/react";
 
 const values = [
   {
@@ -12,7 +12,7 @@ const values = [
       "Bad requirements cost you R20,000–R50,000 per project in rework. Our frameworks eliminate the guesswork that eats your margins.",
   },
   {
-    icon: Zap,
+    icon: Lightning,
     title: "Permissionless Leverage",
     description:
       "We help you build assets that work without you—code, systems, and frameworks that scale while you sleep.",
@@ -33,7 +33,7 @@ const values = [
 
 const audience = [
   {
-    icon: Building2,
+    icon: Buildings,
     title: "Agency Owners",
     pain: "Losing R20,000–R50,000 per project on free rework",
     description:
@@ -177,7 +177,7 @@ const About = () => {
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <div className="bg-slate-100 w-10 h-10 rounded-lg flex items-center justify-center">
-                        <Icon className="h-5 w-5 text-slate-700" />
+                        <Icon weight="duotone" className="h-5 w-5 text-slate-700" />
                       </div>
                       <h3 className="font-bold text-slate-900">{item.title}</h3>
                     </div>
@@ -310,7 +310,7 @@ const About = () => {
                     className="bg-white rounded-xl p-6 shadow-sm border border-slate-100"
                   >
                     <div className="bg-slate-100 w-10 h-10 rounded-lg flex items-center justify-center mb-4">
-                      <Icon className="h-5 w-5 text-slate-700" />
+                      <Icon weight="duotone" className="h-5 w-5 text-slate-700" />
                     </div>
                     <h3 className="font-bold text-slate-900 mb-2">
                       {value.title}

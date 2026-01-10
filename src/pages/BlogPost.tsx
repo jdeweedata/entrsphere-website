@@ -9,7 +9,7 @@ import remarkGfm from "remark-gfm";
 import { api } from "../../convex/_generated/api";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { ArrowLeft, Clock, Calendar, User } from "lucide-react";
+import { ArrowLeft, Clock, Calendar, User } from "@phosphor-icons/react";
 
 // Import highlight.js styles
 import "highlight.js/styles/github.css";
@@ -208,12 +208,12 @@ function PostHeader({
         <div className="flex items-center gap-4 text-sm text-slate-500">
           {post.publishedAt && (
             <div className="flex items-center gap-1.5">
-              <Calendar className="w-4 h-4" />
+              <Calendar weight="duotone" className="w-4 h-4" />
               <span>{formatDate(post.publishedAt)}</span>
             </div>
           )}
           <div className="flex items-center gap-1.5">
-            <Clock className="w-4 h-4" />
+            <Clock weight="duotone" className="w-4 h-4" />
             <span>{post.readTime} min read</span>
           </div>
         </div>
@@ -283,7 +283,7 @@ function PostFooter({
           className="inline-flex items-center gap-2 bg-white text-slate-900 px-6 py-3 rounded-lg font-medium hover:bg-slate-100 transition-colors"
         >
           Get the Toolkit
-          <ArrowLeft className="w-4 h-4 rotate-180" />
+          <ArrowLeft weight="duotone" className="w-4 h-4 rotate-180" />
         </Link>
       </div>
     </footer>
@@ -494,7 +494,7 @@ export default function BlogPost() {
               to="/blog"
               className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors font-medium"
             >
-              <ArrowLeft className="w-5 h-5" />
+              <ArrowLeft weight="duotone" className="w-5 h-5" />
               Back to Blog
             </Link>
           </div>
@@ -564,7 +564,7 @@ export default function BlogPost() {
             to="/blog"
             className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors mb-8 font-medium"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft weight="duotone" className="w-4 h-4" />
             Back to Blog
           </Link>
 
