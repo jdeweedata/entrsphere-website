@@ -90,4 +90,31 @@ export default defineSchema({
     .index("by_email", ["email"])
     .index("by_route", ["route"])
     .index("by_createdAt", ["createdAt"]),
+
+  // SPEC preview leads - email captures from freemium flow
+  specPreviewLeads: defineTable({
+    email: v.string(),
+    sessionId: v.string(),
+    lastSessionId: v.string(),
+    route: v.union(
+      v.literal("A"),
+      v.literal("B"),
+      v.literal("C"),
+      v.literal("D")
+    ),
+    signals: v.object({
+      A: v.number(),
+      B: v.number(),
+      C: v.number(),
+      D: v.number(),
+    }),
+    conversationLength: v.number(),
+    previewCount: v.number(),
+    convertedToFullSpec: v.boolean(),
+    createdAt: v.number(),
+    lastPreviewAt: v.number(),
+  })
+    .index("by_email", ["email"])
+    .index("by_route", ["route"])
+    .index("by_createdAt", ["createdAt"]),
 });

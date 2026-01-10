@@ -363,6 +363,128 @@ export async function generateSpecJson(
 }
 
 // ============================================
+// SPEC PREVIEW (Freemium Flow)
+// ============================================
+
+export interface SpecPreview {
+  preview: true;
+  project: {
+    name: string;
+    summary: string;
+    route: string;
+    status: "preview";
+  };
+  features_preview: Array<{
+    id: string;
+    title: string;
+    priority: "must-have" | "nice-to-have";
+  }>;
+  locked_content: {
+    full_features_count: number;
+    has_integrations: boolean;
+    has_constraints: boolean;
+    has_risks: boolean;
+    has_acceptance_criteria: boolean;
+  };
+  upgrade_cta: string;
+  meta?: {
+    generated_at: string;
+    session_id: string;
+    route: string;
+    email_captured: string;
+    model: string;
+  };
+}
+
+/**
+ * Generate a SPEC preview (freemium - requires email)
+ * Returns limited spec to entice upgrade
+ */
+export async function generateSpecPreview(
+  messages: ChatMessage[],
+  sessionId: string,
+  route: DiscoveryRoute,
+  email: string
+): Promise<{
+  success: boolean;
+  preview?: SpecPreview;
+  error?: string;
+  usage?: { input_tokens: number; output_tokens: number; model: string };
+}> {
+  if (!route) {
+    return {
+      success: false,
+      error: "No route detected. Continue the discovery conversation.",
+    };
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/api/discovery/generate-spec-preview`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        messages,
+        sessionId,
+        route,
+        email,
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      return {
+        success: false,
+        error: error.error || "Failed to generate preview",
+      };
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
+
+/**
+ * Save SPEC preview lead to Convex
+ */
+export async function saveSpecPreviewLead(
+  email: string,
+  sessionId: string,
+  route: DiscoveryRoute,
+  signals: { A: number; B: number; C: number; D: number },
+  conversationLength: number
+): Promise<{ success: boolean; message: string; isRepeat?: boolean }> {
+  if (!convex) {
+    console.warn("Convex not configured");
+    return { success: true, message: "Lead saved locally only" };
+  }
+
+  if (!route) {
+    return { success: false, message: "No route detected" };
+  }
+
+  try {
+    const result = await convex.mutation(api.discovery.saveSpecPreviewLead, {
+      email,
+      sessionId,
+      route,
+      signals,
+      conversationLength,
+    });
+    return result;
+  } catch (error) {
+    console.error("Failed to save SPEC preview lead:", error);
+    return { success: false, message: "Failed to save lead" };
+  }
+}
+
+// ============================================
 // FILESYSTEM AGENT (Vercel Blog Pattern)
 // ============================================
 // Uses filesystem tools for context management

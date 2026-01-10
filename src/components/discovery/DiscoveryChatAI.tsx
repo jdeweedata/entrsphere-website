@@ -6,10 +6,11 @@ import { ChatMessage as ChatMessageType, DiscoveryRoute } from '@/types/discover
 import { sendFilesystemAgentMessage } from '@/services/discoveryService';
 import ChatMessage from './ChatMessage';
 import TypingIndicator from './TypingIndicator';
+import SpecPreviewModal from './SpecPreviewModal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { RotateCcw, Sparkles, Send, Zap } from 'lucide-react';
+import { RotateCcw, Sparkles, Send, Zap, FileJson } from 'lucide-react';
 import posthog from 'posthog-js';
 
 // Generate unique IDs
@@ -35,6 +36,7 @@ const DiscoveryChatAI = ({ onSwitchMode }: Props) => {
   const [signals, setSignals] = useState({ A: 0, B: 0, C: 0, D: 0 });
   const [error, setError] = useState<string | null>(null);
   const [tokenUsage, setTokenUsage] = useState({ input: 0, output: 0 });
+  const [isSpecModalOpen, setIsSpecModalOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const hasStarted = useRef(false);
@@ -250,6 +252,18 @@ const DiscoveryChatAI = ({ onSwitchMode }: Props) => {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          {/* Generate SPEC Button - only show when route detected */}
+          {detectedRoute && messages.length >= 2 && (
+            <Button
+              variant="default"
+              size="sm"
+              onClick={() => setIsSpecModalOpen(true)}
+              className="bg-violet-600 hover:bg-violet-700 text-white text-xs"
+            >
+              <FileJson className="h-3 w-3 mr-1" />
+              Generate SPEC
+            </Button>
+          )}
           {onSwitchMode && (
             <Button
               variant="ghost"
@@ -346,6 +360,16 @@ const DiscoveryChatAI = ({ onSwitchMode }: Props) => {
           </span>
         </div>
       </div>
+
+      {/* SPEC Preview Modal */}
+      <SpecPreviewModal
+        isOpen={isSpecModalOpen}
+        onClose={() => setIsSpecModalOpen(false)}
+        sessionId={sessionId}
+        route={detectedRoute}
+        signals={signals}
+        messages={aiMessages}
+      />
     </div>
   );
 };

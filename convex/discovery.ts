@@ -198,6 +198,82 @@ export const getPatternInsights = query({
   },
 });
 
+// Save SPEC preview lead (email capture for freemium flow)
+export const saveSpecPreviewLead = mutation({
+  args: {
+    email: v.string(),
+    sessionId: v.string(),
+    route: v.union(
+      v.literal("A"),
+      v.literal("B"),
+      v.literal("C"),
+      v.literal("D")
+    ),
+    signals: v.object({
+      A: v.number(),
+      B: v.number(),
+      C: v.number(),
+      D: v.number(),
+    }),
+    conversationLength: v.number(),
+  },
+  handler: async (ctx, args) => {
+    // Check if this email already got a preview
+    const existing = await ctx.db
+      .query("specPreviewLeads")
+      .withIndex("by_email", (q) => q.eq("email", args.email))
+      .first();
+
+    if (existing) {
+      // Update existing lead with new session info
+      await ctx.db.patch(existing._id, {
+        lastSessionId: args.sessionId,
+        route: args.route,
+        signals: args.signals,
+        previewCount: (existing.previewCount || 1) + 1,
+        lastPreviewAt: Date.now(),
+      });
+      return { success: true, message: "Lead updated", isRepeat: true };
+    }
+
+    // Create new lead
+    const id = await ctx.db.insert("specPreviewLeads", {
+      email: args.email,
+      sessionId: args.sessionId,
+      lastSessionId: args.sessionId,
+      route: args.route,
+      signals: args.signals,
+      conversationLength: args.conversationLength,
+      previewCount: 1,
+      convertedToFullSpec: false,
+      createdAt: Date.now(),
+      lastPreviewAt: Date.now(),
+    });
+
+    return { success: true, message: "Lead captured", id, isRepeat: false };
+  },
+});
+
+// Get SPEC preview lead stats (for admin)
+export const getSpecLeadStats = query({
+  args: {},
+  handler: async (ctx) => {
+    const leads = await ctx.db.query("specPreviewLeads").collect();
+
+    return {
+      total: leads.length,
+      converted: leads.filter((l) => l.convertedToFullSpec).length,
+      byRoute: {
+        A: leads.filter((l) => l.route === "A").length,
+        B: leads.filter((l) => l.route === "B").length,
+        C: leads.filter((l) => l.route === "C").length,
+        D: leads.filter((l) => l.route === "D").length,
+      },
+      repeatUsers: leads.filter((l) => (l.previewCount || 1) > 1).length,
+    };
+  },
+});
+
 // Check if email already exists (for duplicate prevention)
 export const checkEmail = query({
   args: {
