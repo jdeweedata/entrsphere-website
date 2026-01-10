@@ -1,0 +1,35 @@
+{
+  "q1_opener": {
+    "question": "What are you trying to accomplish?",
+    "answer": "specific_goal",
+    "verbatim": "I need to build a customer portal where our SaaS customers can view their usage, manage their subscription, and access support."
+  },
+  "q2_clarity": {
+    "question": "How clear is this in your head?",
+    "answer": "very_clear",
+    "verbatim": "I have a pretty detailed list actually. We've been collecting feedback from customers for 6 months and I know exactly what they're asking for."
+  },
+  "q3_systems": {
+    "question": "Does this need to work with existing systems?",
+    "answer": "yes_few",
+    "verbatim": "Stripe for billing, our own database for usage, Zendesk for support",
+    "systems_mentioned": ["Stripe", "Postgres", "Zendesk"]
+  },
+  "q4_authority": {
+    "question": "Who approves the requirements?",
+    "answer": "self",
+    "verbatim": "Me. I'm the founder and this is my call."
+  },
+  "q5_constraints": {
+    "question": "Any sensitivities or constraints?",
+    "answer": "none",
+    "verbatim": "No, just the timeline - 6 weeks for MVP"
+  },
+  "additional_context": {
+    "timeline": "6 weeks MVP",
+    "budget": "$15-20k",
+    "industry": "SaaS",
+    "company_size": "Startup",
+    "user_research_done": true
+  }
+}

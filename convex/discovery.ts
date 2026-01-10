@@ -359,7 +359,7 @@ export const sendDiscoveryEmail = action({
 
     try {
       const { data, error } = await resend.emails.send({
-        from: "EntrSphere Discovery <discovery@entrsphere.com>",
+        from: "EntrSphere Discovery <onboarding@resend.dev>",
         to: [args.email],
         subject: `Your Discovery Profile: ${routeInfo.title}`,
         html: emailHtml,

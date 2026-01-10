@@ -1,0 +1,89 @@
+{
+  "description": "Correlation patterns between initial signals and final routes",
+  "patterns": [
+    {
+      "initial_signal": "I have a specific goal",
+      "most_likely_route": "A",
+      "probability": 0.73,
+      "second_likely": "D",
+      "second_probability": 0.15,
+      "notes": "Clear goals often have hidden integration needs"
+    },
+    {
+      "initial_signal": "I'm still exploring",
+      "most_likely_route": "B",
+      "probability": 0.61,
+      "second_likely": "C",
+      "second_probability": 0.24,
+      "notes": "Exploration often reveals stakeholder complexity"
+    },
+    {
+      "initial_signal": "It's complicated",
+      "most_likely_route": "C",
+      "probability": 0.68,
+      "second_likely": "B",
+      "second_probability": 0.18,
+      "notes": "Complexity usually means people, not technology"
+    },
+    {
+      "initial_signal": "I need to connect systems",
+      "most_likely_route": "D",
+      "probability": 0.82,
+      "second_likely": "A",
+      "second_probability": 0.11,
+      "notes": "Integration-first signals are highly predictive"
+    },
+    {
+      "initial_signal": "Multiple stakeholders mentioned",
+      "most_likely_route": "C",
+      "probability": 0.77,
+      "second_likely": "B",
+      "second_probability": 0.15,
+      "notes": "Stakeholder references predict alignment needs"
+    },
+    {
+      "initial_signal": "Existing system names mentioned",
+      "most_likely_route": "D",
+      "probability": 0.71,
+      "second_likely": "A",
+      "second_probability": 0.19,
+      "notes": "System names (Salesforce, SAP) signal integration"
+    },
+    {
+      "initial_signal": "I can decide myself",
+      "most_likely_route": "A",
+      "probability": 0.69,
+      "second_likely": "B",
+      "second_probability": 0.21,
+      "notes": "Solo decision-makers have clearer paths"
+    },
+    {
+      "initial_signal": "Need to run it by someone",
+      "most_likely_route": "C",
+      "probability": 0.58,
+      "second_likely": "A",
+      "second_probability": 0.25,
+      "notes": "Approval needs indicate organizational complexity"
+    }
+  ],
+  "compound_signals": [
+    {
+      "signals": ["specific goal", "I can decide", "standalone"],
+      "predicted_route": "A",
+      "confidence": 0.91,
+      "notes": "Triple signal for Route A is very reliable"
+    },
+    {
+      "signals": ["exploring", "different opinions", "need approval"],
+      "predicted_route": "C",
+      "confidence": 0.85,
+      "notes": "Exploration + politics = alignment first"
+    },
+    {
+      "signals": ["specific goal", "multiple systems", "API mentioned"],
+      "predicted_route": "D",
+      "confidence": 0.88,
+      "notes": "Clear vision + integration complexity"
+    }
+  ]
+}

@@ -363,6 +363,83 @@ export async function generateSpecJson(
 }
 
 // ============================================
+// FILESYSTEM AGENT (Vercel Blog Pattern)
+// ============================================
+// Uses filesystem tools for context management
+// Agent explores playbooks, patterns, and session history
+
+interface FilesystemAgentResponse {
+  content: string;
+  usage: {
+    input_tokens: number;
+    output_tokens: number;
+    iterations: number;
+    model: string;
+  };
+}
+
+/**
+ * Send a message to the filesystem-powered discovery agent
+ * This agent has access to:
+ * - /playbooks - Route-specific discovery guides
+ * - /templates - SPEC.json schema and question banks
+ * - /knowledge - Red flags, scope creep signals
+ * - /patterns - Historical route distribution data
+ * - /sessions - Past discovery sessions to learn from
+ */
+export async function sendFilesystemAgentMessage(
+  messages: ChatMessage[],
+  sessionId: string,
+  route: DiscoveryRoute,
+  signals: { A: number; B: number; C: number; D: number }
+): Promise<FilesystemAgentResponse> {
+  const response = await fetch(`${API_BASE}/api/discovery/agent`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      messages,
+      sessionId,
+      route,
+      signals,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Failed to connect to filesystem agent");
+  }
+
+  return response.json();
+}
+
+/**
+ * Check if the filesystem agent is available
+ */
+export async function checkFilesystemAgentAvailability(): Promise<{
+  available: boolean;
+  message: string;
+}> {
+  try {
+    const response = await fetch(`${API_BASE}/api/discovery/agent`, {
+      method: "OPTIONS",
+    });
+    return {
+      available: response.ok,
+      message: response.ok
+        ? "Filesystem agent is available"
+        : "Filesystem agent not configured",
+    };
+  } catch {
+    return {
+      available: false,
+      message: "Filesystem agent not reachable",
+    };
+  }
+}
+
+// ============================================
 // EMAIL SERVICE INTEGRATION (via Resend)
 // ============================================
 

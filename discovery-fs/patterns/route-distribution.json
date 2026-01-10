@@ -1,0 +1,51 @@
+{
+  "summary": {
+    "total_sessions": 127,
+    "last_updated": "2024-01-10T00:00:00Z"
+  },
+  "distribution": {
+    "A": {
+      "count": 41,
+      "percentage": 32.3,
+      "label": "Standard Discovery",
+      "avg_duration_minutes": 35,
+      "spec_generation_rate": 0.92,
+      "notes": "Most common for solo founders and small teams"
+    },
+    "B": {
+      "count": 38,
+      "percentage": 29.9,
+      "label": "Exploratory Discovery",
+      "avg_duration_minutes": 52,
+      "spec_generation_rate": 0.68,
+      "notes": "Often needs follow-up session to finalize"
+    },
+    "C": {
+      "count": 29,
+      "percentage": 22.8,
+      "label": "Stakeholder Alignment",
+      "avg_duration_minutes": 71,
+      "spec_generation_rate": 0.45,
+      "notes": "Frequently pauses for stakeholder meetings"
+    },
+    "D": {
+      "count": 19,
+      "percentage": 15.0,
+      "label": "Integration Discovery",
+      "avg_duration_minutes": 58,
+      "spec_generation_rate": 0.79,
+      "notes": "Technical constraints often surface late"
+    }
+  },
+  "trends": {
+    "route_shifts": {
+      "B_to_C": 12,
+      "A_to_D": 8,
+      "B_to_A": 5
+    },
+    "common_transitions": [
+      "User starts thinking B (exploring), discovers political complexity (C)",
+      "User thinks clear requirements (A), then surfaces integrations (D)"
+    ]
+  }
+}
