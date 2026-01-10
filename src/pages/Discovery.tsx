@@ -1,11 +1,13 @@
 // Discovery Agent Demo Page
 // Full-screen focused experience for the discovery flow
 
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '@/components/SEO';
 import DiscoveryChat from '@/components/discovery/DiscoveryChat';
+import DiscoveryChatAI from '@/components/discovery/DiscoveryChatAI';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Sparkles, Clock, Target, FileJson } from 'lucide-react';
+import { ArrowLeft, Sparkles, Clock, Target, FileJson, Zap } from 'lucide-react';
 
 const stats = [
   {
@@ -26,6 +28,8 @@ const stats = [
 ];
 
 const Discovery = () => {
+  const [mode, setMode] = useState<'guided' | 'ai'>('guided');
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
       <SEO
@@ -45,12 +49,48 @@ const Discovery = () => {
             <span className="text-sm font-medium">Back to EntrSphere</span>
           </Link>
 
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-slate-700" />
-            <span className="font-semibold text-slate-900">Discovery Agent</span>
-            <span className="bg-green-100 text-green-700 text-xs font-medium px-2 py-0.5 rounded-full">
-              Free Demo
-            </span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              {mode === 'guided' ? (
+                <Sparkles className="h-5 w-5 text-slate-700" />
+              ) : (
+                <Zap className="h-5 w-5 text-violet-600" />
+              )}
+              <span className="font-semibold text-slate-900">Discovery Agent</span>
+              <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                mode === 'ai'
+                  ? 'bg-violet-100 text-violet-700'
+                  : 'bg-green-100 text-green-700'
+              }`}>
+                {mode === 'ai' ? 'AI Mode' : 'Guided'}
+              </span>
+            </div>
+
+            {/* Mode Toggle */}
+            <div className="hidden sm:flex items-center bg-slate-100 rounded-lg p-1">
+              <button
+                onClick={() => setMode('guided')}
+                className={`flex items-center gap-1 px-3 py-1 rounded-md text-xs font-medium transition-colors ${
+                  mode === 'guided'
+                    ? 'bg-white text-slate-900 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                <Sparkles className="h-3 w-3" />
+                Guided
+              </button>
+              <button
+                onClick={() => setMode('ai')}
+                className={`flex items-center gap-1 px-3 py-1 rounded-md text-xs font-medium transition-colors ${
+                  mode === 'ai'
+                    ? 'bg-white text-violet-700 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                <Zap className="h-3 w-3" />
+                AI Chat
+              </button>
+            </div>
           </div>
 
           <Button asChild variant="outline" size="sm">
@@ -65,11 +105,12 @@ const Discovery = () => {
           <div className="lg:col-span-1 space-y-6">
             <div>
               <h1 className="text-2xl font-bold text-slate-900 mb-2">
-                Find Your Project Route
+                {mode === 'guided' ? 'Find Your Project Route' : 'AI Discovery Agent'}
               </h1>
               <p className="text-slate-600">
-                Answer 5 quick questions and I'll detect the best discovery approach
-                for your specific situation.
+                {mode === 'guided'
+                  ? "Answer 5 quick questions and I'll detect the best discovery approach for your specific situation."
+                  : "Have a free-form conversation with our AI agent. Describe your project and get personalized discovery guidance powered by Claude."}
               </p>
             </div>
 
@@ -130,7 +171,13 @@ const Discovery = () => {
           {/* Right Panel - Chat */}
           <div className="lg:col-span-2">
             <div className="h-[calc(100vh-12rem)] min-h-[500px]">
-              <DiscoveryChat />
+              {mode === 'guided' ? (
+                <DiscoveryChat />
+              ) : (
+                <DiscoveryChatAI
+                  onSwitchMode={() => setMode('guided')}
+                />
+              )}
             </div>
           </div>
         </div>
