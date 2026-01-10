@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useBetaSignupValidation } from "@/hooks/useBetaSignupValidation";
@@ -8,11 +7,7 @@ import FormField from "@/components/forms/FormField";
 import ChallengeSelect from "@/components/forms/ChallengeSelect";
 import ConsentCheckbox from "@/components/forms/ConsentCheckbox";
 
-interface BetaSignupFormProps {
-  onFormSubmit: (eventName: string, eventCategory: string, eventLabel: string) => void;
-}
-
-const BetaSignupForm = ({ onFormSubmit }: BetaSignupFormProps) => {
+const BetaSignupForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
@@ -21,7 +16,7 @@ const BetaSignupForm = ({ onFormSubmit }: BetaSignupFormProps) => {
   const [consent, setConsent] = useState(false);
 
   const { errors, validateForm, resetErrors } = useBetaSignupValidation();
-  
+
   const resetForm = () => {
     setName("");
     setEmail("");
@@ -32,7 +27,6 @@ const BetaSignupForm = ({ onFormSubmit }: BetaSignupFormProps) => {
   };
 
   const { isSubmitting, handleSubmit } = useBetaFormSubmission({
-    onFormSubmit,
     validateForm,
     resetErrors,
   });
