@@ -118,64 +118,149 @@ export async function getPatternInsights(): Promise<{
 }
 
 // ============================================
-// AGENT SDK INTEGRATION STUB
+// AGENT SDK INTEGRATION
 // ============================================
-// The code below is a placeholder for full Agent SDK integration.
-// When ready to implement:
-// 1. Install: npm install @anthropic-ai/claude-agent-sdk
-// 2. Set up a backend API route (Vercel/Netlify function or separate server)
-// 3. Replace these stubs with actual Agent SDK calls
+// Uses Anthropic's Claude API via Vercel serverless functions
+// Tiered model selection: Haiku 4.5 for standard, Opus 4.5 for complex
 
-/**
- * STUB: Start a full discovery session with Agent SDK
- * This will be a server-side function that streams agent responses
- *
- * Future implementation:
- * ```typescript
- * import { query, ClaudeAgentOptions } from "@anthropic-ai/claude-agent-sdk";
- *
- * export async function* startAgentSession(userMessage: string) {
- *   for await (const message of query({
- *     prompt: `${DISCOVERY_ROUTER_PROMPT}\n\nUser: ${userMessage}`,
- *     options: {
- *       allowedTools: ["AskUserQuestion", "Write", "Task"],
- *       agents: DISCOVERY_AGENTS,
- *       hooks: { PostToolUse: [{ matcher: "Write", hooks: [captureSpec] }] }
- *     }
- *   })) {
- *     yield message;
- *   }
- * }
- * ```
- */
-export async function startFullDiscoverySession(
-  _initialMessage: string
-): Promise<{ supported: false; message: string }> {
-  // This is a stub - full Agent SDK sessions require a backend
-  return {
-    supported: false,
-    message:
-      "Full discovery sessions require the Agent SDK backend. " +
-      "The free demo uses client-side routing. " +
-      "Get the Discovery Router Toolkit for production-ready SPEC.json generation.",
+const API_BASE = import.meta.env.VITE_API_URL || "";
+
+interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
+interface StreamEvent {
+  type: "text" | "done";
+  text?: string;
+  usage?: {
+    input_tokens: number;
+    output_tokens: number;
+    model: string;
+    cache_read_input_tokens?: number;
   };
+  model?: string;
 }
 
 /**
- * STUB: Resume an existing Agent SDK session
+ * Start a full discovery session with Claude API
+ * Uses streaming for real-time responses
  */
-export async function resumeAgentSession(
-  _sessionId: string
-): Promise<{ supported: false; message: string }> {
-  return {
-    supported: false,
-    message: "Agent SDK session resumption not yet implemented.",
-  };
+export async function* streamDiscoveryChat(
+  messages: ChatMessage[],
+  sessionId: string,
+  signals: { A: number; B: number; C: number; D: number },
+  detectedRoute: DiscoveryRoute
+): AsyncGenerator<StreamEvent> {
+  const response = await fetch(`${API_BASE}/api/discovery/chat`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      messages,
+      sessionId,
+      signals,
+      detectedRoute,
+      stream: true,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Failed to connect to discovery API");
+  }
+
+  const reader = response.body?.getReader();
+  if (!reader) {
+    throw new Error("No response body");
+  }
+
+  const decoder = new TextDecoder();
+  let buffer = "";
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split("\n");
+    buffer = lines.pop() || "";
+
+    for (const line of lines) {
+      if (line.startsWith("data: ")) {
+        try {
+          const event: StreamEvent = JSON.parse(line.slice(6));
+          yield event;
+        } catch {
+          // Skip invalid JSON lines
+        }
+      }
+    }
+  }
 }
 
 /**
- * STUB: Generate SPEC.json from a full session
- * This would be the output of a complete Route A/B/C/D discovery
+ * Non-streaming discovery chat (for simpler use cases)
+ */
+export async function sendDiscoveryMessage(
+  messages: ChatMessage[],
+  sessionId: string,
+  signals: { A: number; B: number; C: number; D: number },
+  detectedRoute: DiscoveryRoute
+): Promise<{
+  content: string;
+  usage: { input_tokens: number; output_tokens: number; model: string };
+}> {
+  const response = await fetch(`${API_BASE}/api/discovery/chat`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      messages,
+      sessionId,
+      signals,
+      detectedRoute,
+      stream: false,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Failed to connect to discovery API");
+  }
+
+  return response.json();
+}
+
+/**
+ * Check if Agent SDK backend is available
+ */
+export async function checkAgentAvailability(): Promise<{
+  available: boolean;
+  message: string;
+}> {
+  try {
+    const response = await fetch(`${API_BASE}/api/discovery/chat`, {
+      method: "OPTIONS",
+    });
+    return {
+      available: response.ok,
+      message: response.ok
+        ? "Agent SDK backend is available"
+        : "Agent SDK backend not configured",
+    };
+  } catch {
+    return {
+      available: false,
+      message: "Agent SDK backend not reachable. Using client-side routing.",
+    };
+  }
+}
+
+/**
+ * SPEC.json structure for generated specifications
  */
 export interface SpecJson {
   project: {
@@ -183,6 +268,7 @@ export interface SpecJson {
     summary: string;
     route: DiscoveryRoute;
     status: "discovery-complete" | "ready-for-development";
+    generated_at?: string;
   };
   users: Array<{
     type: string;
@@ -194,24 +280,86 @@ export interface SpecJson {
     priority: "must-have" | "nice-to-have";
     user_story: string;
     acceptance_criteria: string[];
-    passes: boolean;
+    technical_notes?: string;
   }>;
   constraints: {
     business_rules: string[];
-    permissions: string[];
+    technical?: string[];
+    timeline?: string;
+    budget?: string;
   };
+  integrations?: Array<{
+    system: string;
+    type: "API" | "database" | "file" | "manual";
+    complexity: "low" | "medium" | "high";
+    notes?: string;
+  }>;
   open_questions: string[];
+  risks?: Array<{
+    description: string;
+    severity: "low" | "medium" | "high";
+    mitigation: string;
+  }>;
+  meta?: {
+    generated_at: string;
+    session_id: string;
+    route: string;
+    model: string;
+    tokens_used: number;
+  };
 }
 
+/**
+ * Generate SPEC.json from a completed discovery session
+ * Uses Opus 4.5 for complex synthesis
+ */
 export async function generateSpecJson(
-  _session: DiscoverySession
-): Promise<{ supported: false; message: string }> {
-  return {
-    supported: false,
-    message:
-      "SPEC.json generation requires a full discovery session with Agent SDK. " +
-      "Available in the Discovery Router Toolkit.",
-  };
+  session: DiscoverySession,
+  messages: ChatMessage[],
+  projectContext?: { name?: string; description?: string }
+): Promise<{
+  success: boolean;
+  spec?: SpecJson;
+  error?: string;
+  usage?: { input_tokens: number; output_tokens: number; model: string };
+}> {
+  if (!session.detectedRoute) {
+    return {
+      success: false,
+      error: "No route detected. Complete the discovery session first.",
+    };
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/api/discovery/generate-spec`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        messages,
+        sessionId: session.id,
+        route: session.detectedRoute,
+        projectContext,
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      return {
+        success: false,
+        error: error.error || "Failed to generate SPEC.json",
+      };
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
 }
 
 // ============================================
