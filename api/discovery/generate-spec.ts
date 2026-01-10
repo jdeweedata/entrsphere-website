@@ -78,7 +78,7 @@ Output ONLY the valid JSON object, no additional text.`;
 
     // Always use Opus for SPEC generation (complex synthesis)
     const response = await anthropic.messages.create({
-      model: MODELS.OPUS,
+      model: MODELS.SONNET,
       max_tokens: 8192,
       system: [
         {
@@ -116,7 +116,7 @@ Output ONLY the valid JSON object, no additional text.`;
         usage: {
           input_tokens: response.usage.input_tokens,
           output_tokens: response.usage.output_tokens,
-          model: MODELS.OPUS,
+          model: MODELS.SONNET,
         },
       });
     }
@@ -126,7 +126,7 @@ Output ONLY the valid JSON object, no additional text.`;
       generated_at: new Date().toISOString(),
       session_id: sessionId,
       route,
-      model: MODELS.OPUS,
+      model: MODELS.SONNET,
       tokens_used: response.usage.input_tokens + response.usage.output_tokens,
     };
 
@@ -136,7 +136,7 @@ Output ONLY the valid JSON object, no additional text.`;
       usage: {
         input_tokens: response.usage.input_tokens,
         output_tokens: response.usage.output_tokens,
-        model: MODELS.OPUS,
+        model: MODELS.SONNET,
       },
     });
   } catch (error) {

@@ -2,8 +2,10 @@
 // Uses Haiku 4.5 for standard flows, Opus 4.5 for complex scenarios
 
 export const MODELS = {
-  HAIKU: "claude-haiku-4-5-20241022",
-  OPUS: "claude-opus-4-5-20250514",
+  // Claude Haiku 4.5 - fast and cost-effective ($1/$5 MTok)
+  HAIKU: "claude-haiku-4-5-20251001",
+  // Claude Sonnet 4.5 - balanced for complex scenarios ($3/$15 MTok)
+  SONNET: "claude-sonnet-4-5-20250929",
 } as const;
 
 export type ModelId = (typeof MODELS)[keyof typeof MODELS];
@@ -38,27 +40,27 @@ export interface DiscoveryContext {
 export function selectModel(context: DiscoveryContext): ModelId {
   // Always use Opus for SPEC.json generation (requires synthesis)
   if (context.phase === "spec-generation") {
-    return MODELS.OPUS;
+    return MODELS.SONNET;
   }
 
   // Use Opus for Route C (political complexity requires nuanced reasoning)
   if (context.hasPoliticalComplexity || context.signals.C > 0.4) {
-    return MODELS.OPUS;
+    return MODELS.SONNET;
   }
 
   // Use Opus when signals are conflicting (needs deeper analysis)
   if (context.hasConflictingSignals) {
-    return MODELS.OPUS;
+    return MODELS.SONNET;
   }
 
   // Use Opus for complex integration scenarios
   if (context.hasIntegrationComplexity && context.signals.D > 0.5) {
-    return MODELS.OPUS;
+    return MODELS.SONNET;
   }
 
   // Use Opus if user explicitly requested deeper analysis
   if (context.requestedDeepAnalysis) {
-    return MODELS.OPUS;
+    return MODELS.SONNET;
   }
 
   // Default to Haiku for standard flows (cost optimization)
@@ -135,7 +137,7 @@ export function analyzeConversation(
  * Get model-specific parameters
  */
 export function getModelParams(model: ModelId) {
-  if (model === MODELS.OPUS) {
+  if (model === MODELS.SONNET) {
     return {
       max_tokens: 4096,
       // Enable extended thinking for complex scenarios
