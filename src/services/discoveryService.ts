@@ -215,32 +215,68 @@ export async function generateSpecJson(
 }
 
 // ============================================
-// FUTURE: EMAIL SERVICE INTEGRATION
+// EMAIL SERVICE INTEGRATION (via Resend)
 // ============================================
 
 /**
- * Send discovery profile to user's email
- * Integrate with Resend, SendGrid, or similar
+ * Send discovery profile to user's email via Resend
+ * This saves the session AND sends a branded email with the results
  */
 export async function sendDiscoveryProfile(
   email: string,
   session: DiscoverySession
 ): Promise<{ success: boolean; message: string }> {
-  // TODO: Implement email sending with Resend or similar
-  // For now, just save the session
+  if (!convex) {
+    console.warn("Convex not configured, cannot send email");
+    return { success: false, message: "Email service not available" };
+  }
+
+  if (!session.detectedRoute) {
+    return { success: false, message: "No route detected" };
+  }
+
+  // First save the session
   const saveResult = await saveDiscoverySession(session, email, true);
 
   if (!saveResult.success) {
     return saveResult;
   }
 
-  // In production, this would send an actual email
-  console.log(`[EMAIL STUB] Would send discovery profile to ${email}`);
-  console.log(`[EMAIL STUB] Route: ${session.detectedRoute}`);
-  console.log(`[EMAIL STUB] Answers:`, session.answers);
+  // Then send the email via Convex action
+  try {
+    const emailResult = await convex.action(api.discovery.sendDiscoveryEmail, {
+      email,
+      route: session.detectedRoute,
+      answers: {
+        q1_opener: session.answers.q1_opener,
+        q2_clarity: session.answers.q2_clarity,
+        q3_systems: session.answers.q3_systems,
+        q4_authority: session.answers.q4_authority,
+        q5_constraints: session.answers.q5_constraints,
+      },
+      signals: session.signals,
+      sessionId: session.id,
+    });
 
-  return {
-    success: true,
-    message: "Profile saved. Email sending not yet configured.",
-  };
+    if (!emailResult.success) {
+      console.error("Failed to send email:", emailResult.error);
+      // Still return success since session was saved
+      return {
+        success: true,
+        message: "Profile saved. Email delivery may be delayed.",
+      };
+    }
+
+    return {
+      success: true,
+      message: "Profile sent to your email!",
+    };
+  } catch (error) {
+    console.error("Failed to send discovery email:", error);
+    // Still return success since session was saved
+    return {
+      success: true,
+      message: "Profile saved. Email delivery may be delayed.",
+    };
+  }
 }

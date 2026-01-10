@@ -1,8 +1,9 @@
 // Convex functions for Discovery Sessions
 // These power the MOAT data accumulation
 
-import { mutation, query } from "./_generated/server";
+import { mutation, query, action } from "./_generated/server";
 import { v } from "convex/values";
+import { Resend } from "resend";
 
 // Save a completed discovery session
 export const saveSession = mutation({
@@ -209,5 +210,171 @@ export const checkEmail = query({
       .first();
 
     return { exists: !!existing };
+  },
+});
+
+// Route descriptions for email
+const ROUTE_INFO: Record<string, { name: string; title: string; description: string; approach: string }> = {
+  A: {
+    name: "Route A",
+    title: "Standard Discovery",
+    description: "You know what you need. Time to document it properly.",
+    approach: "Generate a rigorous PRD & SPEC.json immediately. Focus on acceptance criteria and edge cases.",
+  },
+  B: {
+    name: "Route B",
+    title: "Exploratory Prototype",
+    description: "You'll know it when you see it. Let's build something fast.",
+    approach: "Stop talking. Build a 5-minute disposable prototype. Test assumptions before committing.",
+  },
+  C: {
+    name: "Route C",
+    title: "Strategic Ambiguity",
+    description: "There are factors you can't fully explain. Political complexity detected.",
+    approach: "Stop. This is a political trap. Use the Ambiguity Prompt to force stakeholder alignment.",
+  },
+  D: {
+    name: "Route D",
+    title: "Integration Discovery",
+    description: "You need to connect to existing systems. Dual-track discovery required.",
+    approach: "Run parallel Business + Technical discovery to prevent integration hell.",
+  },
+};
+
+// Send discovery profile email via Resend
+export const sendDiscoveryEmail = action({
+  args: {
+    email: v.string(),
+    route: v.union(
+      v.literal("A"),
+      v.literal("B"),
+      v.literal("C"),
+      v.literal("D")
+    ),
+    answers: v.object({
+      q1_opener: v.optional(v.string()),
+      q2_clarity: v.optional(v.string()),
+      q3_systems: v.optional(v.string()),
+      q4_authority: v.optional(v.string()),
+      q5_constraints: v.optional(v.string()),
+    }),
+    signals: v.object({
+      A: v.number(),
+      B: v.number(),
+      C: v.number(),
+      D: v.number(),
+    }),
+    sessionId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const resendApiKey = process.env.RESEND_API_KEY;
+
+    if (!resendApiKey) {
+      console.error("RESEND_API_KEY not configured");
+      return { success: false, error: "Email service not configured" };
+    }
+
+    const resend = new Resend(resendApiKey);
+    const routeInfo = ROUTE_INFO[args.route];
+
+    // Format signals as percentage
+    const totalSignals = args.signals.A + args.signals.B + args.signals.C + args.signals.D;
+    const signalPcts = {
+      A: Math.round((args.signals.A / totalSignals) * 100),
+      B: Math.round((args.signals.B / totalSignals) * 100),
+      C: Math.round((args.signals.C / totalSignals) * 100),
+      D: Math.round((args.signals.D / totalSignals) * 100),
+    };
+
+    const emailHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Discovery Profile</title>
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1e293b; max-width: 600px; margin: 0 auto; padding: 20px;">
+
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="color: #0f172a; margin-bottom: 5px;">Your Discovery Profile</h1>
+    <p style="color: #64748b; margin: 0;">From EntrSphere's Discovery Agent</p>
+  </div>
+
+  <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; padding: 30px; border-radius: 12px; margin-bottom: 25px;">
+    <div style="font-size: 14px; opacity: 0.8; margin-bottom: 8px;">${routeInfo.name}</div>
+    <h2 style="margin: 0 0 15px 0; font-size: 24px;">${routeInfo.title}</h2>
+    <p style="margin: 0; opacity: 0.9;">${routeInfo.description}</p>
+  </div>
+
+  <div style="background: #f8fafc; padding: 25px; border-radius: 12px; margin-bottom: 25px;">
+    <h3 style="margin: 0 0 15px 0; color: #0f172a;">Recommended Approach</h3>
+    <p style="margin: 0; color: #475569;">${routeInfo.approach}</p>
+  </div>
+
+  <div style="background: #f8fafc; padding: 25px; border-radius: 12px; margin-bottom: 25px;">
+    <h3 style="margin: 0 0 15px 0; color: #0f172a;">Your Signal Distribution</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+      <div style="background: white; padding: 12px; border-radius: 8px; text-align: center;">
+        <div style="font-size: 24px; font-weight: bold; color: ${args.route === 'A' ? '#10b981' : '#64748b'};">${signalPcts.A}%</div>
+        <div style="font-size: 12px; color: #64748b;">Standard</div>
+      </div>
+      <div style="background: white; padding: 12px; border-radius: 8px; text-align: center;">
+        <div style="font-size: 24px; font-weight: bold; color: ${args.route === 'B' ? '#10b981' : '#64748b'};">${signalPcts.B}%</div>
+        <div style="font-size: 12px; color: #64748b;">Exploratory</div>
+      </div>
+      <div style="background: white; padding: 12px; border-radius: 8px; text-align: center;">
+        <div style="font-size: 24px; font-weight: bold; color: ${args.route === 'C' ? '#10b981' : '#64748b'};">${signalPcts.C}%</div>
+        <div style="font-size: 12px; color: #64748b;">Strategic</div>
+      </div>
+      <div style="background: white; padding: 12px; border-radius: 8px; text-align: center;">
+        <div style="font-size: 24px; font-weight: bold; color: ${args.route === 'D' ? '#10b981' : '#64748b'};">${signalPcts.D}%</div>
+        <div style="font-size: 12px; color: #64748b;">Integration</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background: #fef3c7; padding: 20px; border-radius: 12px; margin-bottom: 25px; border-left: 4px solid #f59e0b;">
+    <h3 style="margin: 0 0 10px 0; color: #92400e;">Want the Full Discovery Toolkit?</h3>
+    <p style="margin: 0 0 15px 0; color: #78350f; font-size: 14px;">
+      Get the complete prompts, PRD generators, and SPEC.json templates for all 4 routes.
+    </p>
+    <a href="https://entrsphere.com/solutions/discovery-router"
+       style="display: inline-block; background: #0f172a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500;">
+      Get Full Toolkit — R850
+    </a>
+  </div>
+
+  <div style="text-align: center; color: #94a3b8; font-size: 12px; margin-top: 30px;">
+    <p style="margin: 0 0 10px 0;">
+      <a href="https://entrsphere.com" style="color: #64748b;">EntrSphere</a> ·
+      AI-Native Development Frameworks
+    </p>
+    <p style="margin: 0;">Session ID: ${args.sessionId}</p>
+  </div>
+
+</body>
+</html>
+    `;
+
+    try {
+      const { data, error } = await resend.emails.send({
+        from: "EntrSphere Discovery <discovery@entrsphere.com>",
+        to: [args.email],
+        subject: `Your Discovery Profile: ${routeInfo.title}`,
+        html: emailHtml,
+      });
+
+      if (error) {
+        console.error("Resend error:", error);
+        return { success: false, error: error.message };
+      }
+
+      console.log("Email sent successfully:", data?.id);
+      return { success: true, emailId: data?.id };
+    } catch (err) {
+      console.error("Failed to send email:", err);
+      return { success: false, error: "Failed to send email" };
+    }
   },
 });
