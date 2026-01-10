@@ -17,12 +17,26 @@ const HeroSection = () => {
               Production-ready AI components, intelligent templates, and expert guidance for teams building with AI at the core.
             </p>
 
-            <Button
-              asChild
-              className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-3 rounded-lg font-medium"
-            >
-              <Link to="/solutions">View Solutions</Link>
-            </Button>
+            <div className="flex flex-wrap gap-4">
+              <Button
+                asChild
+                className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-3 rounded-lg font-medium"
+              >
+                <Link to="/solutions">View Solutions</Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="border-slate-900 text-slate-900 hover:bg-slate-50 px-6 py-3 rounded-lg font-medium"
+              >
+                <Link to="/discovery">
+                  Try Discovery Agent
+                  <span className="ml-2 bg-green-100 text-green-700 text-xs font-medium px-2 py-0.5 rounded-full">
+                    Free
+                  </span>
+                </Link>
+              </Button>
+            </div>
           </div>
 
           {/* Right side - Hero shape */}

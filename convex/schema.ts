@@ -43,4 +43,51 @@ export default defineSchema({
     .index("by_category", ["category"])
     .index("by_published", ["publishedAt"])
     .index("by_featured", ["featured"]),
+
+  // Discovery sessions - for MOAT data accumulation
+  discoverySessions: defineTable({
+    // Session identity
+    sessionId: v.string(), // Client-generated ID
+
+    // Route detection
+    route: v.union(
+      v.literal("A"),
+      v.literal("B"),
+      v.literal("C"),
+      v.literal("D")
+    ),
+
+    // Answers to routing questions (anonymized)
+    answers: v.object({
+      q1_opener: v.optional(v.string()),
+      q2_clarity: v.optional(v.string()),
+      q3_systems: v.optional(v.string()),
+      q4_authority: v.optional(v.string()),
+      q5_constraints: v.optional(v.string()),
+    }),
+
+    // Signal scores
+    signals: v.object({
+      A: v.number(),
+      B: v.number(),
+      C: v.number(),
+      D: v.number(),
+    }),
+
+    // Optional email (if user opts in)
+    email: v.optional(v.string()),
+    wantsUpdates: v.optional(v.boolean()),
+
+    // Session metadata
+    durationSeconds: v.optional(v.number()),
+    completedAt: v.optional(v.number()),
+    createdAt: v.number(),
+
+    // Future: Full SPEC.json from Agent SDK sessions
+    specJson: v.optional(v.any()),
+  })
+    .index("by_sessionId", ["sessionId"])
+    .index("by_email", ["email"])
+    .index("by_route", ["route"])
+    .index("by_createdAt", ["createdAt"]),
 });

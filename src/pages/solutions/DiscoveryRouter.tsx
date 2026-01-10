@@ -116,18 +116,30 @@ const DiscoveryRouter = () => {
               The exact framework I use to turn vague "I want an AI app" ideas
               into production-ready specifications in 30 minutes.
             </p>
-            <Button
-              asChild
-              className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-6 text-lg rounded-lg"
-            >
-              <a
-                href="https://paystack.com/pay/discovery-router"
-                target="_blank"
-                rel="noopener noreferrer"
+            <div className="flex flex-wrap gap-4">
+              <Button
+                asChild
+                className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-6 text-lg rounded-lg"
               >
-                Buy Toolkit
-              </a>
-            </Button>
+                <a
+                  href="https://paystack.com/pay/discovery-router"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Buy Toolkit — R850
+                </a>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="border-slate-900 text-slate-900 hover:bg-slate-50 px-8 py-6 text-lg rounded-lg"
+              >
+                <Link to="/discovery">
+                  Try Demo Free
+                  <span className="ml-2 text-sm text-slate-500">2 min</span>
+                </Link>
+              </Button>
+            </div>
           </div>
 
           {/* Problem Section */}
@@ -276,21 +288,30 @@ const DiscoveryRouter = () => {
               Ready to Stop Guessing?
             </h2>
             <p className="text-slate-600 mb-8">
-              Get the complete Discovery Router Toolkit and start building the
-              right product today.
+              Try the free demo to see which discovery route fits your project,
+              then get the full toolkit to generate production-ready specs.
             </p>
-            <Button
-              asChild
-              className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-6 text-lg rounded-lg"
-            >
-              <a
-                href="https://paystack.com/pay/discovery-router"
-                target="_blank"
-                rel="noopener noreferrer"
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button
+                asChild
+                variant="outline"
+                className="border-slate-900 text-slate-900 hover:bg-slate-50 px-8 py-6 text-lg rounded-lg"
               >
-                Buy Toolkit — R850
-              </a>
-            </Button>
+                <Link to="/discovery">Try Free Demo</Link>
+              </Button>
+              <Button
+                asChild
+                className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-6 text-lg rounded-lg"
+              >
+                <a
+                  href="https://paystack.com/pay/discovery-router"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Buy Toolkit — R850
+                </a>
+              </Button>
+            </div>
           </section>
         </div>
       </main>
