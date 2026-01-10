@@ -1,73 +1,150 @@
-# Welcome to your Lovable project
+# EntrSphere Website
 
-## Project info
+AI-Native Development Frameworks for modern product teams.
 
-**URL**: https://lovable.dev/projects/6a507d1e-9fa1-424d-8f81-0d3b5a9c85eb
+## Live Site
 
-## How can I edit this code?
+**Production**: https://www.entrsphere.com
 
-There are several ways of editing your application.
+## Features
 
-**Use Lovable**
+### Discovery Agent (`/discovery`)
+AI-powered project discovery tool that detects the right approach for your project:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/6a507d1e-9fa1-424d-8f81-0d3b5a9c85eb) and start prompting.
+- **Route A** - Standard Discovery: Clear requirements, needs documentation
+- **Route B** - Exploratory: Vision needs clarifying, prototype-first
+- **Route C** - Stakeholder Alignment: Multiple stakeholders with different priorities
+- **Route D** - Integration Focus: Connecting existing systems/APIs
 
-Changes made via Lovable will be committed automatically to this repo.
+**Two Modes:**
+- **Guided Mode**: 5-question flow with automatic route detection
+- **AI Chat Mode**: Free-form conversation powered by Claude (filesystem agent pattern)
 
-**Use your preferred IDE**
+**Freemium SPEC.json Flow:**
+- Generate SPEC preview with email capture
+- Shows project summary + 2-3 key features
+- Full SPEC.json requires upgrade to Discovery Toolkit
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Tech Stack
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- **Framework**: React 18 + Vite + TypeScript
+- **Styling**: Tailwind CSS + shadcn/ui
+- **Backend**:
+  - Vercel Serverless Functions (API routes)
+  - Convex (database + real-time)
+  - Anthropic Claude API (AI agent)
+- **Analytics**: PostHog
+- **Email**: Resend
 
-Follow these steps:
+## Project Structure
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+```
+├── api/                    # Vercel serverless functions
+│   ├── discovery/
+│   │   ├── agent.ts        # Filesystem agent (Claude + tools)
+│   │   ├── chat.ts         # Streaming chat endpoint
+│   │   ├── generate-spec.ts
+│   │   └── generate-spec-preview.ts
+│   └── _lib/
+│       ├── prompts.ts      # System prompts
+│       └── model-selector.ts
+├── convex/                 # Convex backend
+│   ├── schema.ts           # Database schema
+│   └── discovery.ts        # Discovery mutations/queries
+├── discovery-fs/           # Filesystem for agent context
+│   ├── playbooks/          # Route-specific guides
+│   ├── templates/          # SPEC schema, question banks
+│   ├── knowledge/          # Red flags, scope creep signals
+│   └── patterns/           # Route distribution data
+├── src/
+│   ├── components/
+│   │   ├── discovery/      # Discovery Agent components
+│   │   └── ui/             # shadcn/ui components
+│   ├── pages/              # Route pages
+│   └── services/           # API service layer
+└── public/
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## Development
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Prerequisites
+- Node.js 18+
+- npm
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+### Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Add your API keys to .env.local
+
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Environment Variables
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+# Anthropic (required for AI features)
+ANTHROPIC_API_KEY=sk-ant-...
 
-**Use GitHub Codespaces**
+# Convex (required for database)
+VITE_CONVEX_URL=https://your-deployment.convex.cloud
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Resend (optional, for emails)
+RESEND_API_KEY=re_...
 
-## What technologies are used for this project?
+# PostHog (optional, for analytics)
+VITE_POSTHOG_KEY=phc_...
+VITE_POSTHOG_HOST=https://us.i.posthog.com
+```
 
-This project is built with:
+### Commands
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```bash
+npm run dev       # Start dev server (port 8080)
+npm run build     # Production build
+npm run preview   # Preview production build
+npm run lint      # Run ESLint
+```
 
-## How can I deploy this project?
+### Convex Commands
 
-Simply open [Lovable](https://lovable.dev/projects/6a507d1e-9fa1-424d-8f81-0d3b5a9c85eb) and click on Share -> Publish.
+```bash
+# Push schema changes to production
+CONVEX_DEPLOYMENT="prod:small-sardine-868" npx convex deploy
 
-## Can I connect a custom domain to my Lovable project?
+# Open Convex dashboard
+CONVEX_DEPLOYMENT="prod:small-sardine-868" npx convex dashboard
+```
 
-Yes, you can!
+## Deployment
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Vercel (Frontend + API)
+Push to `main` branch triggers automatic deployment.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Convex (Database)
+Schema changes require manual push:
+```bash
+CONVEX_DEPLOYMENT="prod:small-sardine-868" npx convex deploy
+```
+
+## Architecture Notes
+
+### Filesystem Agent Pattern
+Instead of custom RAG, the Discovery Agent uses a filesystem-based context management approach (inspired by [Vercel's blog post](https://vercel.com/blog/how-to-build-agents-with-filesystems-and-bash)):
+
+- Agent has tools: `list_directory`, `read_file`, `search_files`, `write_session`
+- Context is stored as markdown/JSON files in `discovery-fs/`
+- Playbooks are preloaded into system prompt for faster responses
+
+### Model Selection
+- **Haiku 4.5**: SPEC preview generation (fast, cheap)
+- **Sonnet 4.5**: Discovery chat, full SPEC generation (balanced)
+
+## License
+
+Proprietary - EntrSphere
