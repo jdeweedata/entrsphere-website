@@ -1,7 +1,13 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { authService, User } from '@/services/authService';
+
+// User type (previously from authService)
+export interface User {
+  $id: string;
+  email: string;
+  name: string;
+}
 
 interface AuthContextType {
   user: User | null;
@@ -22,42 +28,34 @@ export const useAuth = () => {
   return context;
 };
 
+// NOTE: Appwrite auth has been disabled. Auth functionality is stubbed out.
+// To implement auth, integrate with Convex auth or another provider.
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // No auth check, start as not loading
 
   useEffect(() => {
-    checkAuthStatus();
+    // Auth disabled - no automatic auth check
+    // Previously called Appwrite which caused DNS errors
   }, []);
 
-  const checkAuthStatus = async () => {
-    try {
-      const currentUser = await authService.getCurrentUser();
-      setUser(currentUser);
-    } catch (error) {
-      console.error('Auth check error:', error);
-    } finally {
-      setIsLoading(false);
-    }
+  const login = async (_email: string, _password: string) => {
+    // Auth disabled - implement with Convex auth when needed
+    console.warn('Auth is disabled. Implement Convex auth to enable login.');
+    throw new Error('Auth is currently disabled');
   };
 
-  const login = async (email: string, password: string) => {
-    await authService.login(email, password);
-    const currentUser = await authService.getCurrentUser();
-    setUser(currentUser);
-  };
-
-  const register = async (email: string, password: string, name: string) => {
-    await authService.register(email, password, name);
-    await login(email, password);
+  const register = async (_email: string, _password: string, _name: string) => {
+    // Auth disabled - implement with Convex auth when needed
+    console.warn('Auth is disabled. Implement Convex auth to enable registration.');
+    throw new Error('Auth is currently disabled');
   };
 
   const logout = async () => {
-    await authService.logout();
     setUser(null);
   };
 
-  const isAdmin = user ? authService.isAdmin(user) : false;
+  const isAdmin = false; // No admin without auth
 
   const value: AuthContextType = {
     user,
