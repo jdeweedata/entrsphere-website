@@ -31,3 +31,4 @@ out/
 .claude/
 .playwright-mcp/
 .vercel
+discovery-fs/sessions/
