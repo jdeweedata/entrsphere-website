@@ -10,6 +10,7 @@
 
 import type * as contacts from "../contacts.js";
 import type * as discovery from "../discovery.js";
+import type * as payments from "../payments.js";
 import type * as posts from "../posts.js";
 import type * as seed from "../seed.js";
 import type * as subscribers from "../subscribers.js";
@@ -23,6 +24,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   contacts: typeof contacts;
   discovery: typeof discovery;
+  payments: typeof payments;
   posts: typeof posts;
   seed: typeof seed;
   subscribers: typeof subscribers;

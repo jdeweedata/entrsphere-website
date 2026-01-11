@@ -91,6 +91,27 @@ export default defineSchema({
     .index("by_route", ["route"])
     .index("by_createdAt", ["createdAt"]),
 
+  // Purchases - Discovery Router Toolkit payments
+  purchases: defineTable({
+    email: v.string(),
+    sessionId: v.optional(v.string()), // Links to discovery session if from /discovery flow
+    reference: v.string(), // Paystack payment reference
+    amount: v.number(), // Amount in kobo/cents
+    currency: v.string(), // ZAR
+    status: v.union(
+      v.literal("pending"),
+      v.literal("success"),
+      v.literal("failed")
+    ),
+    product: v.string(), // "discovery-router-toolkit"
+    paystackData: v.optional(v.any()), // Full Paystack response
+    createdAt: v.number(),
+    verifiedAt: v.optional(v.number()),
+  })
+    .index("by_email", ["email"])
+    .index("by_reference", ["reference"])
+    .index("by_sessionId", ["sessionId"]),
+
   // SPEC preview leads - email captures from freemium flow
   specPreviewLeads: defineTable({
     email: v.string(),
