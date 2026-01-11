@@ -142,6 +142,64 @@ export default function AboutPage() {
             </div>
           </section>
 
+          {/* Why Not Just Use ChatGPT? */}
+          <section className="max-w-4xl mx-auto mb-20">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">
+              "Can't I Just Ask ChatGPT for a Spec?"
+            </h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-slate-100 rounded-xl p-6 border border-slate-200">
+                <div className="text-slate-500 font-medium text-sm mb-3 uppercase tracking-wide">
+                  DIY with ChatGPT
+                </div>
+                <ul className="space-y-3 text-slate-600">
+                  <li className="flex items-start gap-2">
+                    <span className="text-red-500 mt-1">✕</span>
+                    <span>Blank page - you need to know what to ask</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-red-500 mt-1">✕</span>
+                    <span>Generic output that misses your context</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-red-500 mt-1">✕</span>
+                    <span>No structure - you're still guessing</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-red-500 mt-1">✕</span>
+                    <span>4+ hours of back-and-forth prompting</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+                <div className="text-green-700 font-medium text-sm mb-3 uppercase tracking-wide">
+                  EntrSphere Discovery Router
+                </div>
+                <ul className="space-y-3 text-slate-700">
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 mt-1">✓</span>
+                    <span>Guided questions - we know what to ask</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 mt-1">✓</span>
+                    <span>Scenario detection - finds hidden complexity</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 mt-1">✓</span>
+                    <span>SPEC.json output - ready for developers</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 mt-1">✓</span>
+                    <span>30 minutes to a production-ready spec</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <p className="text-slate-600 text-center mt-6">
+              The prompt is not the product. <strong className="text-slate-900">The workflow is the product.</strong>
+            </p>
+          </section>
+
           {/* Our Philosophy */}
           <section className="max-w-4xl mx-auto mb-20">
             <h2 className="text-2xl font-bold text-slate-900 mb-6">
@@ -221,83 +279,51 @@ export default function AboutPage() {
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <h3 className="font-bold text-slate-900">
-                        Discovery Router Toolkit
+                        Discovery Agent
                       </h3>
                       <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded-full">
+                        Free
+                      </span>
+                    </div>
+                    <p className="text-slate-600 text-sm mb-2">
+                      Try our guided discovery tool. Answer 5 strategic questions
+                      and get a clear project route in under 3 minutes. No sign-up required.
+                    </p>
+                    <p className="text-slate-500 text-xs">
+                      Best for: Anyone starting a new project or validating an idea
+                    </p>
+                  </div>
+                  <Link
+                    href="/discovery"
+                    className="text-slate-900 font-medium hover:underline whitespace-nowrap flex items-center gap-1"
+                  >
+                    Try free <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
+                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="font-bold text-slate-900">
+                        Discovery Router Toolkit
+                      </h3>
+                      <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
                         R850 (~$47)
                       </span>
                     </div>
                     <p className="text-slate-600 text-sm mb-2">
-                      Turn vague ideas into production-ready specs in 30
-                      minutes. The exact framework we use to scope AI-native
-                      products.
+                      The complete framework to turn vague ideas into production-ready
+                      specs in 30 minutes. Includes templates, scenario detection,
+                      risk matrices, and SPEC.json output.
                     </p>
                     <p className="text-slate-500 text-xs">
-                      Best for: Agency owners, PMs wanting to level up
+                      Best for: Agency owners, founders, and PMs who need clarity before building
                     </p>
                   </div>
                   <Link
                     href="/solutions/discovery-router"
-                    className="text-slate-900 font-medium hover:underline whitespace-nowrap flex items-center gap-1"
-                  >
-                    Learn more <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="font-bold text-slate-900">
-                        AI-Ready Requirements Workshop
-                      </h3>
-                      <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
-                        R45,000-R85,000
-                      </span>
-                    </div>
-                    <p className="text-slate-600 text-sm mb-2">
-                      2-day on-site (or virtual) deep dive with your Product &
-                      Engineering leads. We install the Discovery Router
-                      Framework into your existing Jira/Linear workflow and
-                      customize templates for your industry.
-                    </p>
-                    <p className="text-slate-500 text-xs">
-                      Best for: Medium businesses (50-250 employees) with budget
-                      for process improvement
-                    </p>
-                  </div>
-                  <Link
-                    href="/solutions/consulting"
-                    className="text-slate-900 font-medium hover:underline whitespace-nowrap flex items-center gap-1"
-                  >
-                    Learn more <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="font-bold text-slate-900">
-                        Development Consulting
-                      </h3>
-                      <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">
-                        From R15,000
-                      </span>
-                    </div>
-                    <p className="text-slate-600 text-sm mb-2">
-                      Insurance for your development investment. We ensure your
-                      R100k-R500k build goes to the right thing. Discovery
-                      audits, integration planning, and hands-on guidance.
-                    </p>
-                    <p className="text-slate-500 text-xs">
-                      Best for: Non-technical founders about to make a big bet
-                    </p>
-                  </div>
-                  <Link
-                    href="/solutions/consulting"
                     className="text-slate-900 font-medium hover:underline whitespace-nowrap flex items-center gap-1"
                   >
                     Learn more <ArrowRight className="h-4 w-4" />

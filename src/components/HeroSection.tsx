@@ -10,11 +10,11 @@ const HeroSection = () => {
           {/* Left side - Text content */}
           <div className="max-w-2xl">
             <h1 className="text-5xl lg:text-6xl font-bold text-slate-900 leading-tight mb-6">
-              Accelerate Your Product Development with AI-Native Frameworks.
+              Turn your idea into a developer-ready spec in 30 minutes.
             </h1>
 
             <p className="text-lg text-slate-600 mb-8">
-              Production-ready AI components, intelligent templates, and expert guidance for teams building with AI at the core.
+              Stop losing R20K+ per project on bad requirements. Our guided framework gives you clear specs—not a blank ChatGPT prompt.
             </p>
 
             <div className="flex flex-wrap gap-4">

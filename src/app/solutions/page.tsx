@@ -12,30 +12,22 @@ export const metadata: Metadata = {
 
 const solutions = [
   {
+    title: "Discovery Agent",
+    description:
+      "Try our guided discovery tool for free. Answer 5 questions and get a clear project route in under 3 minutes.",
+    price: "Free",
+    priceUsd: "",
+    href: "/discovery",
+    highlight: "Start Here",
+  },
+  {
     title: "Discovery Router Toolkit",
     description:
-      "The exact framework to turn vague 'I want an AI app' ideas into production-ready specifications in 30 minutes.",
+      "The complete framework to turn vague ideas into production-ready specs in 30 minutes. Templates, checklists, and SPEC.json output.",
     price: "R850",
     priceUsd: "~$47",
     href: "/solutions/discovery-router",
-    highlight: "Most Popular",
-  },
-  {
-    title: "Product Requirement Framework",
-    description:
-      "Standardized, fill-in-the-blank templates for creating clear, bulletproof PRDs and User Stories.",
-    price: "R485",
-    priceUsd: "~$27",
-    href: "/solutions/product-requirements",
-  },
-  {
-    title: "Development Consulting",
-    description:
-      "Expert consulting to help your team implement AI-native development pipelines. Stop guessing and start shipping.",
-    price: "From R25,000",
-    priceUsd: "~$1,500",
-    href: "/solutions/consulting",
-    highlight: "Enterprise",
+    highlight: "Full Toolkit",
   },
 ];
 
@@ -49,16 +41,16 @@ export default function SolutionsPage() {
           {/* Hero Section */}
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
-              AI-Native Development Solutions
+              Turn Ideas into Specs That Developers Love
             </h1>
             <p className="text-lg text-slate-600">
-              From discovery to deployment, we provide the frameworks, templates,
-              and expertise to build AI-powered products without the chaos.
+              Stop losing money on unclear requirements. Start with our free
+              Discovery Agent, then get the full toolkit when you're ready.
             </p>
           </div>
 
           {/* Solutions Grid */}
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {solutions.map((solution) => (
               <Link
                 key={solution.href}

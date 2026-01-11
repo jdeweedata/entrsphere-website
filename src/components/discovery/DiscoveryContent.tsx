@@ -119,13 +119,9 @@ export default function DiscoveryContent() {
             </div>
 
             {/* Footer Note */}
-            <div className="flex items-center gap-3 text-xs text-slate-400 font-medium">
-              <div className="flex -space-x-2">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="w-6 h-6 rounded-full bg-slate-200 border-2 border-white" />
-                ))}
-              </div>
-              <p>Trusted by 1000+ Innovators</p>
+            <div className="flex items-center gap-3 text-xs text-slate-500 font-medium">
+              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              <p>Free to use • No sign-up required</p>
             </div>
           </div>
 
