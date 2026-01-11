@@ -40,12 +40,33 @@ const DiscoveryChat = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const hasStarted = useRef(false);
 
-  // Scroll to bottom when messages change
+  // Scroll to bottom when messages change or phase changes (for RouteResult)
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    // Use requestAnimationFrame to ensure DOM has updated
+    requestAnimationFrame(() => {
+      if (scrollRef.current) {
+        // Try to find the viewport element inside ScrollArea
+        const viewport = scrollRef.current.querySelector('[data-radix-scroll-area-viewport]');
+        if (viewport) {
+          viewport.scrollTop = viewport.scrollHeight;
+        } else {
+          // Fallback for direct ref
+          scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+      }
+    });
+  }, [messages, isTyping, session.phase]);
+
+  // Debug: Log state when conditions for RouteResult should be met
+  useEffect(() => {
+    if (session.phase === 'email_capture') {
+      console.log('[DiscoveryChat] Phase is email_capture', {
+        detectedRoute: session.detectedRoute,
+        isTyping,
+        shouldShowRouteResult: session.detectedRoute && !isTyping,
+      });
     }
-  }, [messages, isTyping]);
+  }, [session.phase, session.detectedRoute, isTyping]);
 
   // Add message with typing effect
   const addAgentMessage = useCallback((message: ChatMessageType) => {
