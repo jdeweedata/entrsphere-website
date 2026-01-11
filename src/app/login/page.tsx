@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import LoginForm from "@/components/auth/LoginForm";
+import { AuthFormWrapper } from "@/components/auth/AuthFormWrapper";
 
 export const metadata: Metadata = {
   title: "Sign In",
@@ -29,7 +30,9 @@ export default function LoginPage() {
           <p className="text-slate-600">Access the admin dashboard</p>
         </div>
         <div className="bg-white py-8 px-6 shadow rounded-lg">
-          <LoginForm />
+          <AuthFormWrapper>
+            <LoginForm />
+          </AuthFormWrapper>
         </div>
       </div>
     </div>

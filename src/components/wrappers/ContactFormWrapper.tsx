@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { ConvexWrapper } from "./ConvexWrapper";
 
 const ContactForm = dynamic(() => import("@/components/ContactForm"), {
   ssr: false,
@@ -22,5 +23,9 @@ const ContactForm = dynamic(() => import("@/components/ContactForm"), {
 });
 
 export default function ContactFormWrapper() {
-  return <ContactForm />;
+  return (
+    <ConvexWrapper>
+      <ContactForm />
+    </ConvexWrapper>
+  );
 }

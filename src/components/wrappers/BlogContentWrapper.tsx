@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { ConvexWrapper } from "./ConvexWrapper";
 
 const BlogContent = dynamic(() => import("@/components/BlogContent"), {
   ssr: false,
@@ -24,5 +25,9 @@ const BlogContent = dynamic(() => import("@/components/BlogContent"), {
 });
 
 export default function BlogContentWrapper() {
-  return <BlogContent />;
+  return (
+    <ConvexWrapper>
+      <BlogContent />
+    </ConvexWrapper>
+  );
 }

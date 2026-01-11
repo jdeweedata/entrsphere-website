@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import RegisterForm from "@/components/auth/RegisterForm";
+import { AuthFormWrapper } from "@/components/auth/AuthFormWrapper";
 
 export const metadata: Metadata = {
   title: "Create Account",
@@ -29,7 +30,9 @@ export default function RegisterPage() {
           <p className="text-slate-600">Join the EntrSphere team</p>
         </div>
         <div className="bg-white py-8 px-6 shadow rounded-lg">
-          <RegisterForm />
+          <AuthFormWrapper>
+            <RegisterForm />
+          </AuthFormWrapper>
         </div>
       </div>
     </div>

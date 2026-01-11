@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const DashboardContent = dynamic(
   () => import("@/components/admin/DashboardContent"),
@@ -25,5 +26,9 @@ const DashboardContent = dynamic(
 );
 
 export default function DashboardContentWrapper() {
-  return <DashboardContent />;
+  return (
+    <AuthProvider>
+      <DashboardContent />
+    </AuthProvider>
+  );
 }
