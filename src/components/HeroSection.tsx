@@ -27,12 +27,12 @@ const HeroSection = () => {
               <Button
                 asChild
                 variant="outline"
-                className="border-slate-900 text-slate-900 hover:bg-slate-50 px-6 py-3 rounded-lg font-medium"
+                className="border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-lg font-medium"
               >
-                <Link href="/discovery">
-                  Try Discovery Agent
-                  <span className="ml-2 bg-green-100 text-green-700 text-xs font-medium px-2 py-0.5 rounded-full">
-                    Free
+                <Link href="/waitlist">
+                  Join Waitlist
+                  <span className="ml-2 bg-blue-100 text-blue-700 text-xs font-medium px-2 py-0.5 rounded-full">
+                    Limited
                   </span>
                 </Link>
               </Button>

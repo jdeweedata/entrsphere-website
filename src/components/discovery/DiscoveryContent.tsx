@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import DiscoveryChat from "@/components/discovery/DiscoveryChat";
 import DiscoveryChatAI from "@/components/discovery/DiscoveryChatAI";
+import { WaitlistGateModal } from "@/components/waitlist";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Sparkle, Clock, Target, FileJs, Lightning } from "@phosphor-icons/react";
 
@@ -27,6 +28,12 @@ const stats = [
 
 export default function DiscoveryContent() {
   const [mode, setMode] = useState<"guided" | "ai">("guided");
+  const [showGateModal, setShowGateModal] = useState(false);
+
+  // Handler for when user tries to interact with gated content
+  const handleGatedInteraction = () => {
+    setShowGateModal(true);
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 relative overflow-hidden font-sans text-slate-900">
@@ -120,18 +127,33 @@ export default function DiscoveryContent() {
 
             {/* Footer Note */}
             <div className="flex items-center gap-3 text-xs text-slate-500 font-medium">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <p>Free to use • No sign-up required</p>
+              <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+              <p>Limited access • Join waitlist to unlock</p>
             </div>
           </div>
 
-          {/* Right Panel - Chat Interface */}
+          {/* Right Panel - Chat Interface (Gated) */}
           <div className="lg:col-span-8 h-[600px] lg:h-[750px]">
-            <div className="h-full w-full bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04)] rounded-[2rem] overflow-hidden flex flex-col relative transition-all duration-500">
+            <div
+              onClick={handleGatedInteraction}
+              className="h-full w-full bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.04)] rounded-[2rem] overflow-hidden flex flex-col relative transition-all duration-500 cursor-pointer group"
+            >
+              {/* Gate Overlay */}
+              <div className="absolute inset-0 z-20 bg-gradient-to-t from-white/80 via-white/40 to-transparent flex items-end justify-center pb-12 pointer-events-none">
+                <div className="text-center">
+                  <p className="text-slate-900 font-semibold text-lg mb-2">
+                    Click to unlock access
+                  </p>
+                  <p className="text-slate-500 text-sm">
+                    Join the waitlist to use Discovery Agent
+                  </p>
+                </div>
+              </div>
+
               {/* Decorative Gradient Blob inside card */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-50 to-violet-50 opacity-50 blur-3xl rounded-full -mr-16 -mt-16 pointer-events-none" />
 
-              <div className="flex-1 relative z-10 min-h-0 h-full">
+              <div className="flex-1 relative z-10 min-h-0 h-full opacity-60 pointer-events-none">
                 {mode === "guided" ? (
                   <DiscoveryChat />
                 ) : (
@@ -142,6 +164,13 @@ export default function DiscoveryContent() {
           </div>
         </div>
       </main>
+
+      {/* Waitlist Gate Modal */}
+      <WaitlistGateModal
+        open={showGateModal}
+        onOpenChange={setShowGateModal}
+        source="discovery-page"
+      />
     </div>
   );
 }

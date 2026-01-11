@@ -6,21 +6,14 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { useState, useEffect } from "react";
-
-const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
-let convexClient: ConvexReactClient | null = null;
-
-if (typeof window !== "undefined" && convexUrl) {
-  convexClient = new ConvexReactClient(convexUrl);
-}
+import { useState, useEffect, ReactNode } from "react";
 
 interface ClientProvidersProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 export function ClientProviders({ children }: ClientProvidersProps) {
-  const [mounted, setMounted] = useState(false);
+  const [convexClient, setConvexClient] = useState<ConvexReactClient | null>(null);
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -33,11 +26,14 @@ export function ClientProviders({ children }: ClientProvidersProps) {
       })
   );
 
+  // Create Convex client only on client side
   useEffect(() => {
-    setMounted(true);
+    const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
+    if (convexUrl) {
+      setConvexClient(new ConvexReactClient(convexUrl));
+    }
   }, []);
 
-  // Show children immediately but without Convex context until mounted
   const content = (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -50,10 +46,10 @@ export function ClientProviders({ children }: ClientProvidersProps) {
     </QueryClientProvider>
   );
 
-  // Only wrap with ConvexProvider after client-side mount
-  if (mounted && convexClient) {
-    return <ConvexProvider client={convexClient}>{content}</ConvexProvider>;
+  // Show loading or render without Convex during SSR/initial load
+  if (!convexClient) {
+    return content;
   }
 
-  return content;
+  return <ConvexProvider client={convexClient}>{content}</ConvexProvider>;
 }

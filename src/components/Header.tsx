@@ -50,6 +50,12 @@ const Header = () => {
             >
               Contact
             </Link>
+            <Link
+              href="/waitlist"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full px-4 py-1.5 transition-colors"
+            >
+              Join Waitlist
+            </Link>
           </nav>
         </div>
       </div>

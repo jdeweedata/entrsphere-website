@@ -246,4 +246,19 @@ export default defineSchema({
     .index("by_flowStage", ["flowStage"])
     .index("by_role_flowStage", ["role", "flowStage"]) // user + post_spec = primitive roadmap
     .index("by_toolSuccess", ["toolSuccess"]), // false = capability gaps
+
+  // Waitlist - cohort-based access control
+  waitlist: defineTable({
+    email: v.string(),
+    cohort: v.number(), // 1, 2, 3...
+    position: v.number(), // Position in cohort (1-25)
+    joinedAt: v.number(),
+    source: v.optional(v.string()), // "homepage", "linkedin", "discovery", etc.
+    accessGranted: v.boolean(), // Flipped when cohort opens
+    accessGrantedAt: v.optional(v.number()),
+  })
+    .index("by_email", ["email"])
+    .index("by_cohort", ["cohort"])
+    .index("by_joinedAt", ["joinedAt"])
+    .index("by_accessGranted", ["accessGranted"]),
 });

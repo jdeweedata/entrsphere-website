@@ -16,6 +16,7 @@ import type * as payments from "../payments.js";
 import type * as posts from "../posts.js";
 import type * as seed from "../seed.js";
 import type * as subscribers from "../subscribers.js";
+import type * as waitlist from "../waitlist.js";
 
 import type {
   ApiFromModules,
@@ -32,6 +33,7 @@ declare const fullApi: ApiFromModules<{
   posts: typeof posts;
   seed: typeof seed;
   subscribers: typeof subscribers;
+  waitlist: typeof waitlist;
 }>;
 
 /**
