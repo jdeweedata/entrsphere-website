@@ -378,7 +378,7 @@ export async function POST(request: NextRequest) {
     let totalInputTokens = 0;
     let totalOutputTokens = 0;
     let iterations = 0;
-    const maxIterations = 3;
+    const maxIterations = 5; // Allow enough iterations for tool calls + final text response
 
     while (continueLoop && iterations < maxIterations) {
       iterations++;
@@ -434,7 +434,12 @@ export async function POST(request: NextRequest) {
 
     // Extract final text response
     const textContent = response?.content.find((c) => c.type === "text");
-    const finalText = textContent?.type === "text" ? textContent.text : "";
+    let finalText = textContent?.type === "text" ? textContent.text : "";
+
+    // Ensure we never return empty content (causes API errors on subsequent calls)
+    if (!finalText || !finalText.trim()) {
+      finalText = "I'm processing your request. Please continue with your next question or provide more details.";
+    }
 
     return NextResponse.json({
       content: finalText,

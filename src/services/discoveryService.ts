@@ -522,13 +522,22 @@ export async function sendFilesystemAgentMessage(
   route: DiscoveryRoute,
   signals: { A: number; B: number; C: number; D: number }
 ): Promise<FilesystemAgentResponse> {
+  // Filter out any messages with empty content (causes API errors)
+  const validMessages = messages.filter(
+    (m) => m.content && m.content.trim().length > 0
+  );
+
+  if (validMessages.length === 0) {
+    throw new Error("No valid messages to send");
+  }
+
   const response = await fetch(`${API_BASE}/api/discovery/agent`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      messages,
+      messages: validMessages,
       sessionId,
       route,
       signals,
