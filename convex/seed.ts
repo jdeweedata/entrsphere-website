@@ -607,7 +607,7 @@ The teams that succeed aren't smarter or better funded. They're more disciplined
 ---
 
 *Ready to improve your project success rate? [Try our Discovery Router](/solutions/discovery-router) to identify the right approach for your next project.*`,
-    coverImage: "/images/blog/project-failure-stats.jpg",
+    coverImage: "/images/blog/why-71-percent-software-projects-fail-infographic.jpg",
     category: "AI Strategy",
     tags: ["project-management", "requirements", "success-rates", "research", "discovery"],
     author: {
@@ -804,7 +804,7 @@ If the answer is "no" to any of these, you're carrying hidden risk on every proj
 ---
 
 *Want to implement a discovery framework in your agency? [Talk to us](/contact) about how EntrSphere can help.*`,
-    coverImage: "/images/blog/case-study-requirements.jpg",
+    coverImage: "/images/blog/hidden-cost-vague-requirements-case-study-infographic.jpg",
     category: "Case Studies",
     tags: ["case-study", "requirements", "agency", "project-management", "cost-analysis"],
     author: {
@@ -1081,7 +1081,7 @@ Stop building from vague briefs. Start building from SPEC.json.
 ---
 
 *Need help implementing structured requirements in your workflow? [Contact us](/contact) for a consultation.*`,
-    coverImage: "/images/blog/spec-json-automation.jpg",
+    coverImage: "/images/blog/idea-to-spec-json-automating-requirements-ai-infographic.jpg",
     category: "Tutorials",
     tags: ["spec-json", "requirements", "ai-automation", "tutorial", "discovery"],
     author: {
@@ -1342,7 +1342,7 @@ The best time to do discovery is before development. The second best time is now
 ---
 
 *Not sure if your project needs discovery? [Try our free assessment](/solutions/discovery-router) to find out in 5 minutes.*`,
-    coverImage: "/images/blog/discovery-phase-signs.jpg",
+    coverImage: "/images/blog/5-signs-project-needs-discovery-phase-infographic.jpg",
     category: "AI Strategy",
     tags: ["discovery", "project-management", "risk-assessment", "planning", "stakeholders"],
     author: {
@@ -1585,7 +1585,7 @@ Every discovery session you run helps build this dataset. Every outcome you repo
 ---
 
 *Interested in how we handle data and privacy? [Read our data principles](/about#data-principles) or [contact us](/contact) with questions.*`,
-    coverImage: "/images/blog/data-moat-tracking.jpg",
+    coverImage: "/images/blog/building-data-moat-outcome-tracking-smarter-ai-infographic.jpg",
     category: "AI Integration",
     tags: ["data-moat", "outcome-tracking", "machine-learning", "competitive-advantage", "analytics"],
     author: {
@@ -1637,5 +1637,34 @@ export const seedEditorialPosts = mutation({
       count: insertedIds.length,
       skipped: editorialPosts.length - insertedIds.length
     };
+  },
+});
+
+// Update cover images for existing editorial posts
+export const updateEditorialCoverImages = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const coverImageMap: Record<string, string> = {
+      "why-71-percent-software-projects-fail": "/images/blog/why-71-percent-software-projects-fail-infographic.jpg",
+      "hidden-cost-vague-requirements-case-study": "/images/blog/hidden-cost-vague-requirements-case-study-infographic.jpg",
+      "idea-to-spec-json-automating-requirements-ai": "/images/blog/idea-to-spec-json-automating-requirements-ai-infographic.jpg",
+      "5-signs-project-needs-discovery-phase": "/images/blog/5-signs-project-needs-discovery-phase-infographic.jpg",
+      "building-data-moat-outcome-tracking-smarter-ai": "/images/blog/building-data-moat-outcome-tracking-smarter-ai-infographic.jpg",
+    };
+
+    let updated = 0;
+    for (const [slug, coverImage] of Object.entries(coverImageMap)) {
+      const post = await ctx.db
+        .query("posts")
+        .withIndex("by_slug", (q) => q.eq("slug", slug))
+        .first();
+
+      if (post) {
+        await ctx.db.patch(post._id, { coverImage, updatedAt: Date.now() });
+        updated++;
+      }
+    }
+
+    return { message: "Cover images updated", count: updated };
   },
 });
