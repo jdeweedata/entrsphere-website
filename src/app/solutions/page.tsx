@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { ArrowRight, ShieldCheck, MagnifyingGlass, CheckCircle } from "@phosphor-icons/react/dist/ssr";
 
 export const metadata: Metadata = {
   title: "Solutions - Build What Your Clients Actually Need",
@@ -47,6 +47,42 @@ export default function SolutionsPage() {
               When specs are clear, developers build the right thing. Your clients
               get results. You get referrals.
             </p>
+          </div>
+
+          {/* Differentiation Section */}
+          <div className="max-w-4xl mx-auto mb-20">
+            <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-slate-100">
+              <h2 className="text-2xl font-bold text-slate-900 mb-4 text-center">
+                Build RIGHT, Not Just Fast
+              </h2>
+              <p className="text-slate-600 text-center mb-8 max-w-2xl mx-auto">
+                AI tools help you write PRDs faster. But speed is useless if you build the wrong thing.
+                We help you discover if your assumptions are correct—before you waste months on the wrong product.
+              </p>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="text-center">
+                  <div className="bg-slate-100 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <ShieldCheck weight="duotone" className="h-6 w-6 text-slate-700" />
+                  </div>
+                  <h3 className="font-semibold text-slate-900 mb-1">Validate Assumptions</h3>
+                  <p className="text-sm text-slate-500">Surface hidden risks before you code</p>
+                </div>
+                <div className="text-center">
+                  <div className="bg-slate-100 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <MagnifyingGlass weight="duotone" className="h-6 w-6 text-slate-700" />
+                  </div>
+                  <h3 className="font-semibold text-slate-900 mb-1">Scenario Detection</h3>
+                  <p className="text-sm text-slate-500">Find complexity ChatGPT misses</p>
+                </div>
+                <div className="text-center">
+                  <div className="bg-slate-100 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <CheckCircle weight="duotone" className="h-6 w-6 text-slate-700" />
+                  </div>
+                  <h3 className="font-semibold text-slate-900 mb-1">Client-Ready Output</h3>
+                  <p className="text-sm text-slate-500">Specs your clients will actually approve</p>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Solutions Grid */}
