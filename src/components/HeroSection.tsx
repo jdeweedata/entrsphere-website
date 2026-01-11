@@ -1,5 +1,5 @@
-
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
 const HeroSection = () => {
@@ -22,14 +22,14 @@ const HeroSection = () => {
                 asChild
                 className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-3 rounded-lg font-medium"
               >
-                <Link to="/solutions">View Solutions</Link>
+                <Link href="/solutions">View Solutions</Link>
               </Button>
               <Button
                 asChild
                 variant="outline"
                 className="border-slate-900 text-slate-900 hover:bg-slate-50 px-6 py-3 rounded-lg font-medium"
               >
-                <Link to="/discovery">
+                <Link href="/discovery">
                   Try Discovery Agent
                   <span className="ml-2 bg-green-100 text-green-700 text-xs font-medium px-2 py-0.5 rounded-full">
                     Free
@@ -41,10 +41,13 @@ const HeroSection = () => {
 
           {/* Right side - Hero shape */}
           <div className="hidden lg:flex justify-center items-center">
-            <img
+            <Image
               src="/entrsphere_asset_hero_shape_transparent.webp"
               alt="Hero shape"
+              width={512}
+              height={512}
               className="w-full max-w-lg"
+              priority
             />
           </div>
         </div>

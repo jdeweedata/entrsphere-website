@@ -1,5 +1,5 @@
 
-import { ShoppingCart, Code, Server, ChartBar } from "@phosphor-icons/react";
+import { ShoppingCart, Code, HardDrives, ChartBar } from "@phosphor-icons/react";
 
 const SolutionsSection = () => {
   const solutions = [
@@ -20,7 +20,7 @@ const SolutionsSection = () => {
       color: "blue"
     },
     {
-      icon: Server,
+      icon: HardDrives,
       title: "Infrastructure-as-a-Service",
       description: "Managed cloud hosting with auto-scaling, security monitoring, and performance optimization for platform businesses",
       features: ["Auto-scaling infrastructure", "24/7 security monitoring", "Performance optimization", "Backup & disaster recovery"],

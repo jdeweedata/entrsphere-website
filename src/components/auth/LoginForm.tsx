@@ -1,16 +1,20 @@
+"use client";
 
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useAuth } from '@/contexts/AuthContext';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 const LoginForm: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,10 +22,10 @@ const LoginForm: React.FC = () => {
 
     try {
       await login(email, password);
-      toast.success('Login successful!');
-      window.location.href = '/dashboard';
+      toast.success("Login successful!");
+      router.push("/dashboard");
     } catch (error: any) {
-      toast.error(error.message || 'Login failed');
+      toast.error(error.message || "Login failed");
     } finally {
       setIsLoading(false);
     }
@@ -61,15 +65,15 @@ const LoginForm: React.FC = () => {
           disabled={isLoading}
           className="w-full bg-slate-900 hover:bg-slate-800"
         >
-          {isLoading ? 'Logging in...' : 'Login'}
+          {isLoading ? "Logging in..." : "Login"}
         </Button>
 
         <div className="text-center">
           <p className="text-sm text-slate-600">
-            Don't have an account?{' '}
-            <a href="/register" className="text-slate-900 hover:underline">
+            Don't have an account?{" "}
+            <Link href="/register" className="text-slate-900 hover:underline">
               Register here
-            </a>
+            </Link>
           </p>
         </div>
       </form>

@@ -10,7 +10,7 @@ import {
   Clock,
   ArrowRight,
 } from '@phosphor-icons/react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
 interface RouteResultProps {
@@ -100,7 +100,7 @@ const RouteResult = ({ route, answers }: RouteResultProps) => {
       {/* CTA */}
       <div className="pt-2">
         <Button asChild className="w-full bg-slate-900 hover:bg-slate-800">
-          <Link to="/solutions/discovery-router">
+          <Link href="/solutions/discovery-router">
             Get Full Discovery Toolkit
             <ArrowRight weight="duotone" className="ml-2 h-4 w-4" />
           </Link>

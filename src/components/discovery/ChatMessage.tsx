@@ -1,69 +1,183 @@
 // Individual chat message component
-// Brand: EntrSphere Glass Design System
+// Brand: EntrSphere Design System - Clean, legible, professional
 
-import { ChatMessage as ChatMessageType } from '@/types/discovery';
-import { cn } from '@/lib/utils';
-import ReactMarkdown from 'react-markdown';
-import { Sphere } from '@phosphor-icons/react';
+import Image from "next/image";
+import { ChatMessage as ChatMessageType } from "@/types/discovery";
+import { cn } from "@/lib/utils";
+import ReactMarkdown from "react-markdown";
 
 interface ChatMessageProps {
   message: ChatMessageType;
 }
 
 const ChatMessage = ({ message }: ChatMessageProps) => {
-  const isAgent = message.role === 'agent' || message.role === 'assistant';
-  const isUser = message.role === 'user';
-  const isSystem = message.role === 'system';
+  const isAgent = message.role === "agent" || message.role === "assistant";
+  const isUser = message.role === "user";
+  const isSystem = message.role === "system";
 
   return (
     <div
       className={cn(
-        'flex w-full mb-6',
-        isUser ? 'justify-end' : 'justify-start'
+        "flex w-full",
+        isUser ? "justify-end" : "justify-start",
+        // Add vertical spacing between messages
+        "mb-5 last:mb-0"
       )}
     >
+      {/* Agent avatar - outside the bubble */}
+      {isAgent && (
+        <div className="flex-shrink-0 mr-3 mt-1">
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center shadow-sm border border-slate-200/60 overflow-hidden">
+            <Image
+              src="/entrsphere_asset_icon_transparent.webp"
+              alt="EntrSphere"
+              width={24}
+              height={24}
+              className="w-6 h-6"
+            />
+          </div>
+        </div>
+      )}
+
       <div
         className={cn(
-          'max-w-[85%] md:max-w-[70%] rounded-2xl px-5 py-4 shadow-sm relative overflow-hidden',
-          isAgent && 'bg-white/90 backdrop-blur-md border border-white/60 !text-slate-900 rounded-tl-none shadow-sm',
-          isUser && 'bg-gradient-to-br from-violet-600 to-blue-600 text-white rounded-tr-none shadow-md',
-          isSystem && 'bg-slate-100/80 border border-slate-200 text-slate-700 w-full max-w-full text-center'
+          "relative",
+          // Max width for readability
+          "max-w-[80%] md:max-w-[70%] lg:max-w-[65%]",
+          isSystem && "max-w-full w-full"
         )}
       >
+        {/* Agent label */}
         {isAgent && (
-          <div className="flex items-center gap-2 mb-3 pb-2 border-b border-slate-200/60">
-            <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center border border-white/50">
-              <Sphere weight="duotone" className="h-3 w-3 text-violet-600" />
-            </div>
-            <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">Discovery Agent</span>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              Discovery Agent
+            </span>
           </div>
         )}
 
-        <div className={cn(
-          "prose prose-sm max-w-none leading-relaxed",
-          isAgent && "prose-p:!text-slate-900 prose-strong:!text-black prose-li:!text-slate-900 prose-headings:!text-slate-900",
-          isUser && "prose-invert prose-p:text-white/95 prose-a:text-white underline-offset-2"
-        )}>
-          <ReactMarkdown
-            components={{
-              p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
-              ul: ({ children }) => (
-                <ul className="list-disc list-inside space-y-1 mt-2 marker:text-slate-400">{children}</ul>
-              ),
-              li: ({ children }) => <li className="text-sm">{children}</li>,
-              a: ({ href, children }) => (
-                <a href={href} className="underline decoration-current/30 hover:decoration-current transition-all" target="_blank" rel="noopener noreferrer">{children}</a>
-              )
-            }}
+        {/* Message bubble */}
+        <div
+          className={cn(
+            "rounded-2xl shadow-sm",
+            // Agent messages - clean white with subtle border
+            isAgent &&
+              "bg-white border border-slate-200/80 text-slate-800 rounded-tl-md px-5 py-4",
+            // User messages - gradient with good contrast
+            isUser &&
+              "bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-tr-md px-5 py-4 shadow-md shadow-blue-500/15",
+            // System messages - subtle centered
+            isSystem &&
+              "bg-slate-100/80 border border-slate-200 text-slate-600 text-center px-5 py-3"
+          )}
+        >
+          {/* Message content with improved typography */}
+          <div
+            className={cn(
+              "prose prose-sm max-w-none",
+              // Better line height for readability
+              "leading-relaxed",
+              // Agent message typography
+              isAgent && [
+                "prose-p:text-slate-700 prose-p:text-[15px] prose-p:leading-relaxed",
+                "prose-strong:text-slate-900 prose-strong:font-semibold",
+                "prose-headings:text-slate-900 prose-headings:font-semibold prose-headings:mt-4 prose-headings:mb-2",
+                "prose-h1:text-lg prose-h2:text-base prose-h3:text-sm",
+                "prose-li:text-slate-700 prose-li:text-[15px]",
+                "prose-ul:my-3 prose-ol:my-3",
+                "prose-li:my-1",
+                "prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline",
+              ],
+              // User message typography
+              isUser && [
+                "prose-invert",
+                "prose-p:text-white prose-p:text-[15px] prose-p:leading-relaxed",
+                "prose-strong:text-white prose-strong:font-semibold",
+                "prose-a:text-blue-200 prose-a:underline",
+              ]
+            )}
           >
-            {message.content}
-          </ReactMarkdown>
+            <ReactMarkdown
+              components={{
+                p: ({ children }) => (
+                  <p className="mb-3 last:mb-0">{children}</p>
+                ),
+                ul: ({ children }) => (
+                  <ul className="list-disc pl-5 space-y-1.5 my-3">
+                    {children}
+                  </ul>
+                ),
+                ol: ({ children }) => (
+                  <ol className="list-decimal pl-5 space-y-1.5 my-3">
+                    {children}
+                  </ol>
+                ),
+                li: ({ children }) => (
+                  <li className="text-[15px] leading-relaxed pl-1">
+                    {children}
+                  </li>
+                ),
+                h1: ({ children }) => (
+                  <h1 className="text-lg font-semibold mt-4 mb-2 first:mt-0">
+                    {children}
+                  </h1>
+                ),
+                h2: ({ children }) => (
+                  <h2 className="text-base font-semibold mt-4 mb-2 first:mt-0">
+                    {children}
+                  </h2>
+                ),
+                h3: ({ children }) => (
+                  <h3 className="text-sm font-semibold mt-3 mb-1.5 first:mt-0">
+                    {children}
+                  </h3>
+                ),
+                strong: ({ children }) => (
+                  <strong className="font-semibold">{children}</strong>
+                ),
+                a: ({ href, children }) => (
+                  <a
+                    href={href}
+                    className="text-blue-600 hover:underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {children}
+                  </a>
+                ),
+                code: ({ children }) => (
+                  <code className="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded text-sm font-mono">
+                    {children}
+                  </code>
+                ),
+                blockquote: ({ children }) => (
+                  <blockquote className="border-l-3 border-slate-300 pl-4 my-3 text-slate-600 italic">
+                    {children}
+                  </blockquote>
+                ),
+              }}
+            >
+              {message.content}
+            </ReactMarkdown>
+          </div>
         </div>
 
-        <div className={cn("mt-2 text-[10px] font-medium opacity-60", isUser ? "text-right text-white" : "text-right text-slate-400")}>
-          {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        {/* Timestamp - subtle, below the bubble */}
+        <div
+          className={cn(
+            "mt-1.5 text-[11px] font-medium text-slate-400",
+            isUser ? "text-right pr-1" : "text-left pl-1"
+          )}
+        >
+          {message.timestamp.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
         </div>
       </div>
+
+      {/* User avatar placeholder for alignment (optional) */}
+      {isUser && <div className="flex-shrink-0 w-9 ml-3" />}
     </div>
   );
 };

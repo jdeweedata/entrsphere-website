@@ -1,29 +1,33 @@
+"use client";
 
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useAuth } from '@/contexts/AuthContext';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 const RegisterForm: React.FC = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { register } = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
+      toast.error("Passwords do not match");
       return;
     }
 
     if (password.length < 8) {
-      toast.error('Password must be at least 8 characters long');
+      toast.error("Password must be at least 8 characters long");
       return;
     }
 
@@ -31,10 +35,10 @@ const RegisterForm: React.FC = () => {
 
     try {
       await register(email, password, name);
-      toast.success('Registration successful!');
-      window.location.href = '/dashboard';
+      toast.success("Registration successful!");
+      router.push("/dashboard");
     } catch (error: any) {
-      toast.error(error.message || 'Registration failed');
+      toast.error(error.message || "Registration failed");
     } finally {
       setIsLoading(false);
     }
@@ -100,15 +104,15 @@ const RegisterForm: React.FC = () => {
           disabled={isLoading}
           className="w-full bg-slate-900 hover:bg-slate-800"
         >
-          {isLoading ? 'Creating account...' : 'Create Account'}
+          {isLoading ? "Creating account..." : "Create Account"}
         </Button>
 
         <div className="text-center">
           <p className="text-sm text-slate-600">
-            Already have an account?{' '}
-            <a href="/login" className="text-slate-900 hover:underline">
+            Already have an account?{" "}
+            <Link href="/login" className="text-slate-900 hover:underline">
               Login here
-            </a>
+            </Link>
           </p>
         </div>
       </form>

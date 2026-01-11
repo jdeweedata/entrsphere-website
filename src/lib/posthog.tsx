@@ -1,11 +1,13 @@
+"use client";
+
 import posthog from "posthog-js";
 import { PostHogProvider as PHProvider, usePostHog } from "posthog-js/react";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useEffect, Suspense } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 
-const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_API_KEY;
+const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_API_KEY;
 // Use reverse proxy in production to bypass ad blockers
-const POSTHOG_HOST = import.meta.env.VITE_POSTHOG_HOST || "/ingest";
+const POSTHOG_HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST || "/ingest";
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -29,20 +31,34 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
   return <PHProvider client={posthog}>{children}</PHProvider>;
 }
 
-// Track page views for SPA navigation
-export function PostHogPageView() {
-  const location = useLocation();
-  const posthog = usePostHog();
+// Inner component that uses useSearchParams (must be wrapped in Suspense)
+function PostHogPageViewInner() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const posthogClient = usePostHog();
 
   useEffect(() => {
-    if (posthog) {
-      posthog.capture("$pageview", {
-        $current_url: window.location.href,
+    if (posthogClient && pathname) {
+      let url = window.origin + pathname;
+      if (searchParams?.toString()) {
+        url = url + "?" + searchParams.toString();
+      }
+      posthogClient.capture("$pageview", {
+        $current_url: url,
       });
     }
-  }, [location, posthog]);
+  }, [pathname, searchParams, posthogClient]);
 
   return null;
+}
+
+// Track page views for SPA navigation
+export function PostHogPageView() {
+  return (
+    <Suspense fallback={null}>
+      <PostHogPageViewInner />
+    </Suspense>
+  );
 }
 
 export { posthog };

@@ -6,7 +6,7 @@ import { api } from "../../convex/_generated/api";
 import { DiscoverySession, DiscoveryRoute } from "@/types/discovery";
 
 // Initialize Convex client
-const convexUrl = import.meta.env.VITE_CONVEX_URL;
+const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
 const convex = convexUrl ? new ConvexHttpClient(convexUrl) : null;
 
 // Type for session data to save
@@ -101,16 +101,23 @@ export async function getDiscoveryStats(): Promise<{
 export async function getPatternInsights(): Promise<{
   hasEnoughData: boolean;
   sessionCount: number;
-  insights: string[];
+  insights?: string[];
   routeDistribution?: Record<string, number>;
+  message?: string;
 } | null> {
   if (!convex) {
     return null;
   }
 
   try {
-    const insights = await convex.query(api.discovery.getPatternInsights);
-    return insights;
+    const result = await convex.query(api.discovery.getPatternInsights);
+    return {
+      hasEnoughData: result.hasEnoughData,
+      sessionCount: result.sessionCount,
+      insights: result.insights,
+      routeDistribution: result.routeDistribution,
+      message: result.message,
+    };
   } catch (error) {
     console.error("Failed to get pattern insights:", error);
     return null;
@@ -123,7 +130,7 @@ export async function getPatternInsights(): Promise<{
 // Uses Anthropic's Claude API via Vercel serverless functions
 // Tiered model selection: Haiku 4.5 for standard, Opus 4.5 for complex
 
-const API_BASE = import.meta.env.VITE_API_URL || "";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
 
 interface ChatMessage {
   role: "user" | "assistant";

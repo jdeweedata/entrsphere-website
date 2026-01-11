@@ -1,5 +1,4 @@
-
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const Footer = () => {
   return (
@@ -8,38 +7,38 @@ const Footer = () => {
         <div className="border-t border-slate-200 pt-8">
           <nav className="flex items-center justify-center gap-8 mb-6">
             <Link
-              to="/solutions"
+              href="/solutions"
               className="text-slate-700 hover:text-slate-900 transition-all border-b-2 border-transparent hover:border-slate-800 pb-1"
             >
               Solutions
             </Link>
             <Link
-              to="/case-studies"
+              href="/case-studies"
               className="text-slate-700 hover:text-slate-900 transition-all border-b-2 border-transparent hover:border-slate-800 pb-1"
             >
               Case Studies
             </Link>
             <Link
-              to="/about"
+              href="/about"
               className="text-slate-700 hover:text-slate-900 transition-all border-b-2 border-transparent hover:border-slate-800 pb-1"
             >
               About
             </Link>
             <Link
-              to="/blog"
+              href="/blog"
               className="text-slate-700 hover:text-slate-900 transition-all border-b-2 border-transparent hover:border-slate-800 pb-1"
             >
               Blog
             </Link>
             <Link
-              to="/contact"
+              href="/contact"
               className="text-slate-700 hover:text-slate-900 transition-all border-b-2 border-transparent hover:border-slate-800 pb-1"
             >
               Contact
             </Link>
           </nav>
           <p className="text-slate-500 text-sm">
-            &copy; 2022 EntrSpere All rights reserved.
+            &copy; {new Date().getFullYear()} EntrSphere. All rights reserved.
           </p>
         </div>
       </div>

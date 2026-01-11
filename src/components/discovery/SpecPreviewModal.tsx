@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { SpecPreview, generateSpecPreview, saveSpecPreviewLead } from '@/services/discoveryService';
 import { DiscoveryRoute } from '@/types/discovery';
 import { FileCode, Lock, Sparkle, Check, SpinnerGap, ArrowRight, WarningCircle } from '@phosphor-icons/react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import posthog from 'posthog-js';
 
 interface ChatMessage {
@@ -258,7 +258,7 @@ const SpecPreviewModal = ({ isOpen, onClose, sessionId, route, signals, messages
                   Generate complete SPEC.json files with acceptance criteria, technical specs, and risk assessments.
                 </p>
                 <Button asChild variant="secondary" className="w-full bg-white text-[#112B58] hover:bg-blue-50 rounded-xl">
-                  <Link to="/solutions/discovery-router" onClick={handleClose}>
+                  <Link href="/solutions/discovery-router" onClick={handleClose}>
                     Unlock Full Toolkit
                     <ArrowRight weight="duotone" className="h-4 w-4 ml-2" />
                   </Link>
