@@ -10,11 +10,11 @@ const HeroSection = () => {
           {/* Left side - Text content */}
           <div className="max-w-2xl">
             <h1 className="text-5xl lg:text-6xl font-bold text-slate-900 leading-tight mb-6">
-              Turn your idea into a developer-ready spec in 30 minutes.
+              Deliver what your clients actually paid for.
             </h1>
 
             <p className="text-lg text-slate-600 mb-8">
-              Stop losing R20K+ per project on bad requirements. Our guided framework gives you clear specs—not a blank ChatGPT prompt.
+              Vague requirements → wrong product → disappointed clients. Our framework turns fuzzy ideas into specs so clear, developers build exactly what your clients need.
             </p>
 
             <div className="flex flex-wrap gap-4">

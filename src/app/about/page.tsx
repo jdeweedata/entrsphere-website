@@ -23,9 +23,9 @@ export const metadata: Metadata = {
 const values = [
   {
     icon: Target,
-    title: "Profit Protection",
+    title: "Client Results",
     description:
-      "Bad requirements cost you R20,000-R50,000 per project in rework. Our frameworks eliminate the guesswork that eats your margins.",
+      "Your clients hired you for results, not revisions. Clear specs mean developers build exactly what was promised—so your clients see ROI, not excuses.",
   },
   {
     icon: Lightning,
@@ -51,10 +51,10 @@ const audience = [
   {
     icon: Buildings,
     title: "Agency Owners",
-    pain: "Losing R20,000-R50,000 per project on free rework",
+    pain: "Clients disappointed because the delivered product missed the mark",
     description:
-      "You just had another project go over budget because a client changed their mind. You're tired of scope creep eating your margins. Our toolkit pays for itself by saving just one hour of senior developer time.",
-    trigger: "You're angry about the last project that went sideways.",
+      "When requirements are vague, developers build the wrong thing. Your clients expected one thing, got another, and now you're doing free rework to save the relationship. Clear specs mean happy clients who come back.",
+    trigger: "Your last client was disappointed with the initial delivery.",
     offer: "Discovery Router Toolkit (R850)",
   },
   {
@@ -207,7 +207,7 @@ export default function AboutPage() {
             </h2>
             <div className="bg-slate-900 text-white rounded-2xl p-8">
               <blockquote className="text-2xl font-medium mb-6">
-                "Don't sell organization. Sell profit protection."
+                "Don't just protect your margins. Enable your clients' success."
               </blockquote>
               <p className="text-slate-300 mb-6">
                 The real cost of bad requirements isn't just confusion-it's

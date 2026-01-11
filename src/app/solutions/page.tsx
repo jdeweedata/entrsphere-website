@@ -23,7 +23,7 @@ const solutions = [
   {
     title: "Discovery Router Toolkit",
     description:
-      "The complete framework to turn vague ideas into production-ready specs in 30 minutes. Templates, checklists, and SPEC.json output.",
+      "Turn vague ideas into specs so clear, your developers build exactly what your clients need—the first time.",
     price: "R850",
     priceUsd: "~$47",
     href: "/solutions/discovery-router",
@@ -41,11 +41,11 @@ export default function SolutionsPage() {
           {/* Hero Section */}
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
-              Turn Ideas into Specs That Developers Love
+              Build What Your Clients Actually Needed
             </h1>
             <p className="text-lg text-slate-600">
-              Stop losing money on unclear requirements. Start with our free
-              Discovery Agent, then get the full toolkit when you're ready.
+              When specs are clear, developers build the right thing. Your clients
+              get results. You get referrals.
             </p>
           </div>
 
