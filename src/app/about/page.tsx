@@ -15,9 +15,9 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 
 export const metadata: Metadata = {
-  title: "About EntrSphere - Stop Losing Money on Bad Requirements",
+  title: "About EntrSphere - Enable Your Clients' Success",
   description:
-    "EntrSphere helps agencies, founders, and product teams protect their profits by turning vague ideas into production-ready specs. No more expensive rework.",
+    "EntrSphere helps agencies and founders deliver what their clients actually need. Clear specs mean happy clients, referrals, and growth.",
 };
 
 const values = [

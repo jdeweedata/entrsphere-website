@@ -5,9 +5,9 @@ import Footer from "@/components/Footer";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 
 export const metadata: Metadata = {
-  title: "AI-Native Development Solutions - Frameworks, Templates & Consulting",
+  title: "Solutions - Build What Your Clients Actually Need",
   description:
-    "From discovery to deployment, we provide frameworks, templates, and expertise to build AI-powered products without chaos. Discovery Router Toolkit from R850.",
+    "Turn vague ideas into specs so clear, developers build exactly what your clients need. Free Discovery Agent + full toolkit from R850.",
 };
 
 const solutions = [

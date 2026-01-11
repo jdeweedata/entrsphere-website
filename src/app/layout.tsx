@@ -12,11 +12,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://entrsphere.com"),
   title: {
-    default: "EntrSphere | Protect Your Profits with AI-Native Development Frameworks",
+    default: "EntrSphere | Deliver What Your Clients Actually Need",
     template: "%s | EntrSphere",
   },
   description:
-    "Stop losing R20,000-R50,000 per project on rework. EntrSphere provides AI-native frameworks that turn vague ideas into production-ready specs. For agencies, founders, and product teams.",
+    "Turn vague ideas into specs so clear, developers build exactly what your clients need. EntrSphere helps agencies and founders deliver results that earn referrals.",
   keywords: [
     "AI development",
     "product requirements",
@@ -46,9 +46,9 @@ export const metadata: Metadata = {
     locale: "en_ZA",
     url: "https://entrsphere.com",
     siteName: "EntrSphere",
-    title: "EntrSphere | Protect Your Profits with AI-Native Development Frameworks",
+    title: "EntrSphere | Deliver What Your Clients Actually Need",
     description:
-      "Stop losing R20,000-R50,000 per project on rework. AI-native frameworks that turn vague ideas into production-ready specs.",
+      "Turn vague ideas into specs so clear, developers build exactly what your clients need. Deliver results that earn referrals.",
     images: [
       {
         url: "/og-image.png",
@@ -62,9 +62,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@entrsphere",
     creator: "@entrsphere",
-    title: "EntrSphere | Protect Your Profits with AI-Native Development Frameworks",
+    title: "EntrSphere | Deliver What Your Clients Actually Need",
     description:
-      "Stop losing R20,000-R50,000 per project on rework. AI-native frameworks that turn vague ideas into production-ready specs.",
+      "Turn vague ideas into specs so clear, developers build exactly what your clients need. Deliver results that earn referrals.",
     images: ["/og-image.png"],
   },
   icons: {
