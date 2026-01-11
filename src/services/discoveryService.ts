@@ -582,13 +582,44 @@ export async function checkFilesystemAgentAvailability(): Promise<{
 // ============================================
 
 /**
+ * Generate an outcome tracking token for a session
+ * Returns the token that can be used in follow-up emails
+ */
+export async function generateOutcomeToken(
+  sessionId: string
+): Promise<{ success: boolean; token?: string; error?: string }> {
+  if (!convex) {
+    return { success: false, error: "Convex not configured" };
+  }
+
+  try {
+    const result = await convex.mutation(api.outcomes.generateOutcomeToken, {
+      sessionId,
+    });
+    return { success: true, token: result.token };
+  } catch (error) {
+    console.error("Failed to generate outcome token:", error);
+    return { success: false, error: "Failed to generate token" };
+  }
+}
+
+/**
+ * Get the outcome tracking URL for a session
+ */
+export function getOutcomeUrl(token: string): string {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://entrsphere.com";
+  return `${baseUrl}/outcome/${token}`;
+}
+
+/**
  * Send discovery profile to user's email via Resend
  * This saves the session AND sends a branded email with the results
+ * Also generates outcome token for follow-up tracking
  */
 export async function sendDiscoveryProfile(
   email: string,
   session: DiscoverySession
-): Promise<{ success: boolean; message: string }> {
+): Promise<{ success: boolean; message: string; outcomeToken?: string }> {
   if (!convex) {
     console.warn("Convex not configured, cannot send email");
     return { success: false, message: "Email service not available" };
@@ -605,7 +636,21 @@ export async function sendDiscoveryProfile(
     return saveResult;
   }
 
+  // Generate outcome token for follow-up tracking
+  let outcomeToken: string | undefined;
+  try {
+    const tokenResult = await generateOutcomeToken(session.id);
+    if (tokenResult.success && tokenResult.token) {
+      outcomeToken = tokenResult.token;
+    }
+  } catch (error) {
+    console.error("Failed to generate outcome token:", error);
+    // Continue without token
+  }
+
   // Then send the email via Convex action
+  // Note: outcomeToken is generated but not yet included in email template
+  // TODO: Add outcome tracking link to follow-up emails
   try {
     const emailResult = await convex.action(api.discovery.sendDiscoveryEmail, {
       email,
@@ -627,12 +672,14 @@ export async function sendDiscoveryProfile(
       return {
         success: true,
         message: "Profile saved. Email delivery may be delayed.",
+        outcomeToken,
       };
     }
 
     return {
       success: true,
       message: "Profile sent to your email!",
+      outcomeToken,
     };
   } catch (error) {
     console.error("Failed to send discovery email:", error);
@@ -640,6 +687,7 @@ export async function sendDiscoveryProfile(
     return {
       success: true,
       message: "Profile saved. Email delivery may be delayed.",
+      outcomeToken,
     };
   }
 }

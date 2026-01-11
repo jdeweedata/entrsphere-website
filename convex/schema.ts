@@ -85,11 +85,37 @@ export default defineSchema({
 
     // Future: Full SPEC.json from Agent SDK sessions
     specJson: v.optional(v.any()),
+
+    // Outcome tracking (for MOAT data)
+    outcomeToken: v.optional(v.string()), // Unique token for outcome URL
+    outcome: v.optional(
+      v.union(
+        v.literal("shipped"),
+        v.literal("delayed"),
+        v.literal("failed"),
+        v.literal("paused"),
+        v.literal("ongoing")
+      )
+    ),
+    outcomeReportedAt: v.optional(v.number()),
+    outcomeNotes: v.optional(v.string()), // Optional context
+    timelineAccuracy: v.optional(v.number()), // Actual vs estimated (0-2x+)
+
+    // Progressive trust levels
+    contributedToBenchmarks: v.optional(v.boolean()),
+    industry: v.optional(v.string()), // e.g., "fintech", "saas", "ecommerce"
+    projectType: v.optional(v.string()), // e.g., "mvp", "integration", "redesign"
+
+    // Follow-up tracking
+    followUpEmailSentAt: v.optional(v.number()),
+    followUpReminderSentAt: v.optional(v.number()),
   })
     .index("by_sessionId", ["sessionId"])
     .index("by_email", ["email"])
     .index("by_route", ["route"])
-    .index("by_createdAt", ["createdAt"]),
+    .index("by_createdAt", ["createdAt"])
+    .index("by_outcomeToken", ["outcomeToken"])
+    .index("by_outcome", ["outcome"]),
 
   // Purchases - Discovery Router Toolkit payments
   purchases: defineTable({
@@ -138,4 +164,39 @@ export default defineSchema({
     .index("by_email", ["email"])
     .index("by_route", ["route"])
     .index("by_createdAt", ["createdAt"]),
+
+  // Route benchmarks - aggregate insights (computed periodically)
+  routeBenchmarks: defineTable({
+    route: v.union(
+      v.literal("A"),
+      v.literal("B"),
+      v.literal("C"),
+      v.literal("D")
+    ),
+    industry: v.optional(v.string()), // null = all industries
+
+    // Aggregate stats
+    totalSessions: v.number(),
+    totalWithOutcomes: v.number(),
+
+    // Outcome distribution
+    outcomeStats: v.object({
+      shipped: v.number(),
+      delayed: v.number(),
+      failed: v.number(),
+      paused: v.number(),
+      ongoing: v.number(),
+    }),
+
+    // Computed insights
+    successRate: v.number(), // shipped / (shipped + failed)
+    avgTimelineAccuracy: v.optional(v.number()),
+    topRiskFactors: v.optional(v.array(v.string())),
+    avgDurationSeconds: v.optional(v.number()),
+
+    // Metadata
+    lastComputedAt: v.number(),
+  })
+    .index("by_route", ["route"])
+    .index("by_route_industry", ["route", "industry"]),
 });

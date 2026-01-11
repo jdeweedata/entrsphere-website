@@ -9,6 +9,8 @@ import {
   Lightbulb,
   Clock,
   ArrowRight,
+  ChartBar,
+  Lock,
 } from '@phosphor-icons/react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -95,6 +97,41 @@ const RouteResult = ({ route, answers }: RouteResultProps) => {
             </li>
           ))}
         </ul>
+      </div>
+
+      {/* Locked Benchmarks Preview (Glassdoor model) */}
+      <div className="bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 rounded-xl p-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/50 to-transparent pointer-events-none z-10" />
+        <div className="relative">
+          <h4 className="font-semibold text-slate-900 mb-3 flex items-center gap-2">
+            <ChartBar weight="duotone" className="h-4 w-4 text-blue-500" />
+            Community Benchmarks
+            <Lock weight="bold" className="h-3 w-3 text-slate-400 ml-auto" />
+          </h4>
+          <div className="space-y-3 text-sm">
+            <div className="flex justify-between items-center">
+              <span className="text-slate-600">Success rate for Route {route}:</span>
+              <span className="font-mono text-slate-400 blur-[3px] select-none">78%</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-slate-600">Avg. timeline accuracy:</span>
+              <span className="font-mono text-slate-400 blur-[3px] select-none">1.4x</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-slate-600">Top risk factor:</span>
+              <span className="font-mono text-slate-400 blur-[3px] select-none">Scope creep</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-slate-600">Projects tracked:</span>
+              <span className="font-mono text-slate-400 blur-[3px] select-none">127</span>
+            </div>
+          </div>
+        </div>
+        <div className="relative z-20 mt-4 pt-3 border-t border-slate-200">
+          <p className="text-xs text-slate-600 text-center">
+            <span className="font-medium">Unlock benchmarks:</span> Share your project outcome in 30 days
+          </p>
+        </div>
       </div>
 
       {/* CTA */}
