@@ -15,7 +15,11 @@ if (typeof window !== "undefined" && convexUrl) {
   convexClient = new ConvexReactClient(convexUrl);
 }
 
-export function ClientProviders() {
+interface ClientProvidersProps {
+  children?: React.ReactNode;
+}
+
+export function ClientProviders({ children }: ClientProvidersProps) {
   const [mounted, setMounted] = useState(false);
   const [queryClient] = useState(
     () =>
@@ -33,20 +37,21 @@ export function ClientProviders() {
     setMounted(true);
   }, []);
 
-  if (!mounted) return null;
-
+  // Show children immediately but without Convex context until mounted
   const content = (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <TooltipProvider>
           <Toaster />
           <Sonner />
+          {children}
         </TooltipProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
 
-  if (convexClient) {
+  // Only wrap with ConvexProvider after client-side mount
+  if (mounted && convexClient) {
     return <ConvexProvider client={convexClient}>{content}</ConvexProvider>;
   }
 

@@ -100,13 +100,13 @@ const RouteResult = ({ route, answers }: RouteResultProps) => {
       {/* CTA */}
       <div className="pt-2">
         <Button asChild className="w-full bg-slate-900 hover:bg-slate-800">
-          <Link href="/solutions/discovery-router">
-            Get Full Discovery Toolkit
+          <Link href={`/solutions/discovery-router?route=${route}`}>
+            Unlock Full Discovery Session
             <ArrowRight weight="duotone" className="ml-2 h-4 w-4" />
           </Link>
         </Button>
         <p className="text-xs text-slate-500 text-center mt-2">
-          Generate production-ready SPEC.json in 30 minutes
+          R850 - AI-guided deep dive + production-ready SPEC.json
         </p>
       </div>
     </div>

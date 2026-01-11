@@ -130,8 +130,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
-        {children}
-        <ClientProviders />
+        <ClientProviders>{children}</ClientProviders>
       </body>
     </html>
   );
