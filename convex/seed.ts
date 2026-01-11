@@ -85,7 +85,7 @@ Ready to accelerate your development process? [Contact us](/contact) to learn ho
     tags: ["ai-agents", "productivity", "development", "automation"],
     author: {
       name: "Jeffrey De Wee",
-      avatar: "/images/jeffrey-dewee.jpg",
+      avatar: "https://ui-avatars.com/api/?name=Jeffrey+De+Wee&background=3B82F6&color=fff&size=128",
       bio: "Founder of EntrSphere. Building AI-powered tools for solopreneurs and SMBs.",
     },
     readTime: 6,
@@ -199,7 +199,7 @@ The Discovery Router isn't just a framework—it's a mindset shift. Every hour s
     tags: ["product-management", "discovery", "validation", "frameworks"],
     author: {
       name: "Jeffrey De Wee",
-      avatar: "/images/jeffrey-dewee.jpg",
+      avatar: "https://ui-avatars.com/api/?name=Jeffrey+De+Wee&background=3B82F6&color=fff&size=128",
       bio: "Founder of EntrSphere. Building AI-powered tools for solopreneurs and SMBs.",
     },
     readTime: 8,
@@ -421,7 +421,7 @@ Need help setting this up? [Schedule a consultation](/solutions/consulting) with
     tags: ["cicd", "github-actions", "automation", "devops", "claude"],
     author: {
       name: "Jeffrey De Wee",
-      avatar: "/images/jeffrey-dewee.jpg",
+      avatar: "https://ui-avatars.com/api/?name=Jeffrey+De+Wee&background=3B82F6&color=fff&size=128",
       bio: "Founder of EntrSphere. Building AI-powered tools for solopreneurs and SMBs.",
     },
     readTime: 12,
@@ -612,7 +612,7 @@ The teams that succeed aren't smarter or better funded. They're more disciplined
     tags: ["project-management", "requirements", "success-rates", "research", "discovery"],
     author: {
       name: "Jeffrey De Wee",
-      avatar: "/images/jeffrey-dewee.jpg",
+      avatar: "https://ui-avatars.com/api/?name=Jeffrey+De+Wee&background=3B82F6&color=fff&size=128",
       bio: "Founder of EntrSphere. Building AI-powered tools that help teams deliver what clients actually need.",
     },
     readTime: 8,
@@ -809,7 +809,7 @@ If the answer is "no" to any of these, you're carrying hidden risk on every proj
     tags: ["case-study", "requirements", "agency", "project-management", "cost-analysis"],
     author: {
       name: "Jeffrey De Wee",
-      avatar: "/images/jeffrey-dewee.jpg",
+      avatar: "https://ui-avatars.com/api/?name=Jeffrey+De+Wee&background=3B82F6&color=fff&size=128",
       bio: "Founder of EntrSphere. Building AI-powered tools that help teams deliver what clients actually need.",
     },
     readTime: 10,
@@ -1086,7 +1086,7 @@ Stop building from vague briefs. Start building from SPEC.json.
     tags: ["spec-json", "requirements", "ai-automation", "tutorial", "discovery"],
     author: {
       name: "Jeffrey De Wee",
-      avatar: "/images/jeffrey-dewee.jpg",
+      avatar: "https://ui-avatars.com/api/?name=Jeffrey+De+Wee&background=3B82F6&color=fff&size=128",
       bio: "Founder of EntrSphere. Building AI-powered tools that help teams deliver what clients actually need.",
     },
     readTime: 9,
@@ -1347,7 +1347,7 @@ The best time to do discovery is before development. The second best time is now
     tags: ["discovery", "project-management", "risk-assessment", "planning", "stakeholders"],
     author: {
       name: "Jeffrey De Wee",
-      avatar: "/images/jeffrey-dewee.jpg",
+      avatar: "https://ui-avatars.com/api/?name=Jeffrey+De+Wee&background=3B82F6&color=fff&size=128",
       bio: "Founder of EntrSphere. Building AI-powered tools that help teams deliver what clients actually need.",
     },
     readTime: 7,
@@ -1590,7 +1590,7 @@ Every discovery session you run helps build this dataset. Every outcome you repo
     tags: ["data-moat", "outcome-tracking", "machine-learning", "competitive-advantage", "analytics"],
     author: {
       name: "Jeffrey De Wee",
-      avatar: "/images/jeffrey-dewee.jpg",
+      avatar: "https://ui-avatars.com/api/?name=Jeffrey+De+Wee&background=3B82F6&color=fff&size=128",
       bio: "Founder of EntrSphere. Building AI-powered tools that help teams deliver what clients actually need.",
     },
     readTime: 11,
@@ -1666,5 +1666,27 @@ export const updateEditorialCoverImages = mutation({
     }
 
     return { message: "Cover images updated", count: updated };
+  },
+});
+
+// Update author avatars for all posts
+export const updateAuthorAvatars = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const newAvatar = "https://ui-avatars.com/api/?name=Jeffrey+De+Wee&background=3B82F6&color=fff&size=128";
+    const posts = await ctx.db.query("posts").collect();
+
+    let updated = 0;
+    for (const post of posts) {
+      if (post.author?.avatar !== newAvatar) {
+        await ctx.db.patch(post._id, {
+          author: { ...post.author, avatar: newAvatar },
+          updatedAt: Date.now()
+        });
+        updated++;
+      }
+    }
+
+    return { message: "Author avatars updated", count: updated };
   },
 });

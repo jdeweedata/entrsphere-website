@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "appwrite.entrsphere.com",
       },
+      {
+        protocol: "https",
+        hostname: "ui-avatars.com",
+      },
     ],
   },
 
