@@ -199,4 +199,51 @@ export default defineSchema({
   })
     .index("by_route", ["route"])
     .index("by_route_industry", ["route", "industry"]),
+
+  // Conversations - per-message persistence for latent demand discovery
+  // Every message, tool call, and result is stored for analysis
+  conversations: defineTable({
+    sessionId: v.string(),
+    timestamp: v.number(),
+
+    // The signal
+    role: v.union(
+      v.literal("user"),
+      v.literal("assistant"),
+      v.literal("tool_call"),
+      v.literal("tool_result")
+    ),
+    content: v.string(),
+
+    // Context for analysis
+    toolName: v.optional(v.string()), // Which primitive was invoked
+    toolSuccess: v.optional(v.boolean()), // Did it work
+    flowStage: v.optional(
+      v.union(
+        v.literal("routing"), // 5-question guided flow
+        v.literal("discovery"), // Full agent discovery session
+        v.literal("post_spec"), // After SPEC generated - KEY SIGNAL
+        v.literal("ask_anything"), // Unguided requests - PURE SIGNAL
+        v.literal("refinement") // Iterating on SPEC
+      )
+    ),
+
+    // Optional: route context for segmented analysis
+    route: v.optional(
+      v.union(
+        v.literal("A"),
+        v.literal("B"),
+        v.literal("C"),
+        v.literal("D")
+      )
+    ),
+
+    // For failed tool calls - what went wrong
+    errorMessage: v.optional(v.string()),
+  })
+    .index("by_sessionId", ["sessionId"])
+    .index("by_timestamp", ["timestamp"])
+    .index("by_flowStage", ["flowStage"])
+    .index("by_role_flowStage", ["role", "flowStage"]) // user + post_spec = primitive roadmap
+    .index("by_toolSuccess", ["toolSuccess"]), // false = capability gaps
 });

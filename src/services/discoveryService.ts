@@ -520,7 +520,8 @@ export async function sendFilesystemAgentMessage(
   messages: ChatMessage[],
   sessionId: string,
   route: DiscoveryRoute,
-  signals: { A: number; B: number; C: number; D: number }
+  signals: { A: number; B: number; C: number; D: number },
+  flowStage?: "routing" | "discovery" | "post_spec" | "ask_anything" | "refinement"
 ): Promise<FilesystemAgentResponse> {
   // Filter out any messages with empty content (causes API errors)
   const validMessages = messages.filter(
@@ -541,6 +542,7 @@ export async function sendFilesystemAgentMessage(
       sessionId,
       route,
       signals,
+      flowStage,
     }),
   });
 

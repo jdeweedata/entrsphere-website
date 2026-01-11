@@ -9,6 +9,7 @@
  */
 
 import type * as contacts from "../contacts.js";
+import type * as conversations from "../conversations.js";
 import type * as discovery from "../discovery.js";
 import type * as outcomes from "../outcomes.js";
 import type * as payments from "../payments.js";
@@ -24,6 +25,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   contacts: typeof contacts;
+  conversations: typeof conversations;
   discovery: typeof discovery;
   outcomes: typeof outcomes;
   payments: typeof payments;

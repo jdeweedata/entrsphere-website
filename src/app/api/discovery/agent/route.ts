@@ -4,11 +4,50 @@ import * as fs from "fs/promises";
 import * as path from "path";
 import { MODELS } from "../_lib/model-selector";
 import { FILESYSTEM_AGENT_PROMPT } from "../_lib/prompts";
+import { ConvexHttpClient } from "convex/browser";
+import { api } from "../../../../../convex/_generated/api";
 
 // Initialize Anthropic client
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
+
+// Initialize Convex client for conversation logging
+const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
+const convex = convexUrl ? new ConvexHttpClient(convexUrl) : null;
+
+// Flow stages for latent demand analysis
+type FlowStage = "routing" | "discovery" | "post_spec" | "ask_anything" | "refinement";
+
+// Log a message to Convex (fire and forget - don't block on this)
+async function logConversation(
+  sessionId: string,
+  role: "user" | "assistant" | "tool_call" | "tool_result",
+  content: string,
+  flowStage?: FlowStage,
+  route?: "A" | "B" | "C" | "D" | null,
+  toolName?: string,
+  toolSuccess?: boolean,
+  errorMessage?: string
+): Promise<void> {
+  if (!convex) return;
+
+  try {
+    await convex.mutation(api.conversations.logMessage, {
+      sessionId,
+      role,
+      content: content.slice(0, 10000), // Limit content size
+      flowStage,
+      route: route || undefined,
+      toolName,
+      toolSuccess,
+      errorMessage,
+    });
+  } catch (error) {
+    // Don't fail the request if logging fails
+    console.error("Failed to log conversation:", error);
+  }
+}
 
 // Filesystem root for the discovery agent (sandboxed)
 const FS_ROOT = path.join(process.cwd(), "discovery-fs");
@@ -275,6 +314,7 @@ interface RequestBody {
   sessionId: string;
   route?: "A" | "B" | "C" | "D" | null;
   signals?: { A: number; B: number; C: number; D: number };
+  flowStage?: FlowStage;
 }
 
 // Preload playbook content based on route to reduce tool calls
@@ -337,12 +377,24 @@ export async function POST(request: NextRequest) {
 
   try {
     const body: RequestBody = await request.json();
-    const { messages, sessionId, route, signals } = body;
+    const { messages, sessionId, route, signals, flowStage } = body;
 
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json(
         { error: "Messages array required" },
         { status: 400 }
+      );
+    }
+
+    // Log incoming user message (fire and forget - don't await)
+    const lastUserMessage = messages[messages.length - 1];
+    if (lastUserMessage?.role === "user") {
+      logConversation(
+        sessionId,
+        "user",
+        lastUserMessage.content,
+        flowStage,
+        route
       );
     }
 
@@ -405,10 +457,36 @@ export async function POST(request: NextRequest) {
         const toolResults: Anthropic.ToolResultBlockParam[] = [];
 
         for (const toolUse of toolUseBlocks) {
+          // Log tool call
+          logConversation(
+            sessionId,
+            "tool_call",
+            JSON.stringify({ name: toolUse.name, input: toolUse.input }),
+            flowStage,
+            route,
+            toolUse.name
+          );
+
           const result = await processToolCall(
             toolUse.name,
             toolUse.input as Record<string, unknown>
           );
+
+          // Determine if tool succeeded (no "Error:" prefix in result)
+          const toolSuccess = !result.startsWith("Error:");
+
+          // Log tool result
+          logConversation(
+            sessionId,
+            "tool_result",
+            result.slice(0, 5000), // Limit result size
+            flowStage,
+            route,
+            toolUse.name,
+            toolSuccess,
+            toolSuccess ? undefined : result
+          );
+
           toolResults.push({
             type: "tool_result",
             tool_use_id: toolUse.id,
@@ -440,6 +518,15 @@ export async function POST(request: NextRequest) {
     if (!finalText || !finalText.trim()) {
       finalText = "I'm processing your request. Please continue with your next question or provide more details.";
     }
+
+    // Log assistant response (fire and forget)
+    logConversation(
+      sessionId,
+      "assistant",
+      finalText,
+      flowStage,
+      route
+    );
 
     return NextResponse.json({
       content: finalText,

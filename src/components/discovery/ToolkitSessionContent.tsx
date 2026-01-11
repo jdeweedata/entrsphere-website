@@ -21,6 +21,7 @@ import {
   CheckCircle,
   LockKey,
   Sparkle,
+  ChatCircleDots,
 } from "@phosphor-icons/react";
 import posthog from "posthog-js";
 
@@ -60,6 +61,7 @@ export default function ToolkitSessionContent() {
   const [tokenUsage, setTokenUsage] = useState({ input: 0, output: 0 });
   const [generatedSpec, setGeneratedSpec] = useState<object | null>(null);
   const [isGeneratingSpec, setIsGeneratingSpec] = useState(false);
+  const [isAskAnythingMode, setIsAskAnythingMode] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -207,11 +209,17 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
     setIsLoading(true);
 
     try {
+      // Determine flow stage based on current state
+      const flowStage = isAskAnythingMode ? "ask_anything" as const
+        : generatedSpec ? "post_spec" as const
+        : "discovery" as const;
+
       const response = await sendFilesystemAgentMessage(
         newAiMessages,
         sessionId,
         detectedRoute,
-        signals
+        signals,
+        flowStage
       );
 
       const aiMsg = createMessage("assistant", response.content);
@@ -476,13 +484,35 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
               <pre className="bg-white border border-green-100 rounded-lg p-4 text-xs overflow-auto max-h-64 text-slate-700">
                 {JSON.stringify(generatedSpec, null, 2)}
               </pre>
-              <Button
-                onClick={handleDownloadSpec}
-                className="mt-4 bg-green-600 hover:bg-green-700 text-white"
-              >
-                <Download className="h-4 w-4 mr-2" />
-                Download SPEC.json
-              </Button>
+              <div className="flex flex-wrap gap-3 mt-4">
+                <Button
+                  onClick={handleDownloadSpec}
+                  className="bg-green-600 hover:bg-green-700 text-white"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Download SPEC.json
+                </Button>
+                {!isAskAnythingMode && (
+                  <Button
+                    onClick={() => {
+                      setIsAskAnythingMode(true);
+                      posthog.capture("toolkit_ask_anything_started", { sessionId, route: detectedRoute });
+                      inputRef.current?.focus();
+                    }}
+                    variant="outline"
+                    className="border-slate-300 hover:bg-slate-100"
+                  >
+                    <ChatCircleDots className="h-4 w-4 mr-2" />
+                    Have questions? Ask anything
+                  </Button>
+                )}
+              </div>
+              {isAskAnythingMode && (
+                <p className="text-sm text-green-700 mt-3 flex items-center gap-2">
+                  <ChatCircleDots className="h-4 w-4" />
+                  Ask anything about your SPEC, project approach, or next steps
+                </p>
+              )}
             </div>
           )}
         </div>
@@ -497,7 +527,7 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Describe your requirements..."
+              placeholder={isAskAnythingMode ? "Ask anything about your SPEC..." : "Describe your requirements..."}
               disabled={isLoading}
               className="flex-1 h-12"
             />
