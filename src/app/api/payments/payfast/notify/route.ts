@@ -5,11 +5,16 @@ import {
   PayFastITNData,
   validateITNSignature,
   verifyPaymentWithPayFast,
-  isValidPayFastHost,
-  parsePayFastAmount,
 } from "@/lib/payfast";
 
-const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+// Lazy initialization of Convex client to avoid build-time errors
+function getConvexClient() {
+  const url = process.env.NEXT_PUBLIC_CONVEX_URL;
+  if (!url) {
+    throw new Error("NEXT_PUBLIC_CONVEX_URL is not configured");
+  }
+  return new ConvexHttpClient(url);
+}
 
 /**
  * PayFast ITN (Instant Transaction Notification) Handler
@@ -94,6 +99,7 @@ export async function POST(request: NextRequest) {
 
     // Step 5: Update purchase in Convex
     try {
+      const convex = getConvexClient();
       await convex.mutation(api.payments.verifyPayFastPurchase, {
         reference,
         status,

@@ -6,7 +6,14 @@ import {
   formatAmountForPayFast,
 } from "@/lib/payfast";
 
-const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+// Lazy initialization of Convex client to avoid build-time errors
+function getConvexClient() {
+  const url = process.env.NEXT_PUBLIC_CONVEX_URL;
+  if (!url) {
+    throw new Error("NEXT_PUBLIC_CONVEX_URL is not configured");
+  }
+  return new ConvexHttpClient(url);
+}
 
 export interface InitiatePaymentRequest {
   email: string;
@@ -70,6 +77,7 @@ export async function POST(request: NextRequest) {
     );
 
     // Create pending purchase in Convex
+    const convex = getConvexClient();
     await convex.mutation(api.payments.createPurchase, {
       email,
       sessionId,
