@@ -111,7 +111,7 @@ export default function DiscoveryRouterPage() {
             {/* Trust indicators */}
             <div className="mt-12 text-center">
               <p className="text-sm text-slate-500">
-                Secure payment via Paystack. Instant access after purchase.
+                Secure payment via Payfast. Instant access after purchase.
               </p>
             </div>
           </div>

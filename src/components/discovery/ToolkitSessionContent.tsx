@@ -8,7 +8,7 @@ import { ChatMessage as ChatMessageType, DiscoveryRoute, ROUTES } from "@/types/
 import { sendFilesystemAgentMessage } from "@/services/discoveryService";
 import ChatMessage from "./ChatMessage";
 import TypingIndicator from "./TypingIndicator";
-import PaystackButton from "@/components/payments/PaystackButton";
+import PayFastButton from "@/components/payments/PayFastButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -387,18 +387,17 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
                   className="mb-4"
                 />
 
-                <PaystackButton
+                <PayFastButton
                   email={email}
                   sessionId={freeSessionId || sessionId}
-                  route={routeParam || undefined}
                   onSuccess={handlePaymentSuccess}
                   className="w-full bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl font-medium"
                 >
                   Get Instant Access
-                </PaystackButton>
+                </PayFastButton>
 
                 <p className="text-xs text-slate-500 text-center mt-4">
-                  Secure payment via Paystack. One-time purchase.
+                  Secure payment via Payfast. One-time purchase.
                 </p>
               </div>
             </div>

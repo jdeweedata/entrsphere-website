@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, Lightning, Sparkle } from "@phosphor-icons/react";
-import PaystackButton from "@/components/payments/PaystackButton";
+import PayFastButton from "@/components/payments/PayFastButton";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 
@@ -118,17 +118,16 @@ export default function DiscoveryRouterCTA() {
 
       {/* Payment Button */}
       <div className="text-center">
-        <PaystackButton
+        <PayFastButton
           email={email}
           sessionId={sessionId}
-          route={selectedRoute || undefined}
           onSuccess={handlePaymentSuccess}
           disabled={!isValidEmail}
           className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 rounded-lg font-medium text-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Lightning weight="fill" className="h-5 w-5" />
           Get Instant Access - R850
-        </PaystackButton>
+        </PayFastButton>
         <p className="text-slate-500 text-sm mt-4">
           Start your deep-dive session immediately after payment
         </p>
