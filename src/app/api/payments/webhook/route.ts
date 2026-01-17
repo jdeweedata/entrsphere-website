@@ -3,7 +3,14 @@ import { ConvexHttpClient } from "convex/browser";
 import { api } from "../../../../../convex/_generated/api";
 import crypto from "crypto";
 
-const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+// Lazy initialization of Convex client to avoid build-time errors
+function getConvexClient() {
+  const url = process.env.NEXT_PUBLIC_CONVEX_URL;
+  if (!url) {
+    throw new Error("NEXT_PUBLIC_CONVEX_URL is not configured");
+  }
+  return new ConvexHttpClient(url);
+}
 
 // Paystack webhook handler
 export async function POST(request: NextRequest) {
@@ -37,6 +44,7 @@ export async function POST(request: NextRequest) {
     console.log("Paystack webhook received:", event);
 
     // Handle different event types
+    const convex = getConvexClient();
     switch (event) {
       case "charge.success": {
         const reference = data.reference;
