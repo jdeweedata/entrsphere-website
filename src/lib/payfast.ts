@@ -154,33 +154,43 @@ export function generatePayFastSignature(
 }
 
 /**
- * Validate ITN signature from PayFast
+ * Validate ITN signature from PayFast using raw body to preserve parameter order
  */
 export function validateITNSignature(
   data: PayFastITNData,
-  passphrase?: string
+  passphrase?: string,
+  rawBody?: string
 ): boolean {
   const receivedSignature = data.signature;
   if (!receivedSignature) {
     return false;
   }
 
-  // Create a copy without the signature
-  const dataWithoutSignature = { ...data };
-  delete dataWithoutSignature.signature;
+  let signatureString: string;
 
-  // Build signature string from received data (in the order received)
-  const params: string[] = [];
+  if (rawBody) {
+    // Use raw body to preserve exact parameter order from PayFast
+    // Remove the signature parameter from the raw body
+    const paramsArray = rawBody.split("&");
+    const filteredParams = paramsArray.filter(
+      (param) => !param.startsWith("signature=")
+    );
+    signatureString = filteredParams.join("&");
+  } else {
+    // Fallback: Build signature string from data object
+    const dataWithoutSignature = { ...data };
+    delete dataWithoutSignature.signature;
 
-  for (const [key, value] of Object.entries(dataWithoutSignature)) {
-    if (value !== undefined && value !== null && value !== "") {
-      const encodedValue = encodeURIComponent(value.toString())
-        .replace(/%20/g, "+");
-      params.push(`${key}=${encodedValue}`);
+    const params: string[] = [];
+    for (const [key, value] of Object.entries(dataWithoutSignature)) {
+      if (value !== undefined && value !== null && value !== "") {
+        const encodedValue = encodeURIComponent(value.toString())
+          .replace(/%20/g, "+");
+        params.push(`${key}=${encodedValue}`);
+      }
     }
+    signatureString = params.join("&");
   }
-
-  let signatureString = params.join("&");
 
   // Append passphrase if provided
   if (passphrase && passphrase.trim() !== "") {

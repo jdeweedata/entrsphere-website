@@ -66,9 +66,9 @@ export async function POST(request: NextRequest) {
     // In production, you might want to verify the IP or host
     // For now, we'll skip this check as it's optional
 
-    // Step 1: Verify signature
+    // Step 1: Verify signature (pass rawBody to preserve parameter order)
     const passphrase = process.env.PAYFAST_PASSPHRASE;
-    if (!validateITNSignature(itnData, passphrase)) {
+    if (!validateITNSignature(itnData, passphrase, rawBody)) {
       console.error("PayFast ITN signature validation failed");
       // Don't reveal signature failure to potential attackers
       return new NextResponse("OK", { status: 200 });
