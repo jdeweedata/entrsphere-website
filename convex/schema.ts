@@ -121,7 +121,7 @@ export default defineSchema({
   purchases: defineTable({
     email: v.string(),
     sessionId: v.optional(v.string()), // Links to discovery session if from /discovery flow
-    reference: v.string(), // Paystack payment reference
+    reference: v.string(), // Payment reference (Paystack or PayFast)
     amount: v.number(), // Amount in kobo/cents
     currency: v.string(), // ZAR
     status: v.union(
@@ -130,7 +130,9 @@ export default defineSchema({
       v.literal("failed")
     ),
     product: v.string(), // "discovery-router-toolkit"
+    provider: v.optional(v.union(v.literal("paystack"), v.literal("payfast"))), // Payment provider
     paystackData: v.optional(v.any()), // Full Paystack response
+    payfastData: v.optional(v.any()), // Full PayFast response
     createdAt: v.number(),
     verifiedAt: v.optional(v.number()),
   })

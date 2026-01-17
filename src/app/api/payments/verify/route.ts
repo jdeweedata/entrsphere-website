@@ -2,7 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "../../../../../convex/_generated/api";
 
-const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+// Lazy initialization of Convex client to avoid build-time errors
+function getConvexClient() {
+  const url = process.env.NEXT_PUBLIC_CONVEX_URL;
+  if (!url) {
+    throw new Error("NEXT_PUBLIC_CONVEX_URL is not configured");
+  }
+  return new ConvexHttpClient(url);
+}
 
 // Paystack verification endpoint
 const PAYSTACK_VERIFY_URL = "https://api.paystack.co/transaction/verify";
@@ -42,6 +49,7 @@ export async function POST(request: NextRequest) {
     const isSuccess = paystackData.data?.status === "success";
 
     // Update purchase in Convex
+    const convex = getConvexClient();
     const result = await convex.mutation(api.payments.verifyPurchase, {
       reference,
       status: isSuccess ? "success" : "failed",
