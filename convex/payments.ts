@@ -10,6 +10,7 @@ export const createPurchase = mutation({
     amount: v.number(),
     currency: v.string(),
     product: v.string(),
+    provider: v.optional(v.union(v.literal("paystack"), v.literal("payfast"))),
   },
   handler: async (ctx, args) => {
     const purchaseId = await ctx.db.insert("purchases", {
@@ -20,6 +21,7 @@ export const createPurchase = mutation({
       currency: args.currency,
       status: "pending",
       product: args.product,
+      provider: args.provider || "paystack", // Default to paystack for backward compatibility
       createdAt: Date.now(),
     });
     return purchaseId;
@@ -51,6 +53,43 @@ export const verifyPurchase = mutation({
     await ctx.db.patch(purchase._id, {
       status: args.status,
       paystackData: args.paystackData,
+      verifiedAt: Date.now(),
+    });
+
+    return {
+      success: args.status === "success",
+      purchaseId: purchase._id,
+      email: purchase.email,
+      sessionId: purchase.sessionId,
+    };
+  },
+});
+
+// Verify and update PayFast purchase status
+export const verifyPayFastPurchase = mutation({
+  args: {
+    reference: v.string(),
+    status: v.union(
+      v.literal("success"),
+      v.literal("failed")
+    ),
+    payfastData: v.optional(v.any()),
+  },
+  handler: async (ctx, args) => {
+    // Find purchase by reference
+    const purchase = await ctx.db
+      .query("purchases")
+      .withIndex("by_reference", (q) => q.eq("reference", args.reference))
+      .first();
+
+    if (!purchase) {
+      throw new Error("Purchase not found");
+    }
+
+    // Update the purchase
+    await ctx.db.patch(purchase._id, {
+      status: args.status,
+      payfastData: args.payfastData,
       verifiedAt: Date.now(),
     });
 
