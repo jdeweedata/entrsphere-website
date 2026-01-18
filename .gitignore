@@ -33,3 +33,10 @@ out/
 .playwright-mcp/
 .vercel
 discovery-fs/sessions/
+
+# Build artifacts
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# Windows artifacts
+nul
