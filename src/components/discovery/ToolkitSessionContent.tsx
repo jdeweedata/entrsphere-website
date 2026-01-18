@@ -8,6 +8,7 @@ import { ChatMessage as ChatMessageType, DiscoveryRoute, ROUTES } from "@/types/
 import { sendFilesystemAgentMessage } from "@/services/discoveryService";
 import ChatMessage from "./ChatMessage";
 import TypingIndicator from "./TypingIndicator";
+import DiscoveryCanvas from "./DiscoveryCanvas";
 import PayFastButton from "@/components/payments/PayFastButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +23,7 @@ import {
   LockKey,
   Sparkle,
   ChatCircleDots,
+  ArrowDown,
 } from "@phosphor-icons/react";
 import posthog from "posthog-js";
 import { cn } from "@/lib/utils";
@@ -64,6 +66,9 @@ export default function ToolkitSessionContent() {
   const [isGeneratingSpec, setIsGeneratingSpec] = useState(false);
   const [isAskAnythingMode, setIsAskAnythingMode] = useState(false);
 
+  // UX State
+  const [showScrollButton, setShowScrollButton] = useState(false);
+
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const hasStarted = useRef(false);
@@ -100,12 +105,59 @@ export default function ToolkitSessionContent() {
     router.push(`/solutions/discovery-router/session?reference=${reference}&route=${detectedRoute || ""}`);
   };
 
-  // Scroll to bottom
+  // Auto-scroll to bottom on new messages
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
+    scrollToBottom();
   }, [messages, isLoading]);
+
+  // Handle manual scroll visibility
+  const handleScroll = useCallback(() => {
+    if (!scrollRef.current) return;
+    const viewport = scrollRef.current.querySelector('[data-radix-scroll-area-viewport]') as HTMLElement;
+    if (!viewport) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = viewport;
+    const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
+    setShowScrollButton(!isNearBottom);
+  }, []);
+
+  // Attach scroll listener
+  useEffect(() => {
+    const scrollViewport = scrollRef.current?.querySelector('[data-radix-scroll-area-viewport]');
+    if (scrollViewport) {
+      scrollViewport.addEventListener('scroll', handleScroll);
+      return () => scrollViewport.removeEventListener('scroll', handleScroll);
+    }
+  }, [handleScroll, isPaid]); // Re-attach when paid view loads
+
+  const scrollToBottom = () => {
+    const viewport = scrollRef.current?.querySelector('[data-radix-scroll-area-viewport]');
+    viewport?.scrollTo({
+      top: viewport.scrollHeight,
+      behavior: 'smooth'
+    });
+  };
+
+  // Focus shortcut (/)
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      // Only trigger if not already focused on an input/textarea
+      if (e.key === "/" && document.activeElement !== inputRef.current && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleGlobalKeyDown);
+    return () => window.removeEventListener("keydown", handleGlobalKeyDown);
+  }, []);
+
+  // Restart session
+  const handleRestart = () => {
+    if (confirm("Are you sure you want to restart? Current progress will be lost.")) {
+      // Reloading ensures clean state and re-triggers initial message
+      window.location.reload();
+    }
+  };
 
   // Create message object
   const createMessage = (role: "user" | "assistant", content: string): ChatMessageType => ({
@@ -157,7 +209,8 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
       console.error("Session start error:", err);
     } finally {
       setIsLoading(false);
-      inputRef.current?.focus();
+      // Wait for DOM update then focus
+      setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [isPaid, sessionId, detectedRoute, signals]);
 
@@ -317,7 +370,7 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
         <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
           <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-            <Link href="/solutions/discovery-router" className="flex items-center gap-2 text-slate-600 hover:text-slate-900">
+            <Link href="/solutions/discovery-router" aria-label="Back to Solutions" className="flex items-center gap-2 text-slate-600 hover:text-slate-900">
               <ArrowLeft className="h-4 w-4" />
               <span className="text-sm font-medium">Back</span>
             </Link>
@@ -386,6 +439,7 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="mb-4"
+                  aria-label="Email Address"
                 />
 
                 <PayFastButton
@@ -410,7 +464,7 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
 
   // Full session UI
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans selection:bg-violet-100 selection:text-violet-900">
+    <div className="h-screen overflow-hidden bg-[#F8FAFC] flex flex-col font-sans selection:bg-violet-100 selection:text-violet-900">
       {/* Background decoration */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-violet-200/30 blur-[100px]" />
@@ -419,10 +473,11 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
 
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 px-4 md:px-6 py-4 shadow-sm shadow-slate-200/50">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
+        <div className="max-w-[1400px] mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link
               href="/solutions/discovery-router"
+              aria-label="Back to Analysis"
               className="group flex items-center justify-center w-8 h-8 rounded-full bg-slate-100/80 hover:bg-slate-200/80 transition-colors text-slate-500 hover:text-slate-900"
             >
               <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
@@ -451,9 +506,21 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
           </div>
 
           <div className="flex items-center gap-3">
+            <Button
+              onClick={handleRestart}
+              variant="ghost"
+              size="sm"
+              aria-label="Restart Session"
+              className="text-slate-500 hover:text-red-600 hover:bg-red-50 hidden md:flex"
+            >
+              <ArrowsClockwise className="h-4 w-4 mr-2" />
+              Restart
+            </Button>
+
             {generatedSpec ? (
               <Button
                 onClick={handleDownloadSpec}
+                aria-label="Download SPEC.json"
                 className="bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-600/20 rounded-xl"
               >
                 <Download className="h-4 w-4 mr-2" />
@@ -463,6 +530,7 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
               <Button
                 onClick={handleGenerateSpec}
                 disabled={isGeneratingSpec || messages.length < 4}
+                aria-label="Generate SPEC.json"
                 className="bg-slate-900 hover:bg-slate-800 text-white shadow-lg shadow-slate-900/20 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 <FileCode className="h-4 w-4 mr-2" />
@@ -473,159 +541,197 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
         </div>
       </header>
 
-      {/* Chat Area */}
-      <ScrollArea className="flex-1 relative z-10" ref={scrollRef}>
-        <div className="max-w-3xl mx-auto py-8 px-4 md:px-6 min-h-[calc(100vh-180px)]">
-          {messages.length === 0 && !isLoading && (
-            <div className="flex flex-col items-center justify-center h-full text-center py-20 opacity-0 animate-in fade-in duration-700">
-              <div className="w-16 h-16 bg-white rounded-2xl shadow-xl shadow-violet-500/10 flex items-center justify-center mb-6">
-                <Sparkle weight="fill" className="h-8 w-8 text-violet-500" />
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">Initialize Session</h3>
-              <p className="text-slate-500 max-w-sm">
-                Connecting to the Discovery Router AI agent...
-              </p>
-            </div>
-          )}
+      {/* Split View Content */}
+      <div className="flex-1 overflow-hidden">
+        <div className="h-full max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-5 bg-white/40">
 
-          {messages.map((message) => (
-            <ChatMessage key={message.id} message={message} />
-          ))}
-
-          {isLoading && (
-            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-              <TypingIndicator />
-            </div>
-          )}
-
-          {error && (
-            <div className="bg-red-50 border border-red-100 rounded-xl p-4 text-red-600 mb-4 flex items-center justify-between shadow-sm animate-in shake">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-red-500" />
-                {error}
-              </div>
-              <button
-                onClick={() => setError(null)}
-                className="px-3 py-1 bg-white border border-red-100 rounded-lg text-xs font-semibold hover:bg-red-50 transition-colors"
-              >
-                Dismiss
-              </button>
-            </div>
-          )}
-
-          {generatedSpec && (
-            <div className="relative group mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-2xl shadow-slate-900/10 animate-in slide-in-from-bottom-4 duration-700">
-              {/* Header */}
-              <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800 bg-slate-950/50">
-                <div className="flex items-center gap-3">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-amber-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-green-500/80" />
+          {/* Left: Chat Interface (3 cols) */}
+          <div className="md:col-span-3 flex flex-col h-full relative">
+            <ScrollArea className="flex-1 relative z-10" ref={scrollRef}>
+              <div className="max-w-3xl mx-auto py-8 px-4 md:px-6 min-h-[calc(100vh-180px)]">
+                {messages.length === 0 && !isLoading && (
+                  <div className="flex flex-col items-center justify-center h-full text-center py-20 opacity-0 animate-in fade-in duration-700">
+                    <div className="w-16 h-16 bg-white rounded-2xl shadow-xl shadow-violet-500/10 flex items-center justify-center mb-6">
+                      <Sparkle weight="fill" className="h-8 w-8 text-violet-500" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-slate-900 mb-2">Initialize Session</h3>
+                    <p className="text-slate-500 max-w-sm">
+                      Connecting to the Discovery Router AI agent...
+                    </p>
                   </div>
-                  <span className="text-xs font-mono font-medium text-slate-400">SPEC.json</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-green-500/10 text-green-400 border border-green-500/20 uppercase tracking-widest">
-                    Generated
-                  </span>
-                </div>
-              </div>
+                )}
 
-              {/* Content */}
-              <div className="p-0 relative font-mono text-xs">
-                <div className="absolute top-0 right-0 p-4 pointer-events-none bg-gradient-to-l from-slate-900 via-transparent to-transparent h-full w-20 z-10" />
-                <ScrollArea className="h-64 w-full">
-                  <div className="p-4">
-                    <pre className="text-emerald-300/90 leading-relaxed">
-                      {JSON.stringify(generatedSpec, null, 2)}
-                    </pre>
+                {messages.map((message) => (
+                  <ChatMessage key={message.id} message={message} />
+                ))}
+
+                {isLoading && (
+                  <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <TypingIndicator />
                   </div>
-                </ScrollArea>
-              </div>
+                )}
 
-              {/* Footer Actions */}
-              <div className="flex items-center gap-3 p-3 bg-slate-900 border-t border-slate-800">
-                <Button
-                  onClick={handleDownloadSpec}
-                  size="sm"
-                  className="bg-green-600 hover:bg-green-500 text-white border-0"
-                >
-                  <Download className="h-3.5 w-3.5 mr-2" />
-                  Download
-                </Button>
-                {!isAskAnythingMode && (
+                {error && (
+                  <div className="bg-red-50 border border-red-100 rounded-xl p-4 text-red-600 mb-4 flex items-center justify-between shadow-sm animate-in shake">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-red-500" />
+                      {error}
+                    </div>
+                    <button
+                      onClick={() => setError(null)}
+                      className="px-3 py-1 bg-white border border-red-100 rounded-lg text-xs font-semibold hover:bg-red-50 transition-colors"
+                    >
+                      Dismiss
+                    </button>
+                  </div>
+                )}
+
+                {generatedSpec && messages.length > 0 && ( /* Only show spec card inline if canvas is hidden/mobile, but for now we keep it? No let's keep it in chat stream too */
+                  <div className="relative group mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-2xl shadow-slate-900/10 animate-in slide-in-from-bottom-4 duration-700">
+                    {/* Header */}
+                    <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800 bg-slate-950/50">
+                      <div className="flex items-center gap-3">
+                        <div className="flex gap-1.5">
+                          <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                          <div className="w-3 h-3 rounded-full bg-amber-500/80" />
+                          <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                        </div>
+                        <span className="text-xs font-mono font-medium text-slate-400">SPEC.json</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-green-500/10 text-green-400 border border-green-500/20 uppercase tracking-widest">
+                          Generated
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-0 relative font-mono text-xs">
+                      <div className="absolute top-0 right-0 p-4 pointer-events-none bg-gradient-to-l from-slate-900 via-transparent to-transparent h-full w-20 z-10" />
+                      <ScrollArea className="h-64 w-full">
+                        <div className="p-4">
+                          <pre className="text-emerald-300/90 leading-relaxed">
+                            {JSON.stringify(generatedSpec, null, 2)}
+                          </pre>
+                        </div>
+                      </ScrollArea>
+                    </div>
+
+                    {/* Footer Actions */}
+                    <div className="flex items-center gap-3 p-3 bg-slate-900 border-t border-slate-800">
+                      <Button
+                        onClick={handleDownloadSpec}
+                        size="sm"
+                        aria-label="Download SPEC as JSON"
+                        className="bg-green-600 hover:bg-green-500 text-white border-0"
+                      >
+                        <Download className="h-3.5 w-3.5 mr-2" />
+                        Download
+                      </Button>
+                      {!isAskAnythingMode && (
+                        <Button
+                          onClick={() => {
+                            setIsAskAnythingMode(true);
+                            posthog.capture("toolkit_ask_anything_started", { sessionId, route: detectedRoute });
+                            setTimeout(() => inputRef.current?.focus(), 100);
+                          }}
+                          variant="ghost"
+                          size="sm"
+                          aria-label="Ask questions"
+                          className="text-slate-400 hover:text-white hover:bg-slate-800"
+                        >
+                          <ChatCircleDots className="h-3.5 w-3.5 mr-2" />
+                          Ask Questions
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {isAskAnythingMode && generatedSpec && (
+                  <div className="mt-4 flex items-center justify-center gap-2 text-sm text-slate-500 animate-in fade-in duration-500">
+                    <span className="w-1.5 h-1.5 rounded-full bg-violet-500" />
+                    Ask anything about your SPEC or implementation plan
+                  </div>
+                )}
+
+                {/* Scroll to bottom button */}
+                <div className={cn(
+                  "fixed bottom-24 right-auto z-40 transition-all duration-300 transform md:ml-[45%]", // Adjust position for split view
+                  showScrollButton ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0 pointer-events-none"
+                )}>
                   <Button
-                    onClick={() => {
-                      setIsAskAnythingMode(true);
-                      posthog.capture("toolkit_ask_anything_started", { sessionId, route: detectedRoute });
-                      setTimeout(() => inputRef.current?.focus(), 100);
-                    }}
-                    variant="ghost"
-                    size="sm"
-                    className="text-slate-400 hover:text-white hover:bg-slate-800"
+                    onClick={scrollToBottom}
+                    size="icon"
+                    aria-label="Scroll to bottom"
+                    className="bg-white/80 backdrop-blur border border-slate-200 shadow-lg text-slate-600 hover:bg-violet-50 hover:text-violet-600 rounded-full h-10 w-10"
                   >
-                    <ChatCircleDots className="h-3.5 w-3.5 mr-2" />
-                    Ask Questions
+                    <ArrowDown className="h-5 w-5" />
                   </Button>
-                )}
-              </div>
-            </div>
-          )}
-
-          {isAskAnythingMode && generatedSpec && (
-            <div className="mt-4 flex items-center justify-center gap-2 text-sm text-slate-500 animate-in fade-in duration-500">
-              <span className="w-1.5 h-1.5 rounded-full bg-violet-500" />
-              Ask anything about your SPEC or implementation plan
-            </div>
-          )}
-        </div>
-      </ScrollArea>
-
-      {/* Input Area */}
-      <div className="relative z-50">
-        {/* Gradient fade above input */}
-        <div className="absolute bottom-full left-0 right-0 h-12 bg-gradient-to-t from-[#F8FAFC] to-transparent pointer-events-none" />
-
-        <div className="bg-white/90 backdrop-blur-xl border-t border-slate-200/60 px-4 md:px-6 py-5 shadow-[0_-4px_20px_-8px_rgba(0,0,0,0.05)]">
-          <div className="max-w-3xl mx-auto">
-            <div className="relative flex items-end gap-3 bg-white border border-slate-200 rounded-2xl shadow-sm focus-within:shadow-md focus-within:border-violet-300 focus-within:ring-4 focus-within:ring-violet-500/10 transition-all duration-300 p-2">
-              <Input
-                ref={inputRef}
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder={isAskAnythingMode ? "What would you like to know about your project?" : "Describe your requirements here..."}
-                disabled={isLoading}
-                className="flex-1 h-auto min-h-[44px] py-3 px-3 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-slate-400 text-[15px] resize-none"
-              />
-              <Button
-                onClick={handleSendMessage}
-                disabled={!inputValue.trim() || isLoading}
-                className={cn(
-                  "relative h-10 w-10 p-0 rounded-xl transition-all duration-300",
-                  inputValue.trim()
-                    ? "bg-violet-600 hover:bg-violet-700 text-white shadow-lg shadow-violet-600/25 rotate-0 scale-100"
-                    : "bg-slate-100 text-slate-300 cursor-not-allowed rotate-6 scale-90"
-                )}
-              >
-                <PaperPlaneTilt weight="fill" className="h-5 w-5" />
-              </Button>
-            </div>
-
-            <div className="flex items-center justify-between mt-3 px-1">
-              <div className="flex items-center gap-4 text-xs font-semibold text-slate-400">
-                <div className="flex items-center gap-1.5">
-                  <div className={cn("w-2 h-2 rounded-full", isLoading ? "bg-violet-500 animate-pulse" : "bg-green-500")} />
-                  {isLoading ? "Thinking..." : "Ready"}
                 </div>
               </div>
-              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-300">
-                {tokenUsage.input + tokenUsage.output > 0 &&
-                  `${((tokenUsage.input + tokenUsage.output) / 1000).toFixed(1)}k tokens used`}
-              </span>
+            </ScrollArea>
+
+            {/* Input Area */}
+            <div className="relative z-50">
+              {/* Gradient fade above input */}
+              <div className="absolute bottom-full left-0 right-0 h-12 bg-gradient-to-t from-[#F8FAFC] to-transparent pointer-events-none" />
+
+              <div className="bg-white/90 backdrop-blur-xl border-t border-slate-200/60 px-4 md:px-6 py-5 shadow-[0_-4px_20px_-8px_rgba(0,0,0,0.05)]">
+                <div className="max-w-3xl mx-auto">
+                  <div className="relative flex items-end gap-3 bg-white border border-slate-200 rounded-2xl shadow-sm focus-within:shadow-md focus-within:border-violet-300 focus-within:ring-4 focus-within:ring-violet-500/10 transition-all duration-300 p-2">
+                    <Input
+                      ref={inputRef}
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder={isAskAnythingMode ? "What would you like to know about your project?" : "Describe your requirements here... (Press '/' to focus)"}
+                      disabled={isLoading}
+                      className="flex-1 h-auto min-h-[44px] py-3 px-3 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-slate-400 text-[15px] resize-none"
+                      aria-label="Chat Input"
+                    />
+                    <Button
+                      onClick={handleSendMessage}
+                      disabled={!inputValue.trim() || isLoading}
+                      aria-label="Send Message"
+                      className={cn(
+                        "relative h-10 w-10 p-0 rounded-xl transition-all duration-300",
+                        inputValue.trim()
+                          ? "bg-violet-600 hover:bg-violet-700 text-white shadow-lg shadow-violet-600/25 rotate-0 scale-100"
+                          : "bg-slate-100 text-slate-300 cursor-not-allowed rotate-6 scale-90"
+                      )}
+                    >
+                      <PaperPlaneTilt weight="fill" className="h-5 w-5" />
+                    </Button>
+                  </div>
+
+                  <div className="flex items-center justify-between mt-3 px-1">
+                    <div className="flex items-center gap-4 text-xs font-semibold text-slate-400">
+                      <div className="flex items-center gap-1.5">
+                        <div className={cn("w-2 h-2 rounded-full", isLoading ? "bg-violet-500 animate-pulse" : "bg-green-500")} />
+                        {isLoading ? "Thinking..." : "Ready"}
+                      </div>
+                    </div>
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-300">
+                      {tokenUsage.input + tokenUsage.output > 0 &&
+                        `${((tokenUsage.input + tokenUsage.output) / 1000).toFixed(1)}k tokens used`}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+
+          {/* Right: Discovery Canvas (2 cols) - Hidden on mobile for now */}
+          <div className="hidden md:block col-span-2 h-full border-l border-slate-200">
+            <DiscoveryCanvas
+              messages={messages}
+              route={detectedRoute}
+              generatedSpec={generatedSpec}
+              isGeneratingSpec={isGeneratingSpec}
+            />
+          </div>
+
         </div>
       </div>
     </div>
