@@ -107,36 +107,52 @@ export default function ToolkitSessionContent() {
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
-    scrollToBottom();
+    // Small delay to ensure DOM is updated
+    const timer = setTimeout(() => {
+      const viewport = scrollRef.current?.querySelector('[data-radix-scroll-area-viewport]') as HTMLElement | null;
+      if (viewport) {
+        viewport.scrollTo({
+          top: viewport.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
+    }, 50);
+    return () => clearTimeout(timer);
   }, [messages, isLoading]);
+
+  // Get the actual scrollable viewport from ScrollArea
+  const getScrollViewport = useCallback(() => {
+    return scrollRef.current?.querySelector('[data-radix-scroll-area-viewport]') as HTMLElement | null;
+  }, []);
 
   // Handle manual scroll visibility
   const handleScroll = useCallback(() => {
-    if (!scrollRef.current) return;
-    const viewport = scrollRef.current.querySelector('[data-radix-scroll-area-viewport]') as HTMLElement;
+    const viewport = getScrollViewport();
     if (!viewport) return;
 
     const { scrollTop, scrollHeight, clientHeight } = viewport;
     const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
     setShowScrollButton(!isNearBottom);
-  }, []);
+  }, [getScrollViewport]);
 
-  // Attach scroll listener
+  // Attach scroll listener to the actual viewport
   useEffect(() => {
-    const scrollViewport = scrollRef.current?.querySelector('[data-radix-scroll-area-viewport]');
-    if (scrollViewport) {
-      scrollViewport.addEventListener('scroll', handleScroll);
-      return () => scrollViewport.removeEventListener('scroll', handleScroll);
+    const viewport = getScrollViewport();
+    if (viewport) {
+      viewport.addEventListener('scroll', handleScroll);
+      return () => viewport.removeEventListener('scroll', handleScroll);
     }
-  }, [handleScroll, isPaid]); // Re-attach when paid view loads
+  }, [handleScroll, getScrollViewport, isPaid]); // Re-attach when paid view loads
 
-  const scrollToBottom = () => {
-    const viewport = scrollRef.current?.querySelector('[data-radix-scroll-area-viewport]');
-    viewport?.scrollTo({
-      top: viewport.scrollHeight,
-      behavior: 'smooth'
-    });
-  };
+  const scrollToBottom = useCallback(() => {
+    const viewport = getScrollViewport();
+    if (viewport) {
+      viewport.scrollTo({
+        top: viewport.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  }, [getScrollViewport]);
 
   // Focus shortcut (/)
   useEffect(() => {

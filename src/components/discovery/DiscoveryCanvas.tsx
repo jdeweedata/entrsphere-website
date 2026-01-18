@@ -64,7 +64,7 @@ export default function DiscoveryCanvas({
     }, [route, messages, generatedSpec]);
 
     return (
-        <div className="h-full flex flex-col bg-slate-50 border-l border-slate-200 shadow-xl shadow-slate-200/50">
+        <div className="h-full flex flex-col bg-slate-50 shadow-xl shadow-slate-200/50">
 
             {/* Header */}
             <div className="p-4 border-b border-slate-200 bg-white/50 backdrop-blur-sm">
