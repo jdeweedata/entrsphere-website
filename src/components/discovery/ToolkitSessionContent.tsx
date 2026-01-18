@@ -24,6 +24,7 @@ import {
   ChatCircleDots,
 } from "@phosphor-icons/react";
 import posthog from "posthog-js";
+import { cn } from "@/lib/utils";
 
 // Generate unique IDs
 const generateId = () => `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -212,7 +213,7 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
       // Determine flow stage based on current state
       const flowStage = isAskAnythingMode ? "ask_anything" as const
         : generatedSpec ? "post_spec" as const
-        : "discovery" as const;
+          : "discovery" as const;
 
       const response = await sendFilesystemAgentMessage(
         newAiMessages,
@@ -409,35 +410,51 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
 
   // Full session UI
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans selection:bg-violet-100 selection:text-violet-900">
+      {/* Background decoration */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-violet-200/30 blur-[100px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-blue-200/30 blur-[100px]" />
+      </div>
+
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 px-4 md:px-6 py-4">
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 px-4 md:px-6 py-4 shadow-sm shadow-slate-200/50">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/solutions/discovery-router" className="text-slate-500 hover:text-slate-900">
-              <ArrowLeft className="h-5 w-5" />
+          <div className="flex items-center gap-4">
+            <Link
+              href="/solutions/discovery-router"
+              className="group flex items-center justify-center w-8 h-8 rounded-full bg-slate-100/80 hover:bg-slate-200/80 transition-colors text-slate-500 hover:text-slate-900"
+            >
+              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
             </Link>
-            <div className="flex items-center gap-2">
-              <Image
-                src="/entrsphere_asset_icon_transparent.webp"
-                alt="EntrSphere"
-                width={32}
-                height={32}
-              />
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div className="absolute inset-0 bg-violet-500/20 blur-md rounded-full" />
+                <Image
+                  src="/entrsphere_asset_icon_transparent.webp"
+                  alt="EntrSphere"
+                  width={34}
+                  height={34}
+                  className="relative z-10"
+                />
+              </div>
               <div>
-                <h1 className="font-semibold text-slate-900">Discovery Router Toolkit</h1>
-                <p className="text-xs text-slate-500">
-                  {detectedRoute ? `${ROUTES[detectedRoute].name} Session` : "Deep-Dive Session"}
-                </p>
+                <h1 className="font-bold text-slate-900 tracking-tight leading-tight">Discovery Router Toolkit</h1>
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                  <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                    {detectedRoute ? `${ROUTES[detectedRoute].name}` : "Live Session"}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {generatedSpec ? (
               <Button
                 onClick={handleDownloadSpec}
-                className="bg-green-600 hover:bg-green-700 text-white"
+                className="bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-600/20 rounded-xl"
               >
                 <Download className="h-4 w-4 mr-2" />
                 Download SPEC
@@ -446,7 +463,7 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
               <Button
                 onClick={handleGenerateSpec}
                 disabled={isGeneratingSpec || messages.length < 4}
-                className="bg-slate-900 hover:bg-slate-800 text-white"
+                className="bg-slate-900 hover:bg-slate-800 text-white shadow-lg shadow-slate-900/20 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 <FileCode className="h-4 w-4 mr-2" />
                 {isGeneratingSpec ? "Generating..." : "Generate SPEC"}
@@ -457,101 +474,157 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
       </header>
 
       {/* Chat Area */}
-      <ScrollArea className="flex-1" ref={scrollRef}>
-        <div className="max-w-3xl mx-auto py-6 px-4 md:px-6">
+      <ScrollArea className="flex-1 relative z-10" ref={scrollRef}>
+        <div className="max-w-3xl mx-auto py-8 px-4 md:px-6 min-h-[calc(100vh-180px)]">
+          {messages.length === 0 && !isLoading && (
+            <div className="flex flex-col items-center justify-center h-full text-center py-20 opacity-0 animate-in fade-in duration-700">
+              <div className="w-16 h-16 bg-white rounded-2xl shadow-xl shadow-violet-500/10 flex items-center justify-center mb-6">
+                <Sparkle weight="fill" className="h-8 w-8 text-violet-500" />
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">Initialize Session</h3>
+              <p className="text-slate-500 max-w-sm">
+                Connecting to the Discovery Router AI agent...
+              </p>
+            </div>
+          )}
+
           {messages.map((message) => (
             <ChatMessage key={message.id} message={message} />
           ))}
 
-          {isLoading && <TypingIndicator />}
+          {isLoading && (
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <TypingIndicator />
+            </div>
+          )}
 
           {error && (
-            <div className="bg-red-50 border border-red-100 rounded-xl p-4 text-red-600 mb-4">
-              {error}
-              <button onClick={() => setError(null)} className="ml-2 underline text-sm">
+            <div className="bg-red-50 border border-red-100 rounded-xl p-4 text-red-600 mb-4 flex items-center justify-between shadow-sm animate-in shake">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-red-500" />
+                {error}
+              </div>
+              <button
+                onClick={() => setError(null)}
+                className="px-3 py-1 bg-white border border-red-100 rounded-lg text-xs font-semibold hover:bg-red-50 transition-colors"
+              >
                 Dismiss
               </button>
             </div>
           )}
 
           {generatedSpec && (
-            <div className="bg-green-50 border border-green-200 rounded-xl p-6 mt-6">
-              <div className="flex items-center gap-3 mb-4">
-                <CheckCircle weight="fill" className="h-6 w-6 text-green-600" />
-                <h3 className="font-semibold text-green-900">SPEC.json Generated!</h3>
+            <div className="relative group mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-2xl shadow-slate-900/10 animate-in slide-in-from-bottom-4 duration-700">
+              {/* Header */}
+              <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800 bg-slate-950/50">
+                <div className="flex items-center gap-3">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                    <div className="w-3 h-3 rounded-full bg-amber-500/80" />
+                    <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                  </div>
+                  <span className="text-xs font-mono font-medium text-slate-400">SPEC.json</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-green-500/10 text-green-400 border border-green-500/20 uppercase tracking-widest">
+                    Generated
+                  </span>
+                </div>
               </div>
-              <pre className="bg-white border border-green-100 rounded-lg p-4 text-xs overflow-auto max-h-64 text-slate-700">
-                {JSON.stringify(generatedSpec, null, 2)}
-              </pre>
-              <div className="flex flex-wrap gap-3 mt-4">
+
+              {/* Content */}
+              <div className="p-0 relative font-mono text-xs">
+                <div className="absolute top-0 right-0 p-4 pointer-events-none bg-gradient-to-l from-slate-900 via-transparent to-transparent h-full w-20 z-10" />
+                <ScrollArea className="h-64 w-full">
+                  <div className="p-4">
+                    <pre className="text-emerald-300/90 leading-relaxed">
+                      {JSON.stringify(generatedSpec, null, 2)}
+                    </pre>
+                  </div>
+                </ScrollArea>
+              </div>
+
+              {/* Footer Actions */}
+              <div className="flex items-center gap-3 p-3 bg-slate-900 border-t border-slate-800">
                 <Button
                   onClick={handleDownloadSpec}
-                  className="bg-green-600 hover:bg-green-700 text-white"
+                  size="sm"
+                  className="bg-green-600 hover:bg-green-500 text-white border-0"
                 >
-                  <Download className="h-4 w-4 mr-2" />
-                  Download SPEC.json
+                  <Download className="h-3.5 w-3.5 mr-2" />
+                  Download
                 </Button>
                 {!isAskAnythingMode && (
                   <Button
                     onClick={() => {
                       setIsAskAnythingMode(true);
                       posthog.capture("toolkit_ask_anything_started", { sessionId, route: detectedRoute });
-                      inputRef.current?.focus();
+                      setTimeout(() => inputRef.current?.focus(), 100);
                     }}
-                    variant="outline"
-                    className="border-slate-300 hover:bg-slate-100"
+                    variant="ghost"
+                    size="sm"
+                    className="text-slate-400 hover:text-white hover:bg-slate-800"
                   >
-                    <ChatCircleDots className="h-4 w-4 mr-2" />
-                    Have questions? Ask anything
+                    <ChatCircleDots className="h-3.5 w-3.5 mr-2" />
+                    Ask Questions
                   </Button>
                 )}
               </div>
-              {isAskAnythingMode && (
-                <p className="text-sm text-green-700 mt-3 flex items-center gap-2">
-                  <ChatCircleDots className="h-4 w-4" />
-                  Ask anything about your SPEC, project approach, or next steps
-                </p>
-              )}
+            </div>
+          )}
+
+          {isAskAnythingMode && generatedSpec && (
+            <div className="mt-4 flex items-center justify-center gap-2 text-sm text-slate-500 animate-in fade-in duration-500">
+              <span className="w-1.5 h-1.5 rounded-full bg-violet-500" />
+              Ask anything about your SPEC or implementation plan
             </div>
           )}
         </div>
       </ScrollArea>
 
       {/* Input Area */}
-      <div className="bg-white border-t border-slate-200 px-4 md:px-6 py-4">
-        <div className="max-w-3xl mx-auto">
-          <div className="flex gap-3">
-            <Input
-              ref={inputRef}
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder={isAskAnythingMode ? "Ask anything about your SPEC..." : "Describe your requirements..."}
-              disabled={isLoading}
-              className="flex-1 h-12"
-            />
-            <Button
-              onClick={handleSendMessage}
-              disabled={!inputValue.trim() || isLoading}
-              className="bg-slate-900 hover:bg-slate-800 h-12 w-12 p-0"
-            >
-              <PaperPlaneTilt weight="fill" className="h-5 w-5" />
-            </Button>
-          </div>
+      <div className="relative z-50">
+        {/* Gradient fade above input */}
+        <div className="absolute bottom-full left-0 right-0 h-12 bg-gradient-to-t from-[#F8FAFC] to-transparent pointer-events-none" />
 
-          <div className="flex items-center justify-between mt-3 text-xs text-slate-400">
-            <div className="flex items-center gap-4">
-              {detectedRoute && (
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-blue-500" />
-                  Route {detectedRoute}: {ROUTES[detectedRoute].name}
-                </span>
-              )}
+        <div className="bg-white/90 backdrop-blur-xl border-t border-slate-200/60 px-4 md:px-6 py-5 shadow-[0_-4px_20px_-8px_rgba(0,0,0,0.05)]">
+          <div className="max-w-3xl mx-auto">
+            <div className="relative flex items-end gap-3 bg-white border border-slate-200 rounded-2xl shadow-sm focus-within:shadow-md focus-within:border-violet-300 focus-within:ring-4 focus-within:ring-violet-500/10 transition-all duration-300 p-2">
+              <Input
+                ref={inputRef}
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder={isAskAnythingMode ? "What would you like to know about your project?" : "Describe your requirements here..."}
+                disabled={isLoading}
+                className="flex-1 h-auto min-h-[44px] py-3 px-3 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-slate-400 text-[15px] resize-none"
+              />
+              <Button
+                onClick={handleSendMessage}
+                disabled={!inputValue.trim() || isLoading}
+                className={cn(
+                  "relative h-10 w-10 p-0 rounded-xl transition-all duration-300",
+                  inputValue.trim()
+                    ? "bg-violet-600 hover:bg-violet-700 text-white shadow-lg shadow-violet-600/25 rotate-0 scale-100"
+                    : "bg-slate-100 text-slate-300 cursor-not-allowed rotate-6 scale-90"
+                )}
+              >
+                <PaperPlaneTilt weight="fill" className="h-5 w-5" />
+              </Button>
             </div>
-            <span>
-              {tokenUsage.input + tokenUsage.output > 0 &&
-                `${((tokenUsage.input + tokenUsage.output) / 1000).toFixed(1)}k tokens`}
-            </span>
+
+            <div className="flex items-center justify-between mt-3 px-1">
+              <div className="flex items-center gap-4 text-xs font-semibold text-slate-400">
+                <div className="flex items-center gap-1.5">
+                  <div className={cn("w-2 h-2 rounded-full", isLoading ? "bg-violet-500 animate-pulse" : "bg-green-500")} />
+                  {isLoading ? "Thinking..." : "Ready"}
+                </div>
+              </div>
+              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-300">
+                {tokenUsage.input + tokenUsage.output > 0 &&
+                  `${((tokenUsage.input + tokenUsage.output) / 1000).toFixed(1)}k tokens used`}
+              </span>
+            </div>
           </div>
         </div>
       </div>
