@@ -304,6 +304,70 @@ async function processToolCall(
   }
 }
 
+// Helper: Process all tool use blocks and return results
+async function processToolUseBlocks(
+  content: Anthropic.ContentBlock[],
+  sessionId: string,
+  flowStage?: FlowStage,
+  route?: "A" | "B" | "C" | "D" | null
+): Promise<Anthropic.ToolResultBlockParam[]> {
+  const toolUseBlocks = content.filter(
+    (block): block is Anthropic.ToolUseBlock => block.type === "tool_use"
+  );
+
+  const toolResults: Anthropic.ToolResultBlockParam[] = [];
+
+  for (const toolUse of toolUseBlocks) {
+    const result = await processSingleToolUse(toolUse, sessionId, flowStage, route);
+    toolResults.push(result);
+  }
+
+  return toolResults;
+}
+
+// Helper: Process a single tool use and log it
+async function processSingleToolUse(
+  toolUse: Anthropic.ToolUseBlock,
+  sessionId: string,
+  flowStage?: FlowStage,
+  route?: "A" | "B" | "C" | "D" | null
+): Promise<Anthropic.ToolResultBlockParam> {
+  // Log tool call
+  logConversation(
+    sessionId,
+    "tool_call",
+    JSON.stringify({ name: toolUse.name, input: toolUse.input }),
+    flowStage,
+    route,
+    toolUse.name
+  );
+
+  const result = await processToolCall(
+    toolUse.name,
+    toolUse.input as Record<string, unknown>
+  );
+
+  const toolSuccess = !result.startsWith("Error:");
+
+  // Log tool result
+  logConversation(
+    sessionId,
+    "tool_result",
+    result.slice(0, 5000),
+    flowStage,
+    route,
+    toolUse.name,
+    toolSuccess,
+    toolSuccess ? undefined : result
+  );
+
+  return {
+    type: "tool_result",
+    tool_use_id: toolUse.id,
+    content: result,
+  };
+}
+
 interface ChatMessage {
   role: "user" | "assistant";
   content: string;
@@ -446,68 +510,30 @@ export async function POST(request: NextRequest) {
       totalInputTokens += response.usage.input_tokens;
       totalOutputTokens += response.usage.output_tokens;
 
-      // Check if we need to process tool calls
-      if (response.stop_reason === "tool_use") {
-        // Find tool use blocks
-        const toolUseBlocks = response.content.filter(
-          (block): block is Anthropic.ToolUseBlock => block.type === "tool_use"
-        );
-
-        // Process each tool call
-        const toolResults: Anthropic.ToolResultBlockParam[] = [];
-
-        for (const toolUse of toolUseBlocks) {
-          // Log tool call
-          logConversation(
-            sessionId,
-            "tool_call",
-            JSON.stringify({ name: toolUse.name, input: toolUse.input }),
-            flowStage,
-            route,
-            toolUse.name
-          );
-
-          const result = await processToolCall(
-            toolUse.name,
-            toolUse.input as Record<string, unknown>
-          );
-
-          // Determine if tool succeeded (no "Error:" prefix in result)
-          const toolSuccess = !result.startsWith("Error:");
-
-          // Log tool result
-          logConversation(
-            sessionId,
-            "tool_result",
-            result.slice(0, 5000), // Limit result size
-            flowStage,
-            route,
-            toolUse.name,
-            toolSuccess,
-            toolSuccess ? undefined : result
-          );
-
-          toolResults.push({
-            type: "tool_result",
-            tool_use_id: toolUse.id,
-            content: result,
-          });
-        }
-
-        // Add assistant message and tool results to continue the conversation
-        currentMessages.push({
-          role: "assistant",
-          content: response.content,
-        });
-
-        currentMessages.push({
-          role: "user",
-          content: toolResults,
-        });
-      } else {
-        // Model finished (end_turn or other)
+      // Model finished - exit loop
+      if (response.stop_reason !== "tool_use") {
         continueLoop = false;
+        continue;
       }
+
+      // Process tool calls
+      const toolResults = await processToolUseBlocks(
+        response.content,
+        sessionId,
+        flowStage,
+        route
+      );
+
+      // Add assistant message and tool results to continue the conversation
+      currentMessages.push({
+        role: "assistant",
+        content: response.content,
+      });
+
+      currentMessages.push({
+        role: "user",
+        content: toolResults,
+      });
     }
 
     // Extract final text response

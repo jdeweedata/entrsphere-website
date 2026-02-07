@@ -34,6 +34,74 @@ interface RequestBody {
   stream?: boolean;
 }
 
+// Helper: Create streaming response to reduce nesting in main handler
+function createStreamingResponse(
+  client: Anthropic,
+  model: string,
+  modelParams: { max_tokens: number },
+  systemPrompt: string,
+  messages: ChatMessage[]
+): ReadableStream {
+  const encoder = new TextEncoder();
+
+  return new ReadableStream({
+    async start(controller) {
+      try {
+        await streamMessages(client, model, modelParams, systemPrompt, messages, encoder, controller);
+      } catch (error) {
+        console.error("Streaming error:", error);
+        controller.error(error);
+      }
+    },
+  });
+}
+
+// Helper: Stream messages and handle events
+async function streamMessages(
+  client: Anthropic,
+  model: string,
+  modelParams: { max_tokens: number },
+  systemPrompt: string,
+  messages: ChatMessage[],
+  encoder: TextEncoder,
+  controller: ReadableStreamDefaultController
+): Promise<void> {
+  const response = await client.messages.stream({
+    model,
+    max_tokens: modelParams.max_tokens,
+    system: [
+      {
+        type: "text",
+        text: systemPrompt,
+        cache_control: { type: "ephemeral" },
+      },
+    ],
+    messages: messages.map((m) => ({
+      role: m.role,
+      content: m.content,
+    })),
+  });
+
+  for await (const event of response) {
+    if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
+      const data = JSON.stringify({ type: "text", text: event.delta.text });
+      controller.enqueue(encoder.encode(`data: ${data}\n\n`));
+    }
+  }
+
+  const finalMessage = await response.finalMessage();
+  const usage = {
+    input_tokens: finalMessage.usage.input_tokens,
+    output_tokens: finalMessage.usage.output_tokens,
+    model,
+    cache_read_input_tokens:
+      (finalMessage.usage as { cache_read_input_tokens?: number }).cache_read_input_tokens || 0,
+  };
+
+  controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: "done", usage, model })}\n\n`));
+  controller.close();
+}
+
 export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
@@ -91,68 +159,13 @@ export async function POST(request: NextRequest) {
     const modelParams = getModelParams(model);
 
     if (stream) {
-      // Streaming response
-      const encoder = new TextEncoder();
-
-      const streamResponse = new ReadableStream({
-        async start(controller) {
-          try {
-            const response = await anthropic.messages.stream({
-              model,
-              max_tokens: modelParams.max_tokens,
-              system: [
-                {
-                  type: "text",
-                  text: systemPrompt,
-                  cache_control: { type: "ephemeral" },
-                },
-              ],
-              messages: messages.map((m) => ({
-                role: m.role,
-                content: m.content,
-              })),
-            });
-
-            // Stream the response
-            for await (const event of response) {
-              if (
-                event.type === "content_block_delta" &&
-                event.delta.type === "text_delta"
-              ) {
-                const data = JSON.stringify({
-                  type: "text",
-                  text: event.delta.text,
-                });
-                controller.enqueue(encoder.encode(`data: ${data}\n\n`));
-              }
-            }
-
-            // Send final message with usage info
-            const finalMessage = await response.finalMessage();
-            const usage = {
-              input_tokens: finalMessage.usage.input_tokens,
-              output_tokens: finalMessage.usage.output_tokens,
-              model,
-              cache_read_input_tokens:
-                (
-                  finalMessage.usage as {
-                    cache_read_input_tokens?: number;
-                  }
-                ).cache_read_input_tokens || 0,
-            };
-
-            controller.enqueue(
-              encoder.encode(
-                `data: ${JSON.stringify({ type: "done", usage, model })}\n\n`
-              )
-            );
-            controller.close();
-          } catch (error) {
-            console.error("Streaming error:", error);
-            controller.error(error);
-          }
-        },
-      });
+      const streamResponse = createStreamingResponse(
+        anthropic,
+        model,
+        modelParams,
+        systemPrompt,
+        messages
+      );
 
       return new NextResponse(streamResponse, {
         headers: {

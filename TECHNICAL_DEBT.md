@@ -50,11 +50,11 @@
 
 ### 3. Deep Nesting (6 Critical Cases)
 
-| File | Max Depth | Recommendation |
-|------|-----------|----------------|
-| `app/api/discovery/chat/route.ts` | 9 levels | Extract to helper functions, use early returns |
-| `app/api/discovery/agent/route.ts` | 8 levels | Flatten logic, extract handlers |
-| `components/ui/chart.tsx` | 7 levels | Simplify component structure |
+| File | Max Depth | Status |
+|------|-----------|--------|
+| `app/api/discovery/chat/route.ts` | 9 → 4 levels | **RESOLVED** - Extracted `createStreamingResponse` and `streamMessages` helpers (2026-02-07) |
+| `app/api/discovery/agent/route.ts` | 8 → 4 levels | **RESOLVED** - Extracted `processToolUseBlocks` and `processSingleToolUse` helpers, used early returns (2026-02-07) |
+| `components/ui/chart.tsx` | 7 levels | Pending - Simplify component structure |
 
 ### 4. Long Parameter Lists (Top Offenders)
 
@@ -121,7 +121,7 @@ As noted in CLAUDE.md, these files are old Vite code:
 
 ### Immediate (This Sprint)
 - [x] ~~Investigate and fix BUG comments~~ - Investigated: 1 false positive, 1 debug code removed (2026-02-07)
-- [ ] Review critical deep nesting in discovery API routes
+- [x] ~~Review critical deep nesting in discovery API routes~~ - Refactored both routes with helper functions (2026-02-07)
 
 ### High Priority (Next Sprint)
 - [ ] Refactor `services/discoveryService.ts` - split into smaller services
@@ -145,8 +145,8 @@ As noted in CLAUDE.md, these files are old Vite code:
 
 | Metric | Current | Target |
 |--------|---------|--------|
-| Total Issues | 333 | < 100 |
-| High Severity | 72 | 0 |
+| Total Issues | 331 | < 100 |
+| High Severity | 70 | 0 |
 | Console Statements | 73 | 0 |
 | Files > 500 lines | 6 | 0 |
 | `any` types | 6 | 0 |
@@ -166,6 +166,8 @@ As noted in CLAUDE.md, these files are old Vite code:
 | Date | Item | Action |
 |------|------|--------|
 | 2026-02-07 | `components/discovery/DiscoveryChat.tsx` | Removed debug useEffect (lines 60-69) |
+| 2026-02-07 | `app/api/discovery/chat/route.ts` | Extracted `createStreamingResponse` and `streamMessages` helpers to reduce nesting from 9 to 4 levels |
+| 2026-02-07 | `app/api/discovery/agent/route.ts` | Extracted `processToolUseBlocks` and `processSingleToolUse` helpers, used early returns to reduce nesting from 8 to 4 levels |
 
 ---
 
