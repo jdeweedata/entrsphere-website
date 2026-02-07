@@ -202,12 +202,12 @@ export default function ToolkitSessionContent() {
 
 Please begin the deep-dive discovery process. Load the appropriate playbook and guide me through a thorough requirements gathering session. I want to end up with a production-ready SPEC.json.`;
 
-      const response = await sendFilesystemAgentMessage(
-        [{ role: "user", content: initialMessage }],
+      const response = await sendFilesystemAgentMessage({
+        messages: [{ role: "user", content: initialMessage }],
         sessionId,
-        detectedRoute,
-        signals
-      );
+        route: detectedRoute,
+        signals,
+      });
 
       const welcomeMsg = createMessage("assistant", response.content);
       setMessages([welcomeMsg]);
@@ -283,13 +283,13 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
         : generatedSpec ? "post_spec" as const
           : "discovery" as const;
 
-      const response = await sendFilesystemAgentMessage(
-        newAiMessages,
+      const response = await sendFilesystemAgentMessage({
+        messages: newAiMessages,
         sessionId,
-        detectedRoute,
+        route: detectedRoute,
         signals,
-        flowStage
-      );
+        flowStage,
+      });
 
       const aiMsg = createMessage("assistant", response.content);
       setMessages((prev) => [...prev, aiMsg]);

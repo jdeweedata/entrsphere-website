@@ -64,10 +64,21 @@ const SpecPreviewModal = ({ isOpen, onClose, sessionId, route, signals, messages
 
     try {
       // Save lead to Convex
-      await saveSpecPreviewLead(email, sessionId, route, signals, messages.length);
+      await saveSpecPreviewLead({
+        email,
+        sessionId,
+        route,
+        signals,
+        conversationLength: messages.length,
+      });
 
       // Generate preview
-      const result = await generateSpecPreview(messages, sessionId, route, email);
+      const result = await generateSpecPreview({
+        messages,
+        sessionId,
+        route,
+        email,
+      });
 
       if (result.success && result.preview) {
         setPreview(result.preview);

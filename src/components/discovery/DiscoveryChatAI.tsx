@@ -70,12 +70,12 @@ const DiscoveryChatAI = ({ onSwitchMode }: Props) => {
 
     try {
       // Send initial message to get AI welcome
-      const response = await sendFilesystemAgentMessage(
-        [{ role: 'user', content: "Hi, I'd like to start a discovery session for a new project." }],
+      const response = await sendFilesystemAgentMessage({
+        messages: [{ role: 'user', content: "Hi, I'd like to start a discovery session for a new project." }],
         sessionId,
-        null,
-        signals
-      );
+        route: null,
+        signals,
+      });
 
       // Add the AI response as welcome message
       const welcomeMsg = createMessage('assistant', response.content);
@@ -162,12 +162,12 @@ const DiscoveryChatAI = ({ onSwitchMode }: Props) => {
     setIsLoading(true);
 
     try {
-      const response = await sendFilesystemAgentMessage(
-        newAiMessages,
+      const response = await sendFilesystemAgentMessage({
+        messages: newAiMessages,
         sessionId,
-        detectedRoute,
-        signals
-      );
+        route: detectedRoute,
+        signals,
+      });
 
       // Add AI response to UI
       const aiMsg = createMessage('assistant', response.content);

@@ -41,11 +41,11 @@ const DashboardContent: React.FC = () => {
 
   const fetchSignups = async () => {
     try {
-      const result = await databases.listDocuments(
+      const result = await databases.listDocuments<BetaSignup>(
         DATABASE_ID,
         BETA_SIGNUPS_COLLECTION_ID
       );
-      setSignups(result.documents as BetaSignup[]);
+      setSignups(result.documents);
     } catch {
       toast.error("Failed to load beta signups");
     } finally {
