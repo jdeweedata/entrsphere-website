@@ -37,8 +37,9 @@ const RegisterForm: React.FC = () => {
       await register(email, password, name);
       toast.success("Registration successful!");
       router.push("/dashboard");
-    } catch (error: any) {
-      toast.error(error.message || "Registration failed");
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Registration failed";
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }

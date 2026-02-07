@@ -80,13 +80,13 @@ Debug logs left throughout codebase. Key locations:
 | `lib/playbook-loader.ts` | 4 | Use proper logging |
 | Various others | 64 | Audit and remove |
 
-### 6. Weak Typing (6 instances of `any`)
+### 6. Weak Typing - **ALL FIXED** (2026-02-07)
 
-| File | Line | Recommendation |
-|------|------|----------------|
-| `services/authService.ts` | 25, 32, 37, 48 | Type errors properly |
-| `components/auth/RegisterForm.tsx` | 40 | Type errors properly |
-| `components/auth/LoginForm.tsx` | 27 | Type errors properly |
+| File | Line | Status |
+|------|------|--------|
+| `services/authService.ts` | 25, 32, 37, 48 | **FIXED** - Added `getErrorMessage` helper, typed errors as `unknown`, return `Models.Session` |
+| `components/auth/RegisterForm.tsx` | 40 | **FIXED** - Used `unknown` with `instanceof Error` check |
+| `components/auth/LoginForm.tsx` | 27 | **FIXED** - Used `unknown` with `instanceof Error` check |
 
 ### 7. Legacy Code - **ALL DELETED** (2026-02-07)
 
@@ -132,7 +132,7 @@ Debug logs left throughout codebase. Key locations:
 - [x] ~~Delete `pages-old/` directory and other legacy Vite files~~ - All deleted (2026-02-07)
 - [ ] Remove/replace 74 console statements with proper logging
 - [ ] Split large component files (sidebar, ToolkitSessionContent)
-- [ ] Fix weak typing (replace `any` with proper types)
+- [x] ~~Fix weak typing (replace `any` with proper types)~~ (2026-02-07)
 
 ### Low Priority (Opportunistic)
 - [ ] Extract magic numbers to named constants
@@ -145,11 +145,11 @@ Debug logs left throughout codebase. Key locations:
 
 | Metric | Current | Target |
 |--------|---------|--------|
-| Total Issues | 331 | < 100 |
+| Total Issues | 325 | < 100 |
 | High Severity | 70 | 0 |
 | Console Statements | 73 | 0 |
 | Files > 500 lines | 6 | 0 |
-| `any` types | 6 | 0 |
+| `any` types | 0 | 0 |
 
 ---
 
@@ -170,6 +170,7 @@ Debug logs left throughout codebase. Key locations:
 | 2026-02-07 | `app/api/discovery/agent/route.ts` | Extracted `processToolUseBlocks` and `processSingleToolUse` helpers, used early returns to reduce nesting from 8 to 4 levels |
 | 2026-02-07 | `src/pages-old/` | Deleted entire legacy Vite pages directory (12 files) |
 | 2026-02-07 | Legacy Vite files | Deleted `src/App.tsx`, `src/main.tsx`, `api-old/`, `vite.config.ts`, `index.html` |
+| 2026-02-07 | Weak typing | Fixed all 6 `any` types in authService.ts, RegisterForm.tsx, LoginForm.tsx |
 
 ---
 

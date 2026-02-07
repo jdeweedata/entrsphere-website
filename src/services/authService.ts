@@ -1,6 +1,5 @@
-
 import { account } from '@/lib/appwrite';
-import { ID } from 'appwrite';
+import { ID, Models } from 'appwrite';
 
 export interface User {
   $id: string;
@@ -15,6 +14,15 @@ export interface AuthError {
   code?: number;
 }
 
+// Helper to extract error message from unknown error type
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'object' && error !== null && 'message' in error) {
+    return String((error as { message: unknown }).message);
+  }
+  return 'An unknown error occurred';
+}
+
 export const authService = {
   // Register a new user
   register: async (email: string, password: string, name: string): Promise<User> => {
@@ -22,21 +30,21 @@ export const authService = {
       const user = await account.create(ID.unique(), email, password, name);
       console.log('User registered:', user);
       return user;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Registration error:', error);
-      throw new Error(error.message || 'Registration failed');
+      throw new Error(getErrorMessage(error) || 'Registration failed');
     }
   },
 
   // Login user
-  login: async (email: string, password: string): Promise<any> => {
+  login: async (email: string, password: string): Promise<Models.Session> => {
     try {
       const session = await account.createEmailPasswordSession(email, password);
       console.log('User logged in:', session);
       return session;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Login error:', error);
-      throw new Error(error.message || 'Login failed');
+      throw new Error(getErrorMessage(error) || 'Login failed');
     }
   },
 
@@ -45,9 +53,9 @@ export const authService = {
     try {
       await account.deleteSession('current');
       console.log('User logged out');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Logout error:', error);
-      throw new Error(error.message || 'Logout failed');
+      throw new Error(getErrorMessage(error) || 'Logout failed');
     }
   },
 
