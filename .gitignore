@@ -30,6 +30,7 @@ out/
 # Tool directories
 .claude/
 .agent/
+.agents/
 .playwright-mcp/
 .vercel
 discovery-fs/sessions/
