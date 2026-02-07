@@ -57,17 +57,6 @@ const DiscoveryChat = () => {
     });
   }, [messages, isTyping, session.phase]);
 
-  // Debug: Log state when conditions for RouteResult should be met
-  useEffect(() => {
-    if (session.phase === 'email_capture') {
-      console.log('[DiscoveryChat] Phase is email_capture', {
-        detectedRoute: session.detectedRoute,
-        isTyping,
-        shouldShowRouteResult: session.detectedRoute && !isTyping,
-      });
-    }
-  }, [session.phase, session.detectedRoute, isTyping]);
-
   // Add message with typing effect
   const addAgentMessage = useCallback((message: ChatMessageType) => {
     setIsTyping(true);
