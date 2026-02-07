@@ -456,7 +456,7 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
                 />
 
                 <PayFastButton
-                  email={email}
+                  customer={{ email }}
                   sessionId={freeSessionId || sessionId}
                   onSuccess={handlePaymentSuccess}
                   className="w-full bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl font-medium"

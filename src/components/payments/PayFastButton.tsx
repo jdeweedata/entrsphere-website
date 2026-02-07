@@ -8,15 +8,25 @@ import { Spinner } from "@phosphor-icons/react";
 const TOOLKIT_PRICE_ZAR = 85000; // R850 in cents
 const PRODUCT_ID = "discovery-router-toolkit";
 
-interface PayFastButtonProps {
+// Customer information for payment
+interface CustomerInfo {
   email: string;
-  sessionId?: string;
-  nameFirst?: string;
-  nameLast?: string;
+  firstName?: string;
+  lastName?: string;
+}
+
+// Payment/item details
+interface PaymentInfo {
   itemName?: string;
   itemDescription?: string;
   amount?: number; // Amount in cents (defaults to TOOLKIT_PRICE_ZAR)
   product?: string; // Product ID (defaults to PRODUCT_ID)
+}
+
+interface PayFastButtonProps {
+  customer: CustomerInfo;
+  payment?: PaymentInfo;
+  sessionId?: string;
   onSuccess?: (reference: string) => void;
   onError?: (error: string) => void;
   children: React.ReactNode;
@@ -43,20 +53,23 @@ interface PayFastFormData {
 }
 
 export default function PayFastButton({
-  email,
+  customer,
+  payment = {},
   sessionId,
-  nameFirst,
-  nameLast,
-  itemName = "Discovery Router Toolkit",
-  itemDescription = "Strategic project routing framework with AI-powered assessment",
-  amount = TOOLKIT_PRICE_ZAR,
-  product = PRODUCT_ID,
   onSuccess,
   onError,
   children,
   className,
   disabled,
 }: PayFastButtonProps) {
+  // Destructure with defaults
+  const { email, firstName, lastName } = customer;
+  const {
+    itemName = "Discovery Router Toolkit",
+    itemDescription = "Strategic project routing framework with AI-powered assessment",
+    amount = TOOLKIT_PRICE_ZAR,
+    product = PRODUCT_ID,
+  } = payment;
   const [isLoading, setIsLoading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState<PayFastFormData | null>(null);
@@ -89,8 +102,8 @@ export default function PayFastButton({
           itemName,
           itemDescription,
           sessionId,
-          nameFirst,
-          nameLast,
+          nameFirst: firstName,
+          nameLast: lastName,
         }),
       });
 

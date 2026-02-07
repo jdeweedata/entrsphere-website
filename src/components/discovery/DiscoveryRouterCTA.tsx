@@ -119,7 +119,7 @@ export default function DiscoveryRouterCTA() {
       {/* Payment Button */}
       <div className="text-center">
         <PayFastButton
-          email={email}
+          customer={{ email }}
           sessionId={sessionId}
           onSuccess={handlePaymentSuccess}
           disabled={!isValidEmail}

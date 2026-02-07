@@ -56,13 +56,12 @@
 | `app/api/discovery/agent/route.ts` | 8 → 4 levels | **RESOLVED** - Extracted `processToolUseBlocks` and `processSingleToolUse` helpers, used early returns (2026-02-07) |
 | `components/ui/chart.tsx` | 7 levels | Pending - Simplify component structure |
 
-### 4. Long Parameter Lists (Top Offenders)
+### 4. Long Parameter Lists - **ALL FIXED** (2026-02-07)
 
 | File | Function | Params | Status |
 |------|----------|--------|--------|
 | ~~`services/discoveryService.ts`~~ | multiple | 10-12 | **RESOLVED** - Refactored to options objects in `services/discovery/` (2026-02-07) |
-| `components/payments/PayFastButton.tsx:45` | - | 14 | Use options object |
-| `components/payments/PayFastButton.tsx:82` | - | 12 | Use options object |
+| ~~`components/payments/PayFastButton.tsx`~~ | props | 14 | **RESOLVED** - Grouped into `customer` and `payment` objects (2026-02-07) |
 
 ### 5. Console Statements - **ALL REMOVED** (2026-02-07)
 
@@ -139,12 +138,12 @@
 
 | Metric | Current | Target |
 |--------|---------|--------|
-| Total Issues | ~240 | < 100 |
-| High Severity | ~65 | 0 |
+| Total Issues | ~235 | < 100 |
+| High Severity | ~60 | 0 |
 | Console Statements | 0 | 0 |
 | Files > 500 lines | 4 | 0 |
 | `any` types | 0 | 0 |
-| Long parameter lists | 2 | 0 |
+| Long parameter lists | 0 | 0 |
 
 ---
 
@@ -168,6 +167,7 @@
 | 2026-02-07 | Weak typing | Fixed all 6 `any` types in authService.ts, RegisterForm.tsx, LoginForm.tsx |
 | 2026-02-07 | Console statements | Removed all 74 console.log/warn/error statements across 23 files |
 | 2026-02-07 | `services/discoveryService.ts` | Refactored 696-line monolith into 8 focused modules in `services/discovery/`: client.ts, types.ts, session.ts, chat.ts, spec.ts, agent.ts, email.ts, index.ts. All functions now use options object pattern. |
+| 2026-02-07 | `components/payments/PayFastButton.tsx` | Refactored 14 flat props into grouped objects: `customer: { email, firstName, lastName }` and `payment: { itemName, itemDescription, amount, product }` |
 
 ---
 
