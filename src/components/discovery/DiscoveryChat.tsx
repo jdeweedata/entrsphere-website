@@ -27,7 +27,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ArrowsClockwise, Sparkle } from '@phosphor-icons/react';
 import posthog from 'posthog-js';
-import { saveDiscoverySession, sendDiscoveryProfile } from '@/services/discoveryService';
+import { saveDiscoverySession, sendDiscoveryProfile } from '@/services/discovery';
 
 const TYPING_DELAY = 800; // ms to show typing indicator
 

@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { ChatMessage as ChatMessageType, DiscoveryRoute, ROUTES } from "@/types/discovery";
-import { sendFilesystemAgentMessage } from "@/services/discoveryService";
+import { sendFilesystemAgentMessage } from "@/services/discovery";
 import ChatMessage from "./ChatMessage";
 import TypingIndicator from "./TypingIndicator";
 import DiscoveryCanvas from "./DiscoveryCanvas";

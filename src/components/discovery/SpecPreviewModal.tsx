@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { SpecPreview, generateSpecPreview, saveSpecPreviewLead } from '@/services/discoveryService';
+import { SpecPreview, generateSpecPreview, saveSpecPreviewLead } from '@/services/discovery';
 import { DiscoveryRoute } from '@/types/discovery';
 import { FileCode, Lock, Sparkle, Check, SpinnerGap, ArrowRight, WarningCircle } from '@phosphor-icons/react';
 import Link from 'next/link';

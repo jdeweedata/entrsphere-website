@@ -30,14 +30,14 @@
 
 ## Critical Findings
 
-### 1. Large Files (6 files exceed 500 lines)
+### 1. Large Files (5 files exceed 500 lines)
 
-| File | Lines | Priority | Recommendation |
-|------|-------|----------|----------------|
+| File | Lines | Priority | Status |
+|------|-------|----------|--------|
 | `components/ui/sidebar.tsx` | 762 | Medium | Split into smaller components |
 | `components/discovery/ToolkitSessionContent.tsx` | 756 | Medium | Extract sub-components |
-| `services/discoveryService.ts` | 696 | High | Split by responsibility |
-| `pages-old/BlogPost.tsx` | 604 | Low | Delete (legacy) |
+| ~~`services/discoveryService.ts`~~ | ~~696~~ | ~~High~~ | **RESOLVED** - Split into `services/discovery/` module (2026-02-07) |
+| ~~`pages-old/BlogPost.tsx`~~ | ~~604~~ | ~~Low~~ | **DELETED** - Legacy code removed |
 | `app/api/discovery/agent/route.ts` | 556 | Medium | Extract helper functions |
 | `components/BlogPostContent.tsx` | 540 | Medium | Split into sections |
 
@@ -58,14 +58,11 @@
 
 ### 4. Long Parameter Lists (Top Offenders)
 
-| File | Function | Params | Recommendation |
-|------|----------|--------|----------------|
-| `services/discoveryService.ts:657` | - | 12 | Use options object |
+| File | Function | Params | Status |
+|------|----------|--------|--------|
+| ~~`services/discoveryService.ts`~~ | multiple | 10-12 | **RESOLVED** - Refactored to options objects in `services/discovery/` (2026-02-07) |
 | `components/payments/PayFastButton.tsx:45` | - | 14 | Use options object |
 | `components/payments/PayFastButton.tsx:82` | - | 12 | Use options object |
-| `services/discoveryService.ts:162` | - | 10 | Use options object |
-| `services/discoveryService.ts:222` | - | 10 | Use options object |
-| `services/discoveryService.ts:535` | - | 10 | Use options object |
 
 ### 5. Console Statements - **ALL REMOVED** (2026-02-07)
 
@@ -121,9 +118,9 @@
 - [x] ~~Review critical deep nesting in discovery API routes~~ - Refactored both routes with helper functions (2026-02-07)
 
 ### High Priority (Next Sprint)
-- [ ] Refactor `services/discoveryService.ts` - split into smaller services
-- [ ] Simplify nested logic in `app/api/discovery/chat/route.ts`
-- [ ] Convert long parameter lists to options objects
+- [x] ~~Refactor `services/discoveryService.ts` - split into smaller services~~ - Split into 8 modules in `services/discovery/` (2026-02-07)
+- [x] ~~Simplify nested logic in `app/api/discovery/chat/route.ts`~~ - Extracted helpers (2026-02-07)
+- [x] ~~Convert long parameter lists to options objects~~ - Done in discovery services (2026-02-07)
 
 ### Medium Priority (This Quarter)
 - [x] ~~Delete `pages-old/` directory and other legacy Vite files~~ - All deleted (2026-02-07)
@@ -142,11 +139,12 @@
 
 | Metric | Current | Target |
 |--------|---------|--------|
-| Total Issues | 251 | < 100 |
-| High Severity | 70 | 0 |
+| Total Issues | ~240 | < 100 |
+| High Severity | ~65 | 0 |
 | Console Statements | 0 | 0 |
-| Files > 500 lines | 6 | 0 |
+| Files > 500 lines | 4 | 0 |
 | `any` types | 0 | 0 |
+| Long parameter lists | 2 | 0 |
 
 ---
 
@@ -169,6 +167,7 @@
 | 2026-02-07 | Legacy Vite files | Deleted `src/App.tsx`, `src/main.tsx`, `api-old/`, `vite.config.ts`, `index.html` |
 | 2026-02-07 | Weak typing | Fixed all 6 `any` types in authService.ts, RegisterForm.tsx, LoginForm.tsx |
 | 2026-02-07 | Console statements | Removed all 74 console.log/warn/error statements across 23 files |
+| 2026-02-07 | `services/discoveryService.ts` | Refactored 696-line monolith into 8 focused modules in `services/discovery/`: client.ts, types.ts, session.ts, chat.ts, spec.ts, agent.ts, email.ts, index.ts. All functions now use options object pattern. |
 
 ---
 

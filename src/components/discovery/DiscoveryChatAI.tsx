@@ -5,7 +5,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { ChatMessage as ChatMessageType, DiscoveryRoute } from "@/types/discovery";
-import { sendFilesystemAgentMessage } from "@/services/discoveryService";
+import { sendFilesystemAgentMessage } from "@/services/discovery";
 import ChatMessage from "./ChatMessage";
 import TypingIndicator from "./TypingIndicator";
 import SpecPreviewModal from "./SpecPreviewModal";
