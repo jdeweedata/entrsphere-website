@@ -88,16 +88,16 @@ Debug logs left throughout codebase. Key locations:
 | `components/auth/RegisterForm.tsx` | 40 | Type errors properly |
 | `components/auth/LoginForm.tsx` | 27 | Type errors properly |
 
-### 7. Legacy Code (Can Be Deleted)
+### 7. Legacy Code - **ALL DELETED** (2026-02-07)
 
-As noted in CLAUDE.md, these files are old Vite code:
+~~As noted in CLAUDE.md, these files were old Vite code:~~
 
-- `src/pages-old/` - Old Vite route pages
-- `src/App.tsx` - Old Vite app entry
-- `src/main.tsx` - Old Vite entry point
-- `api-old/` - Old Vercel API functions
-- `vite.config.ts` - Old Vite config
-- `index.html` - Old Vite HTML entry
+- ~~`src/pages-old/` - Old Vite route pages~~
+- ~~`src/App.tsx` - Old Vite app entry~~
+- ~~`src/main.tsx` - Old Vite entry point~~
+- ~~`api-old/` - Old Vercel API functions~~
+- ~~`vite.config.ts` - Old Vite config~~
+- ~~`index.html` - Old Vite HTML entry~~
 
 ---
 
@@ -129,7 +129,7 @@ As noted in CLAUDE.md, these files are old Vite code:
 - [ ] Convert long parameter lists to options objects
 
 ### Medium Priority (This Quarter)
-- [ ] Delete `pages-old/` directory and other legacy Vite files
+- [x] ~~Delete `pages-old/` directory and other legacy Vite files~~ - All deleted (2026-02-07)
 - [ ] Remove/replace 74 console statements with proper logging
 - [ ] Split large component files (sidebar, ToolkitSessionContent)
 - [ ] Fix weak typing (replace `any` with proper types)
@@ -168,6 +168,8 @@ As noted in CLAUDE.md, these files are old Vite code:
 | 2026-02-07 | `components/discovery/DiscoveryChat.tsx` | Removed debug useEffect (lines 60-69) |
 | 2026-02-07 | `app/api/discovery/chat/route.ts` | Extracted `createStreamingResponse` and `streamMessages` helpers to reduce nesting from 9 to 4 levels |
 | 2026-02-07 | `app/api/discovery/agent/route.ts` | Extracted `processToolUseBlocks` and `processSingleToolUse` helpers, used early returns to reduce nesting from 8 to 4 levels |
+| 2026-02-07 | `src/pages-old/` | Deleted entire legacy Vite pages directory (12 files) |
+| 2026-02-07 | Legacy Vite files | Deleted `src/App.tsx`, `src/main.tsx`, `api-old/`, `vite.config.ts`, `index.html` |
 
 ---
 
