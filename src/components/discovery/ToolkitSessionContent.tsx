@@ -220,9 +220,8 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
         input: response.usage.input_tokens,
         output: response.usage.output_tokens,
       });
-    } catch (err) {
+    } catch {
       setError("Failed to start session. Please try again.");
-      console.error("Session start error:", err);
     } finally {
       setIsLoading(false);
       // Wait for DOM update then focus
@@ -302,9 +301,8 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
       }));
 
       detectRouteFromResponse(response.content);
-    } catch (err) {
+    } catch {
       setError("Failed to get response. Please try again.");
-      console.error("Message error:", err);
       setAiMessages(aiMessages);
     } finally {
       setIsLoading(false);
@@ -343,9 +341,8 @@ Please begin the deep-dive discovery process. Load the appropriate playbook and 
       setGeneratedSpec(spec);
 
       posthog.capture("toolkit_spec_generated", { sessionId, route: detectedRoute });
-    } catch (err) {
+    } catch {
       setError("Failed to generate SPEC. Please try again.");
-      console.error("SPEC generation error:", err);
     } finally {
       setIsGeneratingSpec(false);
     }

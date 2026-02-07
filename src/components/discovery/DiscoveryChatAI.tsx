@@ -89,9 +89,8 @@ const DiscoveryChatAI = ({ onSwitchMode }: Props) => {
         input: response.usage.input_tokens,
         output: response.usage.output_tokens,
       });
-    } catch (err) {
+    } catch {
       setError('Failed to connect to AI agent. Please try again.');
-      console.error('AI agent error:', err);
     } finally {
       setIsLoading(false);
       inputRef.current?.focus();
@@ -186,9 +185,8 @@ const DiscoveryChatAI = ({ onSwitchMode }: Props) => {
       // Try to detect route from response
       detectRouteFromResponse(response.content);
 
-    } catch (err) {
+    } catch {
       setError('Failed to get response. Please try again.');
-      console.error('AI agent error:', err);
 
       // Remove the user message from AI messages on error
       setAiMessages(aiMessages);

@@ -99,8 +99,7 @@ export async function POST(request: NextRequest) {
       actionUrl,
       sandbox: isSandbox,
     });
-  } catch (error) {
-    console.error("PayFast initiate payment error:", error);
+  } catch {
     return NextResponse.json(
       { error: "Failed to initiate payment" },
       { status: 500 }

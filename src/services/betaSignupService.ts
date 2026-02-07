@@ -28,10 +28,8 @@ export const createBetaSignup = async (signupData: BetaSignup) => {
       }
     );
     
-    console.log('Beta signup created successfully:', document);
     return { success: true, data: document };
   } catch (error) {
-    console.error('Error creating beta signup:', error);
     return { success: false, error: error };
   }
 };
@@ -45,8 +43,7 @@ export const checkDuplicateEmail = async (email: string) => {
     );
     
     return result.documents.length > 0;
-  } catch (error) {
-    console.error('Error checking duplicate email:', error);
+  } catch {
     return false;
   }
 };

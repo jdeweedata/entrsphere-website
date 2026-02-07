@@ -145,8 +145,6 @@ Output ONLY the valid JSON object, no additional text.`;
       },
     });
   } catch (error) {
-    console.error("SPEC generation error:", error);
-
     if (error instanceof Anthropic.APIError) {
       return NextResponse.json(
         { error: error.message, type: "api_error" },

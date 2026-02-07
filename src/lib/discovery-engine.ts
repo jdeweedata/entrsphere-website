@@ -432,8 +432,8 @@ const STORAGE_KEY = 'entrsphere_discovery_session';
 export function saveSession(session: DiscoverySession): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
-  } catch (e) {
-    console.warn('Failed to save discovery session:', e);
+  } catch {
+    // Silently fail - localStorage may be unavailable
   }
 }
 
@@ -451,8 +451,7 @@ export function loadSession(): DiscoverySession | null {
     }
 
     return session;
-  } catch (e) {
-    console.warn('Failed to load discovery session:', e);
+  } catch {
     return null;
   }
 }
@@ -461,7 +460,7 @@ export function loadSession(): DiscoverySession | null {
 export function clearSession(): void {
   try {
     localStorage.removeItem(STORAGE_KEY);
-  } catch (e) {
-    console.warn('Failed to clear discovery session:', e);
+  } catch {
+    // Silently fail - localStorage may be unavailable
   }
 }

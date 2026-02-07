@@ -228,8 +228,7 @@ export async function verifyPaymentWithPayFast(
 
     const result = await response.text();
     return result === "VALID";
-  } catch (error) {
-    console.error("PayFast verification error:", error);
+  } catch {
     return false;
   }
 }

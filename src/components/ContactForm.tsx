@@ -81,9 +81,8 @@ export default function ContactForm() {
       setEmail("");
       setMessage("");
       setSelectedPersona(null);
-    } catch (err) {
+    } catch {
       setError("Something went wrong. Please try again.");
-      console.error(err);
     } finally {
       setIsSubmitting(false);
     }

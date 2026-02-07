@@ -35,7 +35,6 @@ export async function saveDiscoverySession(
   wantsUpdates?: boolean
 ): Promise<{ success: boolean; message: string }> {
   if (!convex) {
-    console.warn("Convex not configured, session not saved to backend");
     return { success: true, message: "Session saved locally only" };
   }
 
@@ -68,8 +67,7 @@ export async function saveDiscoverySession(
   try {
     const result = await convex.mutation(api.discovery.saveSession, sessionData);
     return result;
-  } catch (error) {
-    console.error("Failed to save discovery session:", error);
+  } catch {
     return { success: false, message: "Failed to save session" };
   }
 }
@@ -89,8 +87,7 @@ export async function getDiscoveryStats(): Promise<{
   try {
     const stats = await convex.query(api.discovery.getRouteStats);
     return stats;
-  } catch (error) {
-    console.error("Failed to get discovery stats:", error);
+  } catch {
     return null;
   }
 }
@@ -118,8 +115,7 @@ export async function getPatternInsights(): Promise<{
       routeDistribution: result.routeDistribution,
       message: result.message,
     };
-  } catch (error) {
-    console.error("Failed to get pattern insights:", error);
+  } catch {
     return null;
   }
 }
@@ -468,7 +464,6 @@ export async function saveSpecPreviewLead(
   conversationLength: number
 ): Promise<{ success: boolean; message: string; isRepeat?: boolean }> {
   if (!convex) {
-    console.warn("Convex not configured");
     return { success: true, message: "Lead saved locally only" };
   }
 
@@ -485,8 +480,7 @@ export async function saveSpecPreviewLead(
       conversationLength,
     });
     return result;
-  } catch (error) {
-    console.error("Failed to save SPEC preview lead:", error);
+  } catch {
     return { success: false, message: "Failed to save lead" };
   }
 }
@@ -599,8 +593,7 @@ export async function generateOutcomeToken(
       sessionId,
     });
     return { success: true, token: result.token };
-  } catch (error) {
-    console.error("Failed to generate outcome token:", error);
+  } catch {
     return { success: false, error: "Failed to generate token" };
   }
 }
@@ -623,7 +616,6 @@ export async function sendDiscoveryProfile(
   session: DiscoverySession
 ): Promise<{ success: boolean; message: string; outcomeToken?: string }> {
   if (!convex) {
-    console.warn("Convex not configured, cannot send email");
     return { success: false, message: "Email service not available" };
   }
 
@@ -645,8 +637,7 @@ export async function sendDiscoveryProfile(
     if (tokenResult.success && tokenResult.token) {
       outcomeToken = tokenResult.token;
     }
-  } catch (error) {
-    console.error("Failed to generate outcome token:", error);
+  } catch {
     // Continue without token
   }
 
@@ -669,7 +660,6 @@ export async function sendDiscoveryProfile(
     });
 
     if (!emailResult.success) {
-      console.error("Failed to send email:", emailResult.error);
       // Still return success since session was saved
       return {
         success: true,
@@ -683,8 +673,7 @@ export async function sendDiscoveryProfile(
       message: "Profile sent to your email!",
       outcomeToken,
     };
-  } catch (error) {
-    console.error("Failed to send discovery email:", error);
+  } catch {
     // Still return success since session was saved
     return {
       success: true,

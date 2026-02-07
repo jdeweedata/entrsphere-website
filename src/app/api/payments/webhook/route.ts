@@ -22,7 +22,6 @@ export async function POST(request: NextRequest) {
     // Verify webhook signature
     const secret = process.env.PAYSTACK_SECRET_KEY;
     if (!secret) {
-      console.error("Paystack secret key not configured");
       return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
     }
 
@@ -32,7 +31,6 @@ export async function POST(request: NextRequest) {
       .digest("hex");
 
     if (hash !== signature) {
-      console.error("Invalid Paystack webhook signature");
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
@@ -40,8 +38,6 @@ export async function POST(request: NextRequest) {
     const payload = JSON.parse(body);
     const event = payload.event;
     const data = payload.data;
-
-    console.log("Paystack webhook received:", event);
 
     // Handle different event types
     const convex = getConvexClient();
@@ -55,8 +51,6 @@ export async function POST(request: NextRequest) {
           status: "success",
           paystackData: data,
         });
-
-        console.log("Payment successful:", reference);
         break;
       }
 
@@ -68,18 +62,16 @@ export async function POST(request: NextRequest) {
           status: "failed",
           paystackData: data,
         });
-
-        console.log("Payment failed:", reference);
         break;
       }
 
       default:
-        console.log("Unhandled webhook event:", event);
+        // Unhandled event type - silently ignore
+        break;
     }
 
     return NextResponse.json({ received: true });
-  } catch (error) {
-    console.error("Webhook error:", error);
+  } catch {
     return NextResponse.json(
       { error: "Webhook processing failed" },
       { status: 500 }

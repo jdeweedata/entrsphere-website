@@ -185,8 +185,7 @@ const DiscoveryChat = () => {
     // Save to Convex and send discovery profile
     try {
       await sendDiscoveryProfile(email, completedSession);
-    } catch (error) {
-      console.error('Failed to save session to backend:', error);
+    } catch {
       // Continue anyway - local session is saved
     }
 
@@ -221,8 +220,8 @@ const DiscoveryChat = () => {
     // Save to Convex (without email for anonymous pattern data)
     try {
       await saveDiscoverySession(completedSession);
-    } catch (error) {
-      console.error('Failed to save session to backend:', error);
+    } catch {
+      // Silently fail - session is saved locally
     }
 
     // Track completion without email

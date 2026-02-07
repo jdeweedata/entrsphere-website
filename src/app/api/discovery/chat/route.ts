@@ -49,7 +49,6 @@ function createStreamingResponse(
       try {
         await streamMessages(client, model, modelParams, systemPrompt, messages, encoder, controller);
       } catch (error) {
-        console.error("Streaming error:", error);
         controller.error(error);
       }
     },
@@ -206,8 +205,6 @@ export async function POST(request: NextRequest) {
       });
     }
   } catch (error) {
-    console.error("Discovery chat error:", error);
-
     if (error instanceof Anthropic.APIError) {
       return NextResponse.json(
         { error: error.message, type: "api_error" },

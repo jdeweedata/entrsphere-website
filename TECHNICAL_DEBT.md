@@ -67,18 +67,15 @@
 | `services/discoveryService.ts:222` | - | 10 | Use options object |
 | `services/discoveryService.ts:535` | - | 10 | Use options object |
 
-### 5. Console Statements (74 total)
+### 5. Console Statements - **ALL REMOVED** (2026-02-07)
 
-Debug logs left throughout codebase. Key locations:
-
-| File | Count | Action |
-|------|-------|--------|
-| `contexts/AuthContext.tsx` | 2 | Remove or use proper logging |
-| `components/ContactForm.tsx` | 1 | Remove |
-| `hooks/useBetaFormSubmission.ts` | 2 | Remove |
-| `lib/payfast.ts` | 1 | Use proper error handling |
-| `lib/playbook-loader.ts` | 4 | Use proper logging |
-| Various others | 64 | Audit and remove |
+~~Debug logs left throughout codebase~~ - All 74 console statements removed from:
+- Services (authService, betaSignupService, discoveryService)
+- Components (ContactForm, admin, discovery, payments)
+- Hooks (useBetaFormSubmission)
+- Lib files (discovery-engine, playbook-loader, payfast)
+- API routes (discovery, payments)
+- Contexts (AuthContext)
 
 ### 6. Weak Typing - **ALL FIXED** (2026-02-07)
 
@@ -130,7 +127,7 @@ Debug logs left throughout codebase. Key locations:
 
 ### Medium Priority (This Quarter)
 - [x] ~~Delete `pages-old/` directory and other legacy Vite files~~ - All deleted (2026-02-07)
-- [ ] Remove/replace 74 console statements with proper logging
+- [x] ~~Remove/replace 74 console statements with proper logging~~ - All removed (2026-02-07)
 - [ ] Split large component files (sidebar, ToolkitSessionContent)
 - [x] ~~Fix weak typing (replace `any` with proper types)~~ (2026-02-07)
 
@@ -145,9 +142,9 @@ Debug logs left throughout codebase. Key locations:
 
 | Metric | Current | Target |
 |--------|---------|--------|
-| Total Issues | 325 | < 100 |
+| Total Issues | 251 | < 100 |
 | High Severity | 70 | 0 |
-| Console Statements | 73 | 0 |
+| Console Statements | 0 | 0 |
 | Files > 500 lines | 6 | 0 |
 | `any` types | 0 | 0 |
 
@@ -171,6 +168,7 @@ Debug logs left throughout codebase. Key locations:
 | 2026-02-07 | `src/pages-old/` | Deleted entire legacy Vite pages directory (12 files) |
 | 2026-02-07 | Legacy Vite files | Deleted `src/App.tsx`, `src/main.tsx`, `api-old/`, `vite.config.ts`, `index.html` |
 | 2026-02-07 | Weak typing | Fixed all 6 `any` types in authService.ts, RegisterForm.tsx, LoginForm.tsx |
+| 2026-02-07 | Console statements | Removed all 74 console.log/warn/error statements across 23 files |
 
 ---
 

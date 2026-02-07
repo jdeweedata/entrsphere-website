@@ -53,23 +53,13 @@ export async function POST(request: NextRequest) {
       signature: params.get("signature") || undefined,
     };
 
-    console.log("PayFast ITN received:", {
-      paymentId: itnData.m_payment_id,
-      pfPaymentId: itnData.pf_payment_id,
-      status: itnData.payment_status,
-    });
-
     // Verify the source host (optional but recommended)
-    const forwardedFor = request.headers.get("x-forwarded-for");
-    const host = forwardedFor?.split(",")[0]?.trim();
-
     // In production, you might want to verify the IP or host
     // For now, we'll skip this check as it's optional
 
     // Step 1: Verify signature (pass rawBody to preserve parameter order)
     const passphrase = process.env.PAYFAST_PASSPHRASE;
     if (!validateITNSignature(itnData, passphrase, rawBody)) {
-      console.error("PayFast ITN signature validation failed");
       // Don't reveal signature failure to potential attackers
       return new NextResponse("OK", { status: 200 });
     }
@@ -79,17 +69,12 @@ export async function POST(request: NextRequest) {
     const isValid = await verifyPaymentWithPayFast(rawBody, isSandbox);
 
     if (!isValid) {
-      console.error("PayFast server verification failed");
       return new NextResponse("OK", { status: 200 });
     }
 
     // Step 3: Verify merchant ID matches
     const expectedMerchantId = process.env.PAYFAST_MERCHANT_ID;
     if (itnData.merchant_id !== expectedMerchantId) {
-      console.error("PayFast merchant ID mismatch:", {
-        received: itnData.merchant_id,
-        expected: expectedMerchantId,
-      });
       return new NextResponse("OK", { status: 200 });
     }
 
@@ -115,14 +100,7 @@ export async function POST(request: NextRequest) {
           item_name: itnData.item_name,
         },
       });
-
-      console.log("PayFast payment processed:", {
-        reference,
-        status,
-        pfPaymentId: itnData.pf_payment_id,
-      });
-    } catch (dbError) {
-      console.error("Failed to update purchase in database:", dbError);
+    } catch {
       // Still return 200 to prevent PayFast from retrying
       // The payment was valid, just our DB update failed
     }
@@ -130,8 +108,7 @@ export async function POST(request: NextRequest) {
     // Return 200 OK to acknowledge receipt
     // PayFast expects a 200 response, otherwise it will retry
     return new NextResponse("OK", { status: 200 });
-  } catch (error) {
-    console.error("PayFast ITN error:", error);
+  } catch {
     // Still return 200 to prevent infinite retries
     return new NextResponse("OK", { status: 200 });
   }

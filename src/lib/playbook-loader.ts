@@ -45,8 +45,7 @@ export async function loadPlaybook(route: DiscoveryRoute): Promise<PlaybookConte
       name: PLAYBOOK_NAMES[route],
       content,
     };
-  } catch (error) {
-    console.error(`Failed to load playbook for route ${route}:`, error);
+  } catch {
     return {
       route,
       name: PLAYBOOK_NAMES[route],
@@ -67,8 +66,7 @@ export async function loadKnowledge(
   try {
     const content = await fs.readFile(filepath, "utf-8");
     return { type, content };
-  } catch (error) {
-    console.error(`Failed to load knowledge base (${type}):`, error);
+  } catch {
     return {
       type,
       content: `Knowledge base content (${type}) could not be loaded.`,
@@ -85,8 +83,7 @@ export async function loadSpecSchema(): Promise<object | null> {
   try {
     const content = await fs.readFile(filepath, "utf-8");
     return JSON.parse(content);
-  } catch (error) {
-    console.error("Failed to load SPEC schema:", error);
+  } catch {
     return null;
   }
 }
@@ -100,8 +97,7 @@ export async function loadDeepDiveQuestions(): Promise<string> {
   try {
     const content = await fs.readFile(filepath, "utf-8");
     return content;
-  } catch (error) {
-    console.error("Failed to load deep dive questions:", error);
+  } catch {
     return "";
   }
 }

@@ -70,12 +70,10 @@ export default function PaystackButton({
         if (data.success) {
           onSuccess(response.reference);
         } else {
-          console.error("Payment verification failed:", data);
           // Still allow access if Paystack says success but our backend failed
           onSuccess(response.reference);
         }
-      } catch (error) {
-        console.error("Verification error:", error);
+      } catch {
         // Still allow access - payment was successful at Paystack
         onSuccess(response.reference);
       } finally {
@@ -133,8 +131,7 @@ export default function PaystackButton({
 
       setReference(newReference);
       setShouldInitialize(true);
-    } catch (error) {
-      console.error("Failed to create purchase record:", error);
+    } catch {
       alert("Failed to initialize payment. Please try again.");
       setIsLoading(false);
     }

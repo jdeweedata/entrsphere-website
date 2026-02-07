@@ -41,13 +41,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (_email: string, _password: string) => {
     // Auth disabled - implement with Convex auth when needed
-    console.warn('Auth is disabled. Implement Convex auth to enable login.');
     throw new Error('Auth is currently disabled');
   };
 
   const register = async (_email: string, _password: string, _name: string) => {
     // Auth disabled - implement with Convex auth when needed
-    console.warn('Auth is disabled. Implement Convex auth to enable registration.');
     throw new Error('Auth is currently disabled');
   };
 

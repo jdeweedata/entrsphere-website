@@ -43,9 +43,8 @@ async function logConversation(
       toolSuccess,
       errorMessage,
     });
-  } catch (error) {
+  } catch {
     // Don't fail the request if logging fails
-    console.error("Failed to log conversation:", error);
   }
 }
 
@@ -564,8 +563,6 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Filesystem agent error:", error);
-
     if (error instanceof Anthropic.APIError) {
       return NextResponse.json(
         { error: error.message, type: "api_error" },

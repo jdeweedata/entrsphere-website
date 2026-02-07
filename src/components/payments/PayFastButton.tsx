@@ -109,7 +109,6 @@ export default function PayFastButton({
       setFormData(data.formData);
       setActionUrl(data.actionUrl);
     } catch (error) {
-      console.error("PayFast initiation error:", error);
       onError?.(error instanceof Error ? error.message : "Failed to initialize payment");
       setIsLoading(false);
     }

@@ -31,8 +31,7 @@ const AdminDashboard: React.FC = () => {
         BETA_SIGNUPS_COLLECTION_ID
       );
       setSignups(result.documents as BetaSignup[]);
-    } catch (error) {
-      console.error('Error fetching signups:', error);
+    } catch {
       toast.error('Failed to load beta signups');
     } finally {
       setIsLoading(false);

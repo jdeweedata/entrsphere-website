@@ -36,7 +36,6 @@ export async function POST(request: NextRequest) {
     });
 
     if (!paystackResponse.ok) {
-      console.error("Paystack verification failed:", await paystackResponse.text());
       return NextResponse.json(
         { error: "Payment verification failed" },
         { status: 400 }
@@ -71,8 +70,7 @@ export async function POST(request: NextRequest) {
         status: paystackData.data?.status,
       });
     }
-  } catch (error) {
-    console.error("Payment verification error:", error);
+  } catch {
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

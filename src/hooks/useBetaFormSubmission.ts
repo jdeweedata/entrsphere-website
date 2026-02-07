@@ -83,14 +83,12 @@ export const useBetaFormSubmission = ({ validateForm, resetErrors }: UseBetaForm
         posthog?.capture('beta_signup_failed', {
           error: result.error,
         });
-        console.error('Signup failed:', result.error);
       }
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
       posthog?.capture('beta_signup_error', {
         error: error instanceof Error ? error.message : 'Unknown error',
       });
-      console.error('Signup error:', error);
     } finally {
       setIsSubmitting(false);
     }

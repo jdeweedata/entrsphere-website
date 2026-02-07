@@ -136,8 +136,6 @@ Output ONLY the valid JSON object.`;
       },
     });
   } catch (error) {
-    console.error("SPEC preview generation error:", error);
-
     if (error instanceof Anthropic.APIError) {
       return NextResponse.json(
         { error: error.message, type: "api_error" },

@@ -207,8 +207,7 @@ export default function OutcomePage() {
         contributeToBenchmarks: true,
       });
       setIsSubmitted(true);
-    } catch (error) {
-      console.error("Failed to record outcome:", error);
+    } catch {
       alert("Failed to record outcome. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -224,8 +223,7 @@ export default function OutcomePage() {
         contributeToBenchmarks: true,
       });
       setIsSubmitted(true);
-    } catch (error) {
-      console.error("Failed to record outcome:", error);
+    } catch {
       alert("Failed to record outcome. Please try again.");
     } finally {
       setIsSubmitting(false);

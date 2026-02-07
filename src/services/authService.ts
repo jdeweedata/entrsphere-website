@@ -28,10 +28,8 @@ export const authService = {
   register: async (email: string, password: string, name: string): Promise<User> => {
     try {
       const user = await account.create(ID.unique(), email, password, name);
-      console.log('User registered:', user);
       return user;
     } catch (error: unknown) {
-      console.error('Registration error:', error);
       throw new Error(getErrorMessage(error) || 'Registration failed');
     }
   },
@@ -40,10 +38,8 @@ export const authService = {
   login: async (email: string, password: string): Promise<Models.Session> => {
     try {
       const session = await account.createEmailPasswordSession(email, password);
-      console.log('User logged in:', session);
       return session;
     } catch (error: unknown) {
-      console.error('Login error:', error);
       throw new Error(getErrorMessage(error) || 'Login failed');
     }
   },
@@ -52,9 +48,7 @@ export const authService = {
   logout: async (): Promise<void> => {
     try {
       await account.deleteSession('current');
-      console.log('User logged out');
     } catch (error: unknown) {
-      console.error('Logout error:', error);
       throw new Error(getErrorMessage(error) || 'Logout failed');
     }
   },
