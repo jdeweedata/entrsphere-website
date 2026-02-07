@@ -30,16 +30,16 @@
 
 ## Critical Findings
 
-### 1. Large Files (5 files exceed 500 lines)
+### 1. Large Files (4 files exceed 500 lines)
 
 | File | Lines | Priority | Status |
 |------|-------|----------|--------|
-| `components/ui/sidebar.tsx` | 762 | Medium | Split into smaller components |
-| `components/discovery/ToolkitSessionContent.tsx` | 756 | Medium | Extract sub-components |
+| `components/ui/sidebar.tsx` | 762 | Low | shadcn/ui component - leave as-is |
+| ~~`components/discovery/ToolkitSessionContent.tsx`~~ | ~~756~~ → 445 | ~~Medium~~ | **RESOLVED** - Extracted to `toolkit/` folder (2026-02-07) |
 | ~~`services/discoveryService.ts`~~ | ~~696~~ | ~~High~~ | **RESOLVED** - Split into `services/discovery/` module (2026-02-07) |
 | ~~`pages-old/BlogPost.tsx`~~ | ~~604~~ | ~~Low~~ | **DELETED** - Legacy code removed |
 | `app/api/discovery/agent/route.ts` | 556 | Medium | Extract helper functions |
-| `components/BlogPostContent.tsx` | 540 | Medium | Split into sections |
+| `components/BlogPostContent.tsx` | 540 | Low | Blog content - acceptable size |
 
 ### 2. BUG Comments (Investigated)
 
@@ -138,10 +138,10 @@
 
 | Metric | Current | Target |
 |--------|---------|--------|
-| Total Issues | ~235 | < 100 |
-| High Severity | ~60 | 0 |
+| Total Issues | ~230 | < 100 |
+| High Severity | ~55 | 0 |
 | Console Statements | 0 | 0 |
-| Files > 500 lines | 4 | 0 |
+| Files > 500 lines | 3 | 0 |
 | `any` types | 0 | 0 |
 | Long parameter lists | 0 | 0 |
 
@@ -168,6 +168,7 @@
 | 2026-02-07 | Console statements | Removed all 74 console.log/warn/error statements across 23 files |
 | 2026-02-07 | `services/discoveryService.ts` | Refactored 696-line monolith into 8 focused modules in `services/discovery/`: client.ts, types.ts, session.ts, chat.ts, spec.ts, agent.ts, email.ts, index.ts. All functions now use options object pattern. |
 | 2026-02-07 | `components/payments/PayFastButton.tsx` | Refactored 14 flat props into grouped objects: `customer: { email, firstName, lastName }` and `payment: { itemName, itemDescription, amount, product }` |
+| 2026-02-07 | `components/discovery/ToolkitSessionContent.tsx` | Refactored 756-line component into 445 lines + 4 extracted components in `toolkit/`: PaymentGate.tsx, SessionHeader.tsx, ChatInput.tsx, SpecPreviewCard.tsx |
 
 ---
 
