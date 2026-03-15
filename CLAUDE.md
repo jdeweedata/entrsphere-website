@@ -4,69 +4,54 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Purpose
 
-EntrSphere is an AI-native development consultancy website with a flagship **Discovery Router** product — an AI agent that turns vague project ideas into actionable SPEC documents. The site serves as both a marketing/sales funnel and the product delivery platform.
+EntrSphere is a **productized business audit service** that helps South African SMEs find revenue they're leaving on the table. The site is a marketing landing page + payment flow + intake form.
 
-**Primary goal**: Convert visitors into paying Discovery Toolkit customers (R2,500/session).
+**Primary goal**: Convert visitors into paying audit customers (Quick Scan R2,500 / Deep Dive R6,000 / Full Audit R7,500).
 
 ## Project Tree
 
 ```
 entrsphere.com/
 ├── CLAUDE.md                  # THIS FILE — read first every session
-├── context/                   # Layer 3: Training materials & learnings
+├── context/                   # Training materials & learnings
 │   ├── brand-voice.md         # Tone, copy standards, approved messaging
 │   ├── tech-standards.md      # Code patterns, conventions, gotchas
-│   └── product-knowledge.md   # Discovery Router features, pricing, flows
+│   └── product-knowledge.md   # Audit service features, pricing, flows
 ├── src/
 │   ├── app/                   # Next.js App Router pages
-│   │   ├── page.tsx           # Homepage (marketing landing)
-│   │   ├── about/             # Company story
-│   │   ├── blog/              # Content marketing (Convex-powered)
-│   │   ├── case-studies/      # Social proof
-│   │   ├── contact/           # Lead capture (Convex mutation)
-│   │   ├── dashboard/         # Admin panel
-│   │   ├── discovery/         # Discovery Agent (free tier)
-│   │   ├── login/ & register/ # Auth pages (Appwrite)
-│   │   ├── outcome/[token]/   # Shareable outcome pages
+│   │   ├── page.tsx           # Homepage (audit landing page)
+│   │   ├── intake/            # Post-payment intake form
 │   │   ├── payment/           # PayFast success/cancel flows
-│   │   ├── solutions/         # Product pages
-│   │   │   ├── discovery-router/    # Flagship product
-│   │   │   ├── consulting/          # Service offering
-│   │   │   └── product-requirements/# PRD service
-│   │   └── waitlist/          # Pre-launch capture
-│   ├── components/            # React components
-│   │   ├── ui/                # shadcn/ui primitives
-│   │   ├── forms/             # Form components
-│   │   ├── auth/              # Auth components
-│   │   ├── admin/             # Admin components
-│   │   └── discovery/         # Discovery agent UI
-│   ├── contexts/              # React contexts (AuthContext)
+│   │   ├── api/
+│   │   │   ├── notify/        # Email notifications (Resend)
+│   │   │   └── payments/      # PayFast initiate + ITN webhook
+│   │   ├── layout.tsx         # Root layout
+│   │   └── not-found.tsx      # 404 page
+│   ├── components/
+│   │   ├── audit/             # Audit landing page sections
+│   │   ├── payments/          # PayFastButton
+│   │   └── ui/                # shadcn/ui primitives
 │   ├── hooks/                 # Custom hooks
-│   ├── lib/                   # Utilities (cn, etc.)
-│   ├── services/              # API service layer
-│   ├── styles/                # Global CSS
-│   └── types/                 # TypeScript types
+│   ├── lib/                   # Utilities (cn, payfast, pricing, posthog)
+│   └── styles/                # Global CSS
 ├── convex/                    # Backend: schema, mutations, queries
-├── discovery-fs/              # Filesystem agent context
-│   ├── playbooks/             # Route A-D guides
-│   ├── templates/             # SPEC schema, questions
-│   ├── knowledge/             # Red flags, scope creep signals
-│   └── patterns/              # Route distribution data
-├── docs/                      # Strategy docs, marketing copy, research
-├── assets/                    # Design assets (reference + source)
-└── specs/                     # Technical specifications
+│   ├── schema.ts              # contacts, subscribers, purchases, intakeSubmissions
+│   ├── payments.ts            # Payment mutations/queries
+│   ├── intakeSubmissions.ts   # Intake form mutations/queries
+│   ├── contacts.ts            # Contact submissions
+│   └── subscribers.ts         # Email subscribers
+├── docs/                      # Strategy docs, marketing copy
+└── context/                   # Session learnings, brand voice
 ```
 
 ## Tech Stack
 
 - **Framework**: Next.js 16 (App Router)
 - **Styling**: Tailwind CSS + shadcn/ui components
-- **Backend**: Convex (real-time database), Appwrite (auth)
-- **Payments**: PayFast (primary, ZAR), Paystack (legacy)
-- **AI**: Anthropic Claude API (Haiku for previews, Sonnet for chat/SPEC)
+- **Backend**: Convex (real-time database)
+- **Payments**: PayFast (ZAR)
 - **Icons**: Phosphor Icons
-- **State**: TanStack React Query + React Context (AuthContext)
-- **Forms**: React Hook Form + Zod validation
+- **State**: TanStack React Query
 - **Analytics**: PostHog
 - **Email**: Resend
 - **Deploy**: Vercel (auto-deploy on push to main)
@@ -78,33 +63,21 @@ entrsphere.com/
 - Pages in `src/app/` are Server Components by default
 - Client components must have `"use client"` at top
 - Convex queries/mutations require client components
-- Pages using Convex must export `dynamic = "force-dynamic"`
 - Use `npm run dev:memory` to start dev server (avoids heap errors)
-- Use `npm run type-check:memory` to check types (avoids heap errors)
 - Add shadcn components via: `npx shadcn@latest add [name]` (goes to `src/components/ui/`)
 
 ### Environment Variables
 - Client-side vars use `NEXT_PUBLIC_` prefix
-- Required: `NEXT_PUBLIC_CONVEX_URL`, `ANTHROPIC_API_KEY`
-- Optional: `NEXT_PUBLIC_POSTHOG_API_KEY`, `RESEND_API_KEY`
-- Payments: `PAYFAST_MERCHANT_ID`, `PAYFAST_MERCHANT_KEY`, `PAYFAST_PASSPHRASE`
+- Required: `NEXT_PUBLIC_CONVEX_URL`, `NEXT_PUBLIC_APP_URL`
+- Payments: `PAYFAST_MERCHANT_ID`, `PAYFAST_MERCHANT_KEY`, `PAYFAST_PASSPHRASE`, `PAYFAST_SANDBOX`
+- Email: `RESEND_API_KEY`, `NOTIFY_EMAIL`
+- Optional: `NEXT_PUBLIC_POSTHOG_API_KEY`
 - Never commit `.env.local` — use `.env.example` as reference
 
-### Auth Flow
-- `AuthProvider` wraps app in `providers.tsx`
-- `useAuth()` hook for auth state and actions
-- Admin check: email `admin@entrsphere.com`
-
 ### Business Rules
-- Every feature must ladder to revenue (R150K/month goal)
-- Discovery Router is the flagship — protect its UX above all
-- SA market first: ZAR pricing, PayFast payments, WhatsApp-friendly
+- SA market first: ZAR pricing, PayFast payments
+- Three tiers: Quick Scan (R2,500), Deep Dive (R6,000), Full Audit (R7,500)
 - Ship fast, validate with real users before polishing
-
-### Old Files (Safe to Remove)
-- `src/pages-old/`, `src/App.tsx`, `src/main.tsx` — old Vite code
-- `api-old/` — old Vercel API functions
-- `vite.config.ts`, `index.html` — old Vite config
 
 ## Note-Taking Protocol
 
