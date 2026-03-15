@@ -1,13 +1,29 @@
 #!/bin/bash
 # Generate blog hero image using Gemini 3.1 Flash Image Preview API
-# Usage: GEMINI_API_KEY=your_key ./scripts/generate-blog-hero.sh [output_filename]
+# Usage: GEMINI_API_KEY=your_key ./scripts/generate-blog-hero.sh [options] [output_filename]
+#   --prompt "your prompt"    Custom prompt (default: Never-done Machine)
+#   --ratio  "16:9"           Aspect ratio: 16:9, 1:1, 3:1 (default: 16:9)
 
 set -euo pipefail
+
+# ── Parse args ──────────────────────────────────────────────────────────────
+CUSTOM_PROMPT=""
+ASPECT_RATIO="16:9"
+OUTPUT_FILE=""
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --prompt) CUSTOM_PROMPT="$2"; shift 2 ;;
+    --ratio)  ASPECT_RATIO="$2"; shift 2 ;;
+    *)        OUTPUT_FILE="$1"; shift ;;
+  esac
+done
+
+OUTPUT_FILE="${OUTPUT_FILE:-blog_hero_$(date +%Y%m%d_%H%M%S).png}"
 
 # ── Config ──────────────────────────────────────────────────────────────────
 MODEL="gemini-3.1-flash-image-preview"
 API_URL="https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent"
-OUTPUT_FILE="${1:-blog_hero_$(date +%Y%m%d_%H%M%S).png}"
 
 if [[ -z "${GEMINI_API_KEY:-}" ]]; then
   echo "❌ Error: GEMINI_API_KEY environment variable is not set."
@@ -17,9 +33,14 @@ if [[ -z "${GEMINI_API_KEY:-}" ]]; then
 fi
 
 # ── Prompt ──────────────────────────────────────────────────────────────────
-PROMPT='Editorial illustration for a tech blog article titled "The Never-done Machine". Wide-format banner image. The concept shows a surreal, Escher-like perpetual motion machine made of interconnected gears, conveyor belts, and digital screens, with small human figures working alongside AI robot assistants in a never-ending loop. The machine wraps around itself impossibly, suggesting work that never finishes. Style: modern editorial illustration, flat geometric shapes with subtle gradients, muted color palette of deep navy blue, warm amber/orange, soft lavender purple, and cream white. Clean lines, sophisticated composition. The aesthetic is premium, intellectual, and slightly whimsical — like a New Yorker or Monocle magazine illustration. No text overlays.'
+if [[ -n "$CUSTOM_PROMPT" ]]; then
+  PROMPT="$CUSTOM_PROMPT"
+else
+  PROMPT='A wide panoramic illustration in the style of a 19th-century Victorian steel engraving with dense cross-hatching, stippling, and halftone dot shading. Two figures in Renaissance-era clothing, seen from behind, stand at the entrance of a grand neoclassical courtyard with towering Corinthian columns, stone arches, a geometric tiled floor, and tall cypress trees in the distance. A church bell tower is visible on the horizon. On the right side of the courtyard sits early industrial machinery — a printing press and a mechanical device. The entire illustration is rendered in black and white linework with a flat solid golden amber sky filling the background. The style evokes Gustave Doré or Giovanni Battista Piranesi engravings. No text.'
+fi
 
-echo "🎨 Generating blog hero image with Gemini ${MODEL}..."
+echo "🎨 Generating image with Gemini ${MODEL}..."
+echo "   Ratio: ${ASPECT_RATIO}"
 echo "   Prompt: ${PROMPT:0:80}..."
 echo ""
 
@@ -36,7 +57,7 @@ RESPONSE=$(curl -s -X POST "${API_URL}" \
     \"generationConfig\": {
       \"responseModalities\": [\"Image\"],
       \"imageConfig\": {
-        \"aspectRatio\": \"16:9\",
+        \"aspectRatio\": \"${ASPECT_RATIO}\",
         \"imageSize\": \"2K\"
       }
     }
@@ -64,5 +85,5 @@ echo "$IMAGE_DATA" | base64 -d > "$OUTPUT_FILE"
 FILE_SIZE=$(stat -c%s "$OUTPUT_FILE" 2>/dev/null || stat -f%z "$OUTPUT_FILE" 2>/dev/null)
 echo "✅ Image saved to: $OUTPUT_FILE ($(( FILE_SIZE / 1024 )) KB)"
 echo ""
-echo "📐 Aspect ratio: 16:9 (wide banner)"
+echo "📐 Aspect ratio: ${ASPECT_RATIO}"
 echo "📏 Resolution: 2K"
