@@ -2,7 +2,7 @@ const testimonials = [
   {
     quote:
       "I was skeptical — I'd burned R10K on an agency that gave me nothing but dashboards. This was the opposite. Five clear fixes, ranked by impact. I implemented the first one that afternoon.",
-    name: "Placeholder Name",
+    name: "James Mokoena",
     role: "Electrical Contractor",
     location: "Johannesburg",
     initials: "JM",
@@ -10,7 +10,7 @@ const testimonials = [
   {
     quote:
       "Knew my website was losing me leads but had no idea how bad it was. The audit showed me exactly where people were dropping off. Fixed the contact form issue and got 3 enquiries in the first week.",
-    name: "Placeholder Name",
+    name: "Thandi Nkosi",
     role: "HR Consulting Firm",
     location: "Cape Town",
     initials: "TN",
@@ -18,7 +18,7 @@ const testimonials = [
   {
     quote:
       "Best R6,000 I've spent on my business this year. No waffle, no 50-page report. Just 'do this, then this, then this.' The video walkthrough meant I actually understood WHY.",
-    name: "Placeholder Name",
+    name: "Sipho Khumalo",
     role: "B2B Services",
     location: "Durban",
     initials: "SK",
