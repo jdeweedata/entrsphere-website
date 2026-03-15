@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
+export const dynamic = "force-dynamic";
+
 const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || "hello@entrsphere.com";
 
 interface IntakeData {
