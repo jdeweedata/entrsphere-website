@@ -5,7 +5,6 @@ import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { AuthProvider } from "@/contexts/AuthContext";
 import { useState, useEffect, ReactNode } from "react";
 
 interface ClientProvidersProps {
@@ -36,13 +35,11 @@ export function ClientProviders({ children }: ClientProvidersProps) {
 
   const content = (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          {children}
-        </TooltipProvider>
-      </AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        {children}
+      </TooltipProvider>
     </QueryClientProvider>
   );
 

@@ -46,7 +46,7 @@ function PaymentSuccessContent() {
           </p>
           <div className="space-y-3">
             <Button asChild className="w-full">
-              <Link href="/contact">Contact Support</Link>
+              <a href="mailto:hello@entrsphere.com">Contact Support</a>
             </Button>
             <Button variant="outline" asChild className="w-full">
               <Link href="/">Return Home</Link>

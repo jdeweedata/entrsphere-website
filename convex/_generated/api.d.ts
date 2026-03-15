@@ -9,14 +9,9 @@
  */
 
 import type * as contacts from "../contacts.js";
-import type * as conversations from "../conversations.js";
-import type * as discovery from "../discovery.js";
-import type * as outcomes from "../outcomes.js";
+import type * as intakeSubmissions from "../intakeSubmissions.js";
 import type * as payments from "../payments.js";
-import type * as posts from "../posts.js";
-import type * as seed from "../seed.js";
 import type * as subscribers from "../subscribers.js";
-import type * as waitlist from "../waitlist.js";
 
 import type {
   ApiFromModules,
@@ -26,14 +21,9 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   contacts: typeof contacts;
-  conversations: typeof conversations;
-  discovery: typeof discovery;
-  outcomes: typeof outcomes;
+  intakeSubmissions: typeof intakeSubmissions;
   payments: typeof payments;
-  posts: typeof posts;
-  seed: typeof seed;
   subscribers: typeof subscribers;
-  waitlist: typeof waitlist;
 }>;
 
 /**

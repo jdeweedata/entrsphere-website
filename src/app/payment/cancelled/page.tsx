@@ -46,9 +46,9 @@ function PaymentCancelledContent() {
         <div className="mt-6 pt-6 border-t border-slate-200">
           <p className="text-sm text-slate-600">
             Having trouble with payment?{" "}
-            <Link href="/contact" className="text-blue-600 hover:underline">
-              Contact our support team
-            </Link>
+            <a href="mailto:hello@entrsphere.com" className="text-blue-600 hover:underline">
+              Email our support team
+            </a>
           </p>
         </div>
       </div>
