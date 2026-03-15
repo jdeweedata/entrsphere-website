@@ -4,9 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@phosphor-icons/react";
 
-// Discovery Router Toolkit pricing (same as Paystack)
-const TOOLKIT_PRICE_ZAR = 85000; // R850 in cents
-const PRODUCT_ID = "discovery-router-toolkit";
+const DEFAULT_PRICE_ZAR = 250000; // R2,500 in cents (Quick Scan)
+const DEFAULT_PRODUCT = "quick-scan";
 
 // Customer information for payment
 interface CustomerInfo {
@@ -65,10 +64,10 @@ export default function PayFastButton({
   // Destructure with defaults
   const { email, firstName, lastName } = customer;
   const {
-    itemName = "Discovery Router Toolkit",
-    itemDescription = "Strategic project routing framework with AI-powered assessment",
-    amount = TOOLKIT_PRICE_ZAR,
-    product = PRODUCT_ID,
+    itemName = "EntrSphere — Quick Scan",
+    itemDescription = "Website review with 5 prioritized fixes",
+    amount = DEFAULT_PRICE_ZAR,
+    product = DEFAULT_PRODUCT,
   } = payment;
   const [isLoading, setIsLoading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -191,4 +190,4 @@ export function formatPrice(cents: number): string {
   return `R${(cents / 100).toLocaleString("en-ZA")}`;
 }
 
-export { TOOLKIT_PRICE_ZAR, PRODUCT_ID };
+export { DEFAULT_PRICE_ZAR, DEFAULT_PRODUCT };
