@@ -1,4 +1,4 @@
-import { Envelope, WhatsappLogo } from "@phosphor-icons/react/dist/ssr";
+import { Envelope } from "@phosphor-icons/react/dist/ssr";
 
 export default function AuditFooter() {
   return (
@@ -16,15 +16,6 @@ export default function AuditFooter() {
             >
               <Envelope className="h-4 w-4" weight="light" />
               hello@entrsphere.com
-            </a>
-            <a
-              href="https://wa.me/27000000000"
-              className="hover:text-primary transition-colors flex items-center gap-1.5"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <WhatsappLogo className="h-4 w-4" weight="light" />
-              WhatsApp
             </a>
           </div>
         </div>
