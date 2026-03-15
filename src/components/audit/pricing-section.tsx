@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { TIERS, formatZAR, formatUSD } from "@/lib/pricing";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,14 @@ type Currency = "zar" | "usd";
 export default function PricingSection() {
   const [currency, setCurrency] = useState<Currency>("zar");
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const emailRef = useRef<HTMLInputElement>(null);
+
+  const handleEmailError = () => {
+    setEmailError("Enter your email above to continue");
+    emailRef.current?.focus();
+    emailRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
 
   return (
     <section id="pricing" className="py-24 border-t border-border/50">
@@ -59,13 +67,26 @@ export default function PricingSection() {
             Your email to get started
           </label>
           <Input
+            ref={emailRef}
             id="audit-email"
             type="email"
             placeholder="you@company.com"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="text-center bg-secondary/50 border-border"
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (emailError) setEmailError("");
+            }}
+            className={`text-center bg-secondary/50 ${
+              emailError
+                ? "border-red-500 ring-1 ring-red-500"
+                : "border-border"
+            }`}
           />
+          {emailError && (
+            <p className="text-red-500 text-xs text-center mt-2">
+              {emailError}
+            </p>
+          )}
         </div>
 
         {/* Pricing Cards */}
@@ -130,6 +151,7 @@ export default function PricingSection() {
                     itemDescription: tier.itemDescription,
                     product: tier.id,
                   }}
+                  onError={handleEmailError}
                   className={`w-full py-5 font-medium ${
                     tier.popular
                       ? "bg-primary text-primary-foreground hover:bg-primary/90"

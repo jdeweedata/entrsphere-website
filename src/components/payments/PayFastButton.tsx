@@ -131,7 +131,7 @@ export default function PayFastButton({
       <Button
         type="button"
         onClick={handleClick}
-        disabled={disabled || isLoading || !email}
+        disabled={disabled || isLoading}
         className={className}
       >
         {isLoading ? (
