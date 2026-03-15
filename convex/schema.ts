@@ -249,6 +249,33 @@ export default defineSchema({
     .index("by_role_flowStage", ["role", "flowStage"]) // user + post_spec = primitive roadmap
     .index("by_toolSuccess", ["toolSuccess"]), // false = capability gaps
 
+  // Intake submissions - business audit intake forms
+  intakeSubmissions: defineTable({
+    purchaseReference: v.string(),
+    email: v.string(),
+    businessName: v.string(),
+    contactName: v.string(),
+    phone: v.optional(v.string()),
+    websiteUrl: v.optional(v.string()),
+    monthlyRevenue: v.optional(v.string()),
+    businessType: v.optional(v.string()),
+    biggestChallenge: v.optional(v.string()),
+    tier: v.union(
+      v.literal("quick-scan"),
+      v.literal("deep-dive"),
+      v.literal("full-audit")
+    ),
+    createdAt: v.number(),
+    status: v.union(
+      v.literal("submitted"),
+      v.literal("in-progress"),
+      v.literal("completed")
+    ),
+  })
+    .index("by_email", ["email"])
+    .index("by_purchaseReference", ["purchaseReference"])
+    .index("by_status", ["status"]),
+
   // Waitlist - cohort-based access control
   waitlist: defineTable({
     email: v.string(),

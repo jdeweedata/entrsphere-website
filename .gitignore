@@ -41,3 +41,4 @@ tsconfig.tsbuildinfo
 
 # Windows artifacts
 nul
+.env*.local

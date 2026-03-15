@@ -33,7 +33,7 @@ function PaymentCancelledContent() {
 
         <div className="space-y-3">
           <Button asChild className="w-full">
-            <Link href="/solutions/discovery-router">
+            <Link href="/#pricing">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Try Again
             </Link>

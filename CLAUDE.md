@@ -2,17 +2,59 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project Overview
+## Purpose
 
-EntrSphere website - a landing page for a digital platform solutions company. Built with Next.js App Router, deployed on Vercel, with Convex for real-time data and Appwrite for authentication.
+EntrSphere is an AI-native development consultancy website with a flagship **Discovery Router** product — an AI agent that turns vague project ideas into actionable SPEC documents. The site serves as both a marketing/sales funnel and the product delivery platform.
 
-## Development Commands
+**Primary goal**: Convert visitors into paying Discovery Toolkit customers (R2,500/session).
 
-```bash
-npm run dev          # Start Next.js dev server
-npm run build        # Production build
-npm run start        # Start production server
-npm run lint         # Run ESLint
+## Project Tree
+
+```
+entrsphere.com/
+├── CLAUDE.md                  # THIS FILE — read first every session
+├── context/                   # Layer 3: Training materials & learnings
+│   ├── brand-voice.md         # Tone, copy standards, approved messaging
+│   ├── tech-standards.md      # Code patterns, conventions, gotchas
+│   └── product-knowledge.md   # Discovery Router features, pricing, flows
+├── src/
+│   ├── app/                   # Next.js App Router pages
+│   │   ├── page.tsx           # Homepage (marketing landing)
+│   │   ├── about/             # Company story
+│   │   ├── blog/              # Content marketing (Convex-powered)
+│   │   ├── case-studies/      # Social proof
+│   │   ├── contact/           # Lead capture (Convex mutation)
+│   │   ├── dashboard/         # Admin panel
+│   │   ├── discovery/         # Discovery Agent (free tier)
+│   │   ├── login/ & register/ # Auth pages (Appwrite)
+│   │   ├── outcome/[token]/   # Shareable outcome pages
+│   │   ├── payment/           # PayFast success/cancel flows
+│   │   ├── solutions/         # Product pages
+│   │   │   ├── discovery-router/    # Flagship product
+│   │   │   ├── consulting/          # Service offering
+│   │   │   └── product-requirements/# PRD service
+│   │   └── waitlist/          # Pre-launch capture
+│   ├── components/            # React components
+│   │   ├── ui/                # shadcn/ui primitives
+│   │   ├── forms/             # Form components
+│   │   ├── auth/              # Auth components
+│   │   ├── admin/             # Admin components
+│   │   └── discovery/         # Discovery agent UI
+│   ├── contexts/              # React contexts (AuthContext)
+│   ├── hooks/                 # Custom hooks
+│   ├── lib/                   # Utilities (cn, etc.)
+│   ├── services/              # API service layer
+│   ├── styles/                # Global CSS
+│   └── types/                 # TypeScript types
+├── convex/                    # Backend: schema, mutations, queries
+├── discovery-fs/              # Filesystem agent context
+│   ├── playbooks/             # Route A-D guides
+│   ├── templates/             # SPEC schema, questions
+│   ├── knowledge/             # Red flags, scope creep signals
+│   └── patterns/              # Route distribution data
+├── docs/                      # Strategy docs, marketing copy, research
+├── assets/                    # Design assets (reference + source)
+└── specs/                     # Technical specifications
 ```
 
 ## Tech Stack
@@ -20,93 +62,58 @@ npm run lint         # Run ESLint
 - **Framework**: Next.js 16 (App Router)
 - **Styling**: Tailwind CSS + shadcn/ui components
 - **Backend**: Convex (real-time database), Appwrite (auth)
+- **Payments**: PayFast (primary, ZAR), Paystack (legacy)
+- **AI**: Anthropic Claude API (Haiku for previews, Sonnet for chat/SPEC)
 - **Icons**: Phosphor Icons
 - **State**: TanStack React Query + React Context (AuthContext)
 - **Forms**: React Hook Form + Zod validation
 - **Analytics**: PostHog
+- **Email**: Resend
+- **Deploy**: Vercel (auto-deploy on push to main)
 
-## Architecture
+## Rules
 
-### Path Aliases
-
-Use `@/` prefix for imports (maps to `./src/`):
-```typescript
-import { Button } from "@/components/ui/button";
-import { useAuth } from "@/contexts/AuthContext";
-```
-
-### Directory Structure
-
-```
-src/
-├── app/                    # Next.js App Router pages
-│   ├── layout.tsx          # Root layout with providers
-│   ├── page.tsx            # Homepage
-│   ├── about/              # About page
-│   ├── blog/               # Blog pages (dynamic)
-│   ├── contact/            # Contact page
-│   ├── dashboard/          # Admin dashboard
-│   ├── discovery/          # Discovery agent
-│   ├── login/              # Login page
-│   ├── register/           # Register page
-│   └── solutions/          # Solution pages
-├── components/             # React components
-│   ├── ui/                 # shadcn/ui primitives
-│   ├── forms/              # Form components
-│   ├── auth/               # Auth components
-│   ├── admin/              # Admin components
-│   └── discovery/          # Discovery agent components
-├── contexts/               # React contexts
-├── hooks/                  # Custom hooks
-├── lib/                    # Utilities
-├── services/               # API services
-├── styles/                 # Global styles
-└── types/                  # TypeScript types
-```
-
-### Server vs Client Components
-
+### Code Standards
+- Use `@/` prefix for all imports (maps to `./src/`)
 - Pages in `src/app/` are Server Components by default
-- Client components use `"use client"` directive at top
-- Components using hooks, state, or browser APIs must be client components
+- Client components must have `"use client"` at top
 - Convex queries/mutations require client components
+- Pages using Convex must export `dynamic = "force-dynamic"`
+- Use `npm run dev:memory` to start dev server (avoids heap errors)
+- Use `npm run type-check:memory` to check types (avoids heap errors)
+- Add shadcn components via: `npx shadcn@latest add [name]` (goes to `src/components/ui/`)
 
 ### Environment Variables
+- Client-side vars use `NEXT_PUBLIC_` prefix
+- Required: `NEXT_PUBLIC_CONVEX_URL`, `ANTHROPIC_API_KEY`
+- Optional: `NEXT_PUBLIC_POSTHOG_API_KEY`, `RESEND_API_KEY`
+- Payments: `PAYFAST_MERCHANT_ID`, `PAYFAST_MERCHANT_KEY`, `PAYFAST_PASSPHRASE`
+- Never commit `.env.local` — use `.env.example` as reference
 
-Use `NEXT_PUBLIC_` prefix for client-side env vars:
-- `NEXT_PUBLIC_CONVEX_URL` - Convex deployment URL
-- `NEXT_PUBLIC_POSTHOG_API_KEY` - PostHog analytics key
-- `NEXT_PUBLIC_API_URL` - API base URL
-
-### Dynamic Pages
-
-Pages using Convex must export `dynamic = "force-dynamic"`:
-- `/blog`, `/blog/[slug]` - Blog with Convex queries
-- `/contact` - Contact form with Convex mutations
-- `/dashboard` - Admin dashboard
-- `/discovery` - Discovery agent
-
-## Auth Flow
-
+### Auth Flow
 - `AuthProvider` wraps app in `providers.tsx`
 - `useAuth()` hook for auth state and actions
-- Appwrite handles authentication
 - Admin check: email `admin@entrsphere.com`
 
-## Adding shadcn Components
+### Business Rules
+- Every feature must ladder to revenue (R150K/month goal)
+- Discovery Router is the flagship — protect its UX above all
+- SA market first: ZAR pricing, PayFast payments, WhatsApp-friendly
+- Ship fast, validate with real users before polishing
 
-```bash
-npx shadcn@latest add [component-name]
+### Old Files (Safe to Remove)
+- `src/pages-old/`, `src/App.tsx`, `src/main.tsx` — old Vite code
+- `api-old/` — old Vercel API functions
+- `vite.config.ts`, `index.html` — old Vite config
+
+## Note-Taking Protocol
+
+After completing work in this project, add a dated one-liner to the relevant `context/*.md` file under its **Session Learnings** section. Format:
+
+```
+- [observation or preference learned] (learned YYYY-MM-DD)
 ```
 
-Components are added to `src/components/ui/`.
+When 3+ related learnings accumulate, graduate them into a new context file.
 
-## Old Files (Can Be Removed)
-
-The following directories contain old Vite code and can be deleted:
-- `src/pages-old/` - Old Vite route pages
-- `src/App.tsx` - Old Vite app entry
-- `src/main.tsx` - Old Vite entry point
-- `api-old/` - Old Vercel API functions
-- `vite.config.ts` - Old Vite config
-- `index.html` - Old Vite HTML entry
+Always read `context/` files at session start to build on prior learnings.

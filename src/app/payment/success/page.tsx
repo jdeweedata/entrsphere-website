@@ -107,21 +107,12 @@ function PaymentSuccessContent() {
         </div>
 
         <div className="space-y-3">
-          {purchase.sessionId ? (
-            <Button asChild className="w-full">
-              <Link href={`/discovery/session/${purchase.sessionId}`}>
-                Continue to Your Toolkit
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          ) : (
-            <Button asChild className="w-full">
-              <Link href="/dashboard">
-                Go to Dashboard
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          )}
+          <Button asChild className="w-full">
+            <Link href={`/intake?reference=${reference}`}>
+              Complete Your Intake Form
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
           <Button variant="outline" asChild className="w-full">
             <Link href="/">Return Home</Link>
           </Button>

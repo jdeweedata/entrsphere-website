@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Instrument_Serif } from "next/font/google";
 import "@/styles/globals.css";
 import { ClientProviders } from "@/components/ClientProviders";
 
@@ -9,23 +9,31 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  variable: "--font-display",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://entrsphere.com"),
   title: {
-    default: "EntrSphere | Deliver What Your Clients Actually Need",
+    default:
+      "EntrSphere — I'll Tell You Exactly What's Broken and What to Fix First",
     template: "%s | EntrSphere",
   },
   description:
-    "Turn vague ideas into specs so clear, developers build exactly what your clients need. EntrSphere helps agencies and founders deliver results that earn referrals.",
+    "A 48-hour business audit. Fixed fee. No retainer. No fluff. Just a prioritized list of what to fix and in what order.",
   keywords: [
-    "AI development",
-    "product requirements",
-    "PRD templates",
-    "discovery framework",
-    "scope creep",
-    "software development",
-    "AI automation",
+    "business audit",
+    "online presence audit",
+    "website review",
+    "digital audit",
     "South Africa",
+    "SME consulting",
+    "business consulting",
+    "fixed fee audit",
   ],
   authors: [{ name: "EntrSphere" }],
   creator: "EntrSphere",
@@ -46,15 +54,16 @@ export const metadata: Metadata = {
     locale: "en_ZA",
     url: "https://entrsphere.com",
     siteName: "EntrSphere",
-    title: "EntrSphere | Deliver What Your Clients Actually Need",
+    title:
+      "EntrSphere — I'll Tell You Exactly What's Broken and What to Fix First",
     description:
-      "Turn vague ideas into specs so clear, developers build exactly what your clients need. Deliver results that earn referrals.",
+      "A 48-hour business audit. Fixed fee. No retainer. No fluff. Just a prioritized list of what to fix and in what order.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "EntrSphere - AI-Native Development Frameworks",
+        alt: "EntrSphere — Business Audit Service",
       },
     ],
   },
@@ -62,9 +71,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@entrsphere",
     creator: "@entrsphere",
-    title: "EntrSphere | Deliver What Your Clients Actually Need",
+    title:
+      "EntrSphere — I'll Tell You Exactly What's Broken and What to Fix First",
     description:
-      "Turn vague ideas into specs so clear, developers build exactly what your clients need. Deliver results that earn referrals.",
+      "A 48-hour business audit. Fixed fee. No retainer. No fluff. Just a prioritized list of what to fix and in what order.",
     images: ["/og-image.png"],
   },
   icons: {
@@ -78,7 +88,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0f172a",
+  themeColor: "#111519",
   width: "device-width",
   initialScale: 1,
 };
@@ -91,7 +101,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Structured Data - Organization */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -102,13 +111,12 @@ export default function RootLayout({
               url: "https://entrsphere.com",
               logo: "https://entrsphere.com/favicon.png",
               description:
-                "AI-native development frameworks that turn vague ideas into production-ready specs. For agencies, founders, and product teams.",
+                "Fixed-fee business audits that tell you exactly what's broken in your online presence and what to fix first.",
               contactPoint: {
                 "@type": "ContactPoint",
                 email: "hello@entrsphere.com",
                 contactType: "customer service",
               },
-              sameAs: ["https://twitter.com/entrsphere"],
               address: {
                 "@type": "PostalAddress",
                 addressCountry: "ZA",
@@ -116,7 +124,6 @@ export default function RootLayout({
             }),
           }}
         />
-        {/* Structured Data - WebSite */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -129,7 +136,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body
+        className={`${inter.variable} ${instrumentSerif.variable} font-sans antialiased`}
+      >
         <ClientProviders>{children}</ClientProviders>
       </body>
     </html>

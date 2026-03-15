@@ -20,7 +20,8 @@ export default {
 			fontFamily: {
 				'intro-rust': ['Intro Rust', 'serif'],
 				'inter': ['Inter', 'sans-serif'],
-				'sans': ['Inter', 'sans-serif'],
+				'sans': ['var(--font-inter)', 'Inter', 'sans-serif'],
+				'display': ['var(--font-display)', 'Instrument Serif', 'serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
