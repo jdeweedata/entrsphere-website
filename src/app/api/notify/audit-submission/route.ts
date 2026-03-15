@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || "hello@entrsphere.com";
 
 interface IntakeData {
@@ -21,6 +20,13 @@ export async function POST(request: Request) {
   try {
     const data: IntakeData = await request.json();
 
+    if (!process.env.RESEND_API_KEY) {
+      return NextResponse.json(
+        { error: "Email service not configured" },
+        { status: 503 }
+      );
+    }
+
     if (!data.businessName || !data.contactName || !data.email || !data.tier) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -34,6 +40,8 @@ export async function POST(request: Request) {
         : data.tier === "deep-dive"
           ? "Deep Dive (R6,000)"
           : "Full Audit (R7,500)";
+
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     await resend.emails.send({
       from: "EntrSphere <notifications@entrsphere.com>",
